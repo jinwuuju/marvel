@@ -1,794 +1,493 @@
 <!doctype html>
-<html lang="ko">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta property="og:title" content="멍BTI 견종 감별소">
-<meta property="og:description" content="내가 강아지였다면 어떤 견종일까? 산책 메이트, 앙숙, 찰떡 주인까지 알려 주는 30문항 검사">
-<title>멍BTI 견종 감별소</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&family=Press+Start+2P&display=swap">
+<html lang='ko' data-theme='day'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>진우주 철학 검사 · 나와 닮은 철학자</title>
+<meta name='description' content='서재·광장·정원을 거닐며 50개의 질문에 답하면, 철학자 30인 중 당신과 가장 닮은 사람을 찾아 드려요.'>
+<link rel='preconnect' href='https://fonts.googleapis.com'><link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;700&family=Gowun+Batang:wght@400;700&family=Gaegu:wght@400;700&display=swap'>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css'>
 <style>
-/* Layout: one column like a park signboard; stage in the middle, results as stacked picnic cards. Deliberate single sunny-day theme. */
-:root{
-  --sky:#dff3ff; --sky-2:#bfe6f8; --grass:#86cf6e; --grass-d:#4c9a5b;
-  --cream:#fffaf0; --paper:#ffffff; --ink:#2d2a3a; --ink-2:#5c5870;
-  --coral:#ff7a59; --coral-d:#d65a3c; --blue:#4a86e0; --blue-d:#2f62b0; --sun:#ffd65a; --leaf:#2fa77a;
-  --f-disp:"Jua","Gowun Dodum","Apple SD Gothic Neo",sans-serif;
-  --f-body:"Gowun Dodum","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
-  --f-pix:"Press Start 2P",ui-monospace,monospace;
-  color-scheme:light;
-}
-[hidden]{display:none!important}
-html,body{background:var(--sky);color:var(--ink)}
-body{font-family:var(--f-body);font-size:16px;line-height:1.65;min-height:100%;
-  background:linear-gradient(180deg,var(--sky-2) 0,var(--sky) 380px,#e9f7e3 100%)}
-.wrap{max-width:720px;margin:0 auto;padding-block:20px 48px;
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
-  display:flex;flex-direction:column;gap:18px}
-h1,h2,h3{font-family:var(--f-disp);font-weight:400;margin:0;text-wrap:balance}
-p{margin:0}
-button{font:inherit;cursor:pointer}
-button:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
-
-.intro{display:flex;flex-direction:column;gap:16px;align-items:center;text-align:center}
-.eyebrow{font-family:var(--f-pix);font-size:10px;letter-spacing:.1em;color:var(--coral-d)}
-.title{font-size:clamp(44px,11vw,76px);line-height:1;color:var(--ink);text-shadow:4px 4px 0 var(--sun)}
-.title em{font-style:normal;color:var(--coral)}
-.lede{max-width:32em;color:var(--ink-2)}
-.cast{width:100%;max-width:560px;image-rendering:pixelated;border:3px solid var(--ink);border-radius:10px;background:var(--grass)}
-.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:560px}
-.rules div{background:var(--paper);border:2px solid var(--ink);border-radius:10px;padding:10px 8px;font-size:13px;color:var(--ink-2);box-shadow:3px 3px 0 var(--ink)}
-.rules b{display:block;font-family:var(--f-pix);font-size:14px;font-weight:400;color:var(--coral);margin-bottom:4px}
-.btn{border:3px solid var(--ink);border-radius:12px;padding:12px 26px;font-family:var(--f-disp);font-size:21px;background:var(--coral);color:var(--paper);box-shadow:4px 4px 0 var(--ink);transition:transform .08s,box-shadow .08s}
-.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.btn.ghost{background:var(--paper);color:var(--ink)}
-
-.hud{display:flex;align-items:center;gap:12px}
-.hud .no{font-family:var(--f-disp);font-size:22px;white-space:nowrap}
-.hud .no small{font-family:var(--f-pix);font-size:10px;color:var(--ink-2);margin-left:6px}
-.pips{flex:1;display:grid;grid-template-columns:repeat(30,1fr);gap:2px;min-width:0}
-.pips i{height:8px;background:var(--paper);border:1px solid #b9c7d3;border-radius:2px}
-.pips i.done{background:var(--coral);border-color:var(--coral-d)}
-.pips i.gate{border-color:var(--ink)}
-.qcard{background:var(--paper);border:3px solid var(--ink);border-radius:14px;padding:14px 18px;box-shadow:4px 4px 0 var(--ink);display:flex;gap:12px;align-items:flex-start}
-.qcard .paw{flex:none;font-family:var(--f-pix);font-size:10px;color:var(--paper);background:var(--ink);border-radius:6px;padding:6px 6px 5px;margin-top:3px}
-.qcard p{font-size:18px;line-height:1.5;font-family:var(--f-disp)}
-
-.stage{position:relative;width:100%;aspect-ratio:4/3;max-width:100%;border-radius:12px;overflow:hidden;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
-.stage canvas{display:block;width:100%;height:100%;image-rendering:pixelated}
-.bubble{position:absolute;top:3%;width:40%;padding:8px 10px 10px;border:2px solid var(--ink);border-radius:12px;background:var(--paper);color:var(--ink);text-align:left;
-  font-family:var(--f-body);font-size:clamp(12px,2.6vw,15px);line-height:1.4;box-shadow:3px 3px 0 rgba(45,42,58,.35);transition:transform .15s,background .15s}
-.bubble::after{content:"";position:absolute;bottom:-9px;left:calc(50% - 8px);width:12px;height:12px;background:inherit;border-right:2px solid var(--ink);border-bottom:2px solid var(--ink);transform:rotate(45deg)}
-.bubble.l{left:2%}.bubble.r{right:2%}
-.bubble .tag{display:inline-block;font-family:var(--f-disp);font-size:13px;color:var(--paper);border-radius:6px;padding:0 7px;margin-bottom:3px}
-.bubble.l .tag{background:var(--coral)}.bubble.r .tag{background:var(--blue)}
-.bubble.hot{transform:translateY(-3px) scale(1.03)}
-.bubble.l.hot{background:#fff0ea}.bubble.r.hot{background:#eaf2ff}
-.bubble[disabled]{cursor:default}
-.minibox{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;background:rgba(255,250,240,.88);text-align:center;padding:16px}
-.minibox h2{font-size:clamp(26px,6.5vw,36px);color:var(--coral-d)}
-.minibox p{max-width:26em;font-size:14px}
-.minibox .note{font-size:12px;color:var(--ink-2)}
-.mhud{position:absolute;top:6px;left:8px;right:8px;display:flex;justify-content:space-between;font-family:var(--f-disp);font-size:clamp(13px,3vw,16px);pointer-events:none}
-.mhud span{background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:0 8px}
-.pad{display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap}
-.pad button{min-width:84px;height:56px;border-radius:12px;border:3px solid var(--ink);background:var(--paper);color:var(--ink);font-family:var(--f-pix);font-size:16px;box-shadow:3px 3px 0 var(--ink);touch-action:none;user-select:none;-webkit-user-select:none}
-.pad button.on,.pad button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.pad .act{background:var(--sun);font-family:var(--f-disp);font-size:20px}
-.hint{text-align:center;font-size:13px;color:var(--ink-2)}
-
-.res{display:flex;flex-direction:column;gap:18px}
-.hero{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:18px;box-shadow:5px 5px 0 var(--ink)}
-.portrait{width:168px;height:126px;image-rendering:pixelated;border-radius:12px;border:3px solid var(--ink);background:var(--grass)}
-.meta{min-width:0;display:flex;flex-direction:column;gap:6px}
-.code{font-family:var(--f-pix);font-size:clamp(20px,5.5vw,30px);color:var(--coral)}
-.breed{font-size:clamp(32px,8vw,46px);line-height:1.05}
-.breed small{display:block;font-family:var(--f-body);font-size:13px;color:var(--ink-2);margin-top:4px}
-.nick{font-family:var(--f-disp);font-size:19px;color:var(--blue-d)}
-.chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
-.chip{font-size:13px;padding:2px 10px;border-radius:999px;border:2px solid var(--ink);background:var(--cream)}
-.energy{display:inline-flex;gap:3px;align-items:center;font-size:13px}
-.energy i{width:10px;height:10px;border-radius:3px;background:#dfe5ea;border:1px solid var(--ink)}
-.energy i.on{background:var(--coral)}
-
-.panel{background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:5px 5px 0 var(--ink)}
-.panel h3{font-size:24px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.panel h3 .k{font-family:var(--f-pix);font-size:9px;letter-spacing:.06em;color:var(--paper);background:var(--ink);padding:5px 6px 4px;border-radius:5px}
-.panel .sub{font-size:14px;color:var(--ink-2)}
-.traits{display:flex;flex-wrap:wrap;gap:6px}
-.traits span{background:var(--sun);border:2px solid var(--ink);font-size:13px;padding:2px 10px;border-radius:8px}
-.axes{display:flex;flex-direction:column;gap:10px}
-.axis{display:grid;grid-template-columns:4.6em 1fr 4.6em;gap:8px;align-items:center;font-size:13px}
-.axis .a{text-align:right}
-.axis .on{color:var(--coral-d);font-weight:700}
-.bar{position:relative;height:14px;background:#e6edf2;border:2px solid var(--ink);border-radius:7px;overflow:hidden}
-.bar i{position:absolute;inset:0 auto 0 0;background:var(--coral)}
-.bar::after{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--ink);opacity:.4}
-.pc{display:flex;justify-content:space-between;font-family:var(--f-pix);font-size:8px;color:var(--ink-2);margin-top:3px}
-
-.pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.mate{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:center;padding:12px;border-radius:12px;border:2px solid var(--ink);min-width:0}
-.mate.good{background:#eaf8e4}.mate.bad{background:#fff0ea}
-.mate canvas{width:84px;height:63px;image-rendering:pixelated;border-radius:8px;border:2px solid var(--ink);background:var(--grass)}
-.mate.bad canvas{background:#f7c9b9}
-.mate .nm{font-family:var(--f-disp);font-size:19px;line-height:1.2}
-.mate .cd{font-family:var(--f-pix);font-size:9px;color:var(--ink-2)}
-.mate p{grid-column:1/-1;font-size:14px}
-.badge{display:inline-block;font-family:var(--f-disp);font-size:13px;padding:0 8px;border-radius:6px;color:var(--paper);margin-bottom:2px}
-.badge.g{background:var(--leaf)}.badge.b{background:var(--coral-d)}
-.owner{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start;padding:14px;border-radius:12px;border:2px solid var(--ink);min-width:0}
-.owner.good{background:#eaf2ff}.owner.bad{background:#f3eefc}
-.owner canvas{width:60px;height:96px;image-rendering:pixelated;border-radius:8px;border:2px solid var(--ink);background:var(--sky)}
-.owner .nm{font-family:var(--f-disp);font-size:19px;line-height:1.25}
-.owner .cd{font-family:var(--f-pix);font-size:11px;color:var(--blue-d)}
-.owner p{font-size:14px;margin-top:4px}
-.owner .tip{margin-top:8px;font-size:13px;background:var(--paper);border:2px dashed var(--ink-2);border-radius:8px;padding:6px 10px}
-.alt .rk{font-family:var(--f-disp);font-size:14px;color:var(--coral-d)}
-.share{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
-.toast{text-align:center;font-size:13px;color:var(--leaf);min-height:1.2em}
-.urlbox{width:100%;font-size:12px;background:var(--cream);color:var(--ink);border:2px solid var(--ink);border-radius:8px;padding:8px}
-.foot{height:14px;background:repeating-linear-gradient(90deg,var(--grass) 0 10px,var(--grass-d) 10px 12px);border-radius:7px;border:2px solid var(--ink)}
-@media (max-width:540px){
-  .hero{grid-template-columns:1fr;justify-items:center;text-align:center}.chips{justify-content:center}
-  .pair{grid-template-columns:1fr}.rules{grid-template-columns:1fr}.qcard p{font-size:16px}
-}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
-</style>
-
-<style>:root{padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)}body{margin:0}</style>
-</head>
-<body>
-<div class="wrap">
-  <section id="intro" class="intro">
-    <span class="eyebrow">MUNG-BTI · 16 BREEDS</span>
-    <h1 class="title">멍BTI<br><em>견종 감별소</em></h1>
-    <p class="lede">내가 강아지로 태어났다면 어떤 견종이었을까요? 픽셀 강아지를 데리고 30개의 갈림길을 지나면 내 견종, 함께 산책하기 좋은 친구, 만나면 으르렁대는 앙숙, 그리고 나와 잘 맞는 주인까지 알려 드려요.</p>
-    <canvas id="cast" class="cast" width="160" height="48" aria-label="골든 리트리버, 웰시 코기, 시바견, 말티즈, 진돗개 픽셀 그림"></canvas>
-    <div class="rules">
-      <div><b>30</b>강아지를 걸려 답이 적힌 개집으로 쏙</div>
-      <div><b>3</b>10문항마다 쉬어 가는 놀이 (결과와 무관)</div>
-      <div><b>16</b>견종 + 산책 메이트 + 앙숙 + 찰떡 주인</div>
-    </div>
-    <button class="btn" id="start">산책 시작하기</button>
-  </section>
-
-  <section id="play" hidden>
-    <div class="hud"><div class="no" id="qno"></div><div class="pips" id="pips" aria-hidden="true"></div></div>
-    <div class="qcard"><span class="paw" id="qpaw">Q</span><p id="qtext"></p></div>
-    <div class="stage">
-      <canvas id="cv" width="160" height="120"></canvas>
-      <button class="bubble l" id="optL"></button>
-      <button class="bubble r" id="optR"></button>
-      <div class="mhud" id="mhud" hidden><span id="mLeft"></span><span id="mRight"></span></div>
-      <div class="minibox" id="minibox" hidden></div>
-    </div>
-    <div class="pad">
-      <button id="btnL" aria-label="왼쪽으로">◀</button>
-      <button id="btnAct" class="act" hidden></button>
-      <button id="btnR" aria-label="오른쪽으로">▶</button>
-    </div>
-    <p class="hint" id="hint"></p>
-  </section>
-
-  <section id="result" class="res" hidden></section>
-  <div class="foot" aria-hidden="true"></div>
-</div>
-
-<script>
-// 30문항: E/I 8, S/N 7, T/F 7, J/P 8
-window.QUESTIONS = [
-{q:"산책을 나왔더니 공원에 처음 보는 강아지들이 잔뜩 모여 있어요!", a:["꼬리를 붕붕 흔들며 바로 무리 속으로 돌진!","E"], b:["멀찍이서 냄새부터 맡으며 분위기를 살펴요.","I"], w:1.2},
-{q:"새 장난감이 생겼어요. 제일 먼저 하는 일은?", a:["일단 물고 흔들고 씹어 봐요. 직접 해 봐야 알죠!","S"], b:["이 안에 뭐가 숨어 있을까? 이리저리 굴려 보며 궁리해요.","N"]},
-{q:"친구 강아지가 내 간식을 몰래 먹어 버렸어요.", a:["그건 내 거야! 단호하게 짖어서 확실히 해 둬요.","T"], b:["배가 많이 고팠나 봐… 그냥 넘어가 줘요.","F"]},
-{q:"매일 가는 산책 시간이 다가와요.", a:["5분 전부터 현관 앞에 앉아 대기해요.","J"], b:["주인이 목줄을 들면 그제야 알아채요.","P"]},
-{q:"집에 손님이 왔어요!", a:["현관까지 달려가 온몸으로 환영해요.","E"], b:["방 구석에서 지켜보다가 나중에 슬쩍 다가가요.","I"]},
-{q:"산책길에서 처음 맡아 보는 냄새가 나요.", a:["어디서 온 냄새일까? 머릿속으로 모험을 떠나요.","N"], b:["누구 냄새인지 하나하나 꼼꼼히 확인해요.","S"]},
-{q:"훈련 중에 '앉아'를 틀렸어요.", a:["뭐가 틀렸는지 다시 해 보며 방법을 찾아요.","T"], b:["주인 표정이 실망한 것 같아 마음이 쓰여요.","F"]},
-{q:"내 잠자리는요?", a:["언제나 같은 자리, 같은 방석이어야 해요.","J"], b:["오늘은 소파, 내일은 이불 위. 그날 기분 따라!","P"]},
-{q:"신나게 놀고 난 뒤 쉬는 방법은?", a:["친구들이랑 엉켜서 다 같이 꾸벅꾸벅.","E"], b:["혼자 내 집에 쏙 들어가 푹 쉬어요.","I"]},
-{q:"주인이 새로운 개인기를 가르쳐 줘요.", a:["시범 보여 준 대로 차근차근 따라 해요.","S"], b:["대충 감 잡고 나만의 방식으로 해 봐요.","N"]},
-
-{q:"옆에서 다른 강아지가 낑낑대며 울고 있어요.", a:["다가가서 옆에 꼭 붙어 앉아 줘요.","F"], b:["무슨 일인지 주변부터 살펴 원인을 찾아요.","T"]},
-{q:"산책 코스가 갑자기 바뀌었어요.", a:["오, 새로운 길이다! 신나요.","P"], b:["왜 평소 길로 안 가요? 그 자리에 버티고 서요.","J"]},
-{q:"애견 카페에 놀러 갔어요.", a:["카페에 있는 모든 강아지와 인사를 나눠요.","E"], b:["마음에 드는 친구 하나랑만 놀아요.","I"]},
-{q:"간식 숨겨 놓고 찾기 놀이를 해요.", a:["코를 바닥에 대고 구석구석 차근차근 훑어요.","S"], b:["주인이 숨길 만한 곳을 짐작해서 바로 가요.","N"]},
-{q:"공놀이 시합에서 졌어요.", a:["다음엔 이긴다! 더 빨리 뛰는 법을 연구해요.","T"], b:["이긴 친구에게 꼬리 흔들며 축하해 줘요.","F"]},
-{q:"밥그릇에 사료가 담겼어요.", a:["정해진 만큼 한 번에 깔끔하게 비워요.","J"], b:["먹다 놀다 먹다 놀다, 하루 종일 조금씩.","P"]},
-{q:"주인이 외출했다 돌아왔어요!", a:["짖고 뛰고 빙글빙글! 온 동네가 알게 반겨요.","E"], b:["살랑살랑 꼬리 치며 조용히 다가가 기대요.","I"]},
-{q:"창밖을 바라볼 때 나는…", a:["저 구름은 뼈다귀 모양이네… 하며 멍때려요.","N"], b:["지나가는 사람, 차, 고양이를 하나하나 지켜봐요.","S"]},
-{q:"산책 중에 주인이 다른 강아지를 쓰다듬어요.", a:["그럴 수도 있죠. 별로 신경 안 써요.","T"], b:["서운해서 주인 다리에 몸을 비비며 관심을 끌어요.","F"]},
-{q:"내 장난감들은 어디에 있나요?", a:["늘 바구니 안에 모아 둬요.","J"], b:["온 집 안에 흩어져 있어요. 다 내 영역이니까요.","P"]},
-
-{q:"강아지 운동회에 나가게 됐어요.", a:["관중이 환호할수록 힘이 더 나요!","E"], b:["사람이 많으면 긴장돼서 실력이 덜 나와요.","I"]},
-{q:"처음 보는 로봇청소기가 거실을 돌아다녀요.", a:["직접 다가가 냄새 맡고 앞발로 툭툭 쳐 봐요.","S"], b:["혹시 살아 있는 건가? 멀리서 온갖 상상을 해요.","N"]},
-{q:"주인에게 혼나고 있어요.", a:["뭘 잘못했는지 따져 보고 다음엔 안 해요.","T"], b:["주인이 화난 게 속상해서 자꾸 눈치를 봐요.","F"]},
-{q:"놀이 시간이에요!", a:["공놀이 하다 터그 하다 냄새 맡다, 마음 가는 대로!","P"], b:["공놀이면 공놀이, 하나를 끝까지 해요.","J"]},
-{q:"동네에 새 강아지가 이사 왔어요.", a:["먼저 찾아가서 반갑게 냄새 인사를 해요.","E"], b:["몇 번 마주쳐서 익숙해진 다음에 인사해요.","I"]},
-{q:"꿈속의 나는…", a:["하늘을 날아서 간식 나라를 여행해요.","N"], b:["어제 갔던 공원을 또 신나게 뛰어다녀요.","S"]},
-{q:"친구 강아지가 내 공을 갖고 싶어 해요.", a:["친구가 좋아하니까 양보해요.","F"], b:["내 공은 내 공. 순서를 정해서 같이 놀아요.","T"]},
-{q:"오늘은 목욕하는 날이에요.", a:["아침부터 눈치채고 마음의 준비를 해요.","J"], b:["욕실 앞에 와서야 깨닫고 도망칠 궁리를 해요.","P"], w:1.2},
-{q:"집에 아기 강아지가 새 가족으로 왔어요.", a:["바로 같이 놀자고 장난을 걸어요.","E"], b:["거리를 두고 천천히 지켜봐요.","I"]},
-{q:"주인이 \"이따가 산책 가자\"라고 말했어요.", a:["'이따가'가 정확히 언제인지 궁금해서 졸졸 따라다녀요.","J"], b:["언젠가 가겠지~ 하고 일단 낮잠을 자요.","P"]}
-];
-
+:root{--bg:#f4ede0;--glow1:rgba(222,180,100,.24);--glow2:rgba(70,90,160,.10);--card:rgba(255,251,243,.88);--card2:rgba(255,251,243,.6);--ink:#2a241d;--ink2:#5d5347;--ink3:#8e8373;--line:rgba(70,50,25,.13);--line2:rgba(70,50,25,.26);--gold:#a87b26;--gold2:#d6ad55;--goldbg:rgba(214,173,85,.17);--acc:#3d4c8c;--accbg:rgba(61,76,140,.09);--good:#3c7a4c;--goodbg:rgba(60,122,76,.11);--warn:#9a6a12;--warnbg:rgba(214,160,40,.15);--bad:#a43d36;--badbg:rgba(164,61,54,.10);--p1:#3d4c8c;--p2:#b25a35;--p3:#4d7a35;--pl:#3d4c8c;--pr:#b25a35;--shadow:0 12px 30px rgba(90,65,30,.12),0 2px 6px rgba(90,65,30,.06);--glyph:42,36,29;--disp:'Hahmlet','Gowun Batang',serif;--hand:'Gaegu','Gowun Batang',sans-serif}
+html[data-theme=dusk]{--bg:#1b1828;--glow1:rgba(255,160,80,.16);--glow2:rgba(120,100,220,.24);--card:rgba(42,36,58,.86);--card2:rgba(42,36,58,.6);--ink:#f2e9d8;--ink2:#c8bca6;--ink3:#8f8577;--line:rgba(255,235,200,.11);--line2:rgba(255,235,200,.24);--gold:#e2b75e;--gold2:#e9c46f;--goldbg:rgba(233,196,111,.14);--acc:#aab6ff;--accbg:rgba(170,182,255,.13);--good:#8fd1a0;--goodbg:rgba(143,209,160,.13);--warn:#f0c46e;--warnbg:rgba(240,196,110,.13);--bad:#ff9d90;--badbg:rgba(255,157,144,.12);--p1:#9fadff;--p2:#f2a27a;--p3:#a6d08a;--pl:#9fadff;--pr:#f2a27a;--shadow:0 14px 34px rgba(0,0,0,.35);--glyph:242,220,170}
+*{box-sizing:border-box}html,body{margin:0}
+body{min-height:100vh;color:var(--ink);font-family:'Gowun Batang',-apple-system,'Apple SD Gothic Neo',serif;font-size:16px;line-height:1.75;background:radial-gradient(ellipse 70% 50% at 10% 0%,var(--glow1),transparent 65%),radial-gradient(ellipse 60% 50% at 95% 100%,var(--glow2),transparent 65%),var(--bg);background-attachment:fixed;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(rgba(var(--glyph),.05) 1px,transparent 1px);background-size:5px 5px}
+#sky{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#deco{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}#deco .fl{position:absolute;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.wrap{position:relative;z-index:2;max-width:740px;margin:0 auto;padding:18px 18px 90px}.w{padding:.75rem 0}
+.disp{font-family:var(--disp);font-weight:600;letter-spacing:-.2px}.hand{font-family:var(--hand)}
+.kicker{font-family:var(--hand);font-size:19px;color:var(--gold);margin:.2rem 0 0}
+.title{font-family:var(--disp);font-weight:700;font-size:clamp(32px,7.5vw,48px);line-height:1.15;margin:.1rem 0 .4rem;letter-spacing:-1px}
+button{font:inherit;font-size:14px;min-height:40px;padding:0 16px;border-radius:999px;border:1px solid var(--line2);background:var(--card2);color:var(--ink);cursor:pointer;transition:transform .15s,background .2s,box-shadow .2s,border-color .2s}
+button:hover{border-color:var(--gold2);background:var(--card)}button:active{transform:scale(.97)}button:focus-visible{outline:2px solid var(--gold2);outline-offset:2px}
+.btn-main{background:linear-gradient(135deg,#e8c675,#c99335 55%,#b07a2a);border:none;color:#2a1d0a;font-family:var(--disp);font-weight:700;font-size:17px;min-height:52px;padding:0 28px;box-shadow:0 10px 24px rgba(176,122,42,.35),inset 0 1px 0 rgba(255,255,255,.55)}
+.btn-main:hover{filter:brightness(1.05);transform:translateY(-2px);background:linear-gradient(135deg,#e8c675,#c99335 55%,#b07a2a)}
+input,select,textarea{font:inherit;font-size:15px;min-height:46px;padding:0 14px;border-radius:14px;border:1px solid var(--line2);background:var(--card);color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s}
+textarea{padding:10px 14px;resize:vertical;line-height:1.5}input::placeholder,textarea::placeholder{color:var(--ink3)}
+input:focus,select:focus,textarea:focus{border-color:var(--gold2);box-shadow:0 0 0 3px var(--goldbg)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:1.1rem 1.25rem;margin:0 0 1rem;box-shadow:var(--shadow);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);position:relative}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;padding:3px 12px;border-radius:999px;background:var(--goldbg);color:var(--gold);margin:0 6px 6px 0;border:1px solid rgba(214,173,85,.38)}
+.mut{color:var(--ink2);font-size:15px;line-height:1.8;word-break:keep-all}.sm{font-size:13px;color:var(--ink2);line-height:1.7;word-break:keep-all}
+b,.b{font-weight:700;color:var(--ink)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;border-radius:99px}
+.row{display:grid;grid-template-columns:92px minmax(0,1fr) 40px;gap:10px;align-items:center;margin:7px 0}
+.met{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:12px}
+.sec{font-family:var(--disp);font-weight:700;font-size:23px;margin:2.8rem 0 .45rem;scroll-margin-top:14px;display:flex;align-items:center;gap:10px}.sec::before{content:'❦';color:var(--gold2);font-size:20px}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+details summary{cursor:pointer;color:var(--acc);font-size:13px;list-style:none}details summary::-webkit-details-marker{display:none}
+.quote{font-family:var(--disp);font-size:16.5px;line-height:1.7;border-left:3px solid var(--gold2);padding:2px 0 2px 14px;margin:.6rem 0;word-break:keep-all}
+.bubble{display:inline-block;background:#fffaf0;color:#3a2e22;border:1.5px solid #e2cfa6;border-radius:18px;padding:6px 15px;font-family:var(--hand);font-size:18px;line-height:1.4;box-shadow:0 6px 16px rgba(90,65,30,.15)}
+.owlsay{display:flex;align-items:center;gap:8px;justify-content:center;margin:.2rem 0 .8rem;min-height:38px}
+.float{animation:float 5s ease-in-out infinite}.rise{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
+.in{animation:inR .34s cubic-bezier(.2,.8,.2,1)}.out{animation:outL .18s ease-in forwards}.spin{animation:spin .9s cubic-bezier(.3,1.5,.5,1)!important}
+.tossed{animation:toss .5s ease-in forwards!important;pointer-events:none}
+.owl .wing{transform-origin:48px 108px;animation:wave 1.9s ease-in-out infinite}.owl .blink{animation:blink 4.5s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-10px) rotate(1.5deg)}}
+@keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(16deg)}}
+@keyframes blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+@keyframes spin{from{transform:rotate(0) scale(1)}50%{transform:rotate(200deg) scale(1.15)}to{transform:rotate(360deg) scale(1)}}
+@keyframes inR{from{opacity:0;transform:translateX(36px) rotate(.8deg)}to{opacity:1;transform:none}}
+@keyframes outL{to{opacity:0;transform:translateX(-46px) rotate(-.8deg)}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes toss{to{opacity:0;transform:translate(160px,260px) rotate(70deg) scale(.4)}}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.25)}100%{transform:scale(1)}}
+@keyframes shimmer{0%{background-position:0 0,0% 50%}100%{background-position:0 0,300% 50%}}
+@keyframes marq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes wavey{0%,100%{transform:translateX(0)}50%{transform:translateX(-14px)}}
+@keyframes rock{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+@keyframes flip{from{transform:rotateY(90deg);opacity:0}to{transform:none;opacity:1}}
+.holo{border:1.5px solid transparent!important;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(115deg,#d6ad55,#f3dc9a,#b25a35,#3d4c8c,#4d7a35,#d6ad55) border-box!important;background-size:auto,300% 300%!important;animation:shimmer 8s linear infinite}
+.path{position:relative;height:58px;margin:0 0 6px}.path .trk{position:absolute;left:16px;right:16px;top:40px;border-top:2px dashed var(--line2)}
+.path .done{position:absolute;left:16px;top:39px;height:4px;border-radius:4px;background:linear-gradient(90deg,var(--p1),var(--p2),var(--p3),var(--gold2));transition:width .45s cubic-bezier(.2,.8,.2,1)}
+.path .pl{position:absolute;top:28px;width:26px;height:26px;border-radius:50%;transform:translateX(-50%);background:var(--card);border:2px solid;display:flex;align-items:center;justify-content:center;font-size:14px}
+.path .ow{position:absolute;top:-4px;transform:translateX(-50%);transition:left .45s cubic-bezier(.2,.8,.2,1);filter:drop-shadow(0 3px 4px rgba(0,0,0,.2))}
+.topline{display:flex;justify-content:space-between;margin:-2px 2px 10px}
+.qcard{padding:1.3rem 1.35rem 1.15rem}.qhead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.qtype{font-size:12px;padding:2px 10px;border-radius:999px;background:var(--accbg);color:var(--acc)}.qti{font-family:var(--disp);font-size:14px;color:var(--gold)}
+.qtext{font-family:var(--disp);font-weight:600;font-size:21px;line-height:1.6;min-height:96px;margin:.7rem 0 1.3rem;word-break:keep-all}
+.dots{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 8px}
+.dot{border-radius:50%;padding:0;min-height:0;border:2.5px solid;background:transparent;flex:none;transition:transform .15s,background .15s}
+.dot:hover{transform:scale(1.1)}.dot.on{animation:pop .26s}
+.dl{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink2);margin-top:12px;padding:0 2px;gap:8px}.dlab{font-family:var(--hand);font-size:18px;color:var(--ink)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 12px}
+.opt{position:relative;text-align:left;white-space:normal;border-radius:16px;min-height:96px;padding:12px 14px 12px 44px;background:var(--card2);border:1.5px solid var(--line2);line-height:1.6;font-size:15px}
+.opt .olab{position:absolute;left:12px;top:12px;width:24px;height:24px;border-radius:50%;background:var(--oc);color:#fff;font-family:var(--disp);font-size:13px;display:flex;align-items:center;justify-content:center}
+.opt.sel{box-shadow:inset 0 0 0 2px var(--oc),var(--shadow);border-color:var(--oc)}.opt.sel::after,.opt.half::after{content:'';position:absolute;inset:0;background:var(--oc);opacity:.12;border-radius:inherit;pointer-events:none}.opt.half::after{opacity:.05}.opt.half{border-color:var(--oc)}
+.scale4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 6px}.scale4 button{font-size:12.5px;min-height:36px;padding:0 4px}.scale4 button.on{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);font-weight:700}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 10px}.tabs button{min-height:34px;font-size:13.5px}.tabs button.on{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);font-weight:700}
+.vgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.vcard{margin:0;min-height:110px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;white-space:normal;padding:10px 6px}
+.vcard i{font-size:28px;color:var(--gold)}.vcard .disp{font-size:19px}.vs{font-size:12px;color:var(--ink2);line-height:1.4}
+.ship{display:flex;justify-content:center;margin:4px 0}.ship svg{animation:rock 3.2s ease-in-out infinite;transform-origin:50% 80%}
+.gcard{margin:0;text-align:left;white-space:normal;border-radius:18px;padding:12px 14px;min-height:118px;display:flex;gap:12px;align-items:center;position:relative}
+.gcard.sel{box-shadow:inset 0 0 0 2px var(--gold2),var(--shadow)}
+.badge{position:absolute;top:8px;right:10px;width:28px;height:28px;border-radius:50%;background:var(--gold2);color:#2a1d0a;font-family:var(--disp);font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px var(--gold2)}
+.medal{position:relative;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;flex:none;color:#fff;background:radial-gradient(circle at 32% 26%,rgba(255,255,255,.55),transparent 46%),var(--mc);border:3px solid var(--gold2);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35),0 6px 14px rgba(60,40,10,.22)}
+.medal .laurel{position:absolute;inset:-16%;width:132%;height:132%;pointer-events:none}.medal i{position:relative;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.marq{overflow:hidden;margin:0 -18px 1.1rem;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marq .track{display:flex;gap:22px;width:max-content;animation:marq 70s linear infinite;padding:12px 0}
+.axrow{margin:0 0 14px}.axlab{display:flex;justify-content:space-between;font-size:13px;margin-bottom:2px}
+.axbar{position:relative;height:22px}.axbar .ln{position:absolute;left:0;right:0;top:10px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--pl),var(--line) 50%,var(--pr));opacity:.55}
+.axbar .mid{position:absolute;left:50%;top:2px;height:18px;border-left:1px dashed var(--line2)}
+.axbar .bd{position:absolute;top:6px;height:11px;border-radius:6px;background:var(--gold2);opacity:.28}
+.axbar .me{position:absolute;top:4px;width:15px;height:15px;margin-left:-7.5px;border-radius:50%;background:var(--card);box-shadow:0 0 0 3px var(--gold),0 2px 6px rgba(0,0,0,.2)}
+.axbar .ph{position:absolute;top:5px;width:12px;height:12px;margin-left:-6px;transform:rotate(45deg);background:var(--ink3);opacity:.75}
+.tag{display:inline-block;font-size:12px;padding:1px 9px;border-radius:999px;border:1px solid var(--line2);color:var(--ink2);margin:2px 4px 2px 0}
+#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,150px);z-index:50;transition:transform .38s cubic-bezier(.2,.9,.25,1.15);display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line2);border-radius:999px;padding:5px 20px 5px 8px;box-shadow:0 12px 34px rgba(0,0,0,.25);max-width:92vw;font-size:14px;line-height:1.45}
+#toast.show{transform:translate(-50%,0)}
+#egg{position:fixed;inset:0;z-index:60;background:radial-gradient(ellipse at center,rgba(40,28,20,.94),rgba(10,8,6,.97));cursor:pointer;animation:rise .4s ease both}
+#themeB{position:fixed;top:12px;right:12px;z-index:40;min-height:36px;padding:0 13px;font-size:13px;backdrop-filter:blur(6px)}
+.feather{pointer-events:auto;cursor:pointer;animation:float 4s ease-in-out infinite;filter:drop-shadow(0 0 6px #e9c46f)}
+.tl text{font-family:'Gowun Batang',serif}
+@media (max-width:540px){.qtext{font-size:18.5px;min-height:110px}.opts{grid-template-columns:1fr}.opt{min-height:0}.row{grid-template-columns:76px minmax(0,1fr) 34px}.wrap{padding:12px 14px 90px}.vgrid{gap:8px}.vcard{min-height:96px}.scale4 button{font-size:11.5px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{#sky,#deco,#toast,#themeB,.noprint{display:none!important}body{background:#fff!important;color:#111}body::before{display:none}.card{box-shadow:none;background:#fff;border-color:#ccc}}
+</style></head><body>
+<canvas id='sky' aria-hidden='true'></canvas><div id='deco' aria-hidden='true'></div>
+<button id='themeB' aria-label='테마 바꾸기'><i class='ti ti-moon'></i> 황혼</button>
+<div class='wrap'><div id='app'><p class='sm'>서재의 등불을 켜는 중…</p></div></div>
+<div id='toast' role='status' aria-live='polite'></div>
+<script id='data'>
+const NL=String.fromCharCode(10);
+const AX=[
+{k:'RE',n:'앎의 원천',L:'이성',R:'경험',Ld:'생각과 논리로 진리에 닿는다고 봐요.',Rd:'보고 겪고 확인해야 안다고 봐요.',topic:'진리는 머리로 아는가, 겪어서 아는가?',ch:['pla','hum']},
+{k:'CD',n:'진리 앞의 태도',L:'확신',R:'회의',Ld:'따져 보면 답에 도달할 수 있다고 믿어요.',Rd:'단정하는 순간 놓치는 것이 있다고 느껴요.',topic:'결국 정답은 존재하는가?',ch:['des','zhu']},
+{k:'HR',n:'판단의 엔진',L:'머리',R:'가슴',Ld:'감정은 이성으로 다스리는 편이에요.',Rd:'감정이 진짜 나를 알려 준다고 믿어요.',topic:'중요한 선택은 머리로? 가슴으로?',ch:['mar','rou']},
+{k:'PC',n:'옳음의 기준',L:'원칙',R:'결과',Ld:'결과와 상관없이 지킬 선이 있어요.',Rd:'좋은 결과가 옳음을 만든다고 봐요.',topic:'좋은 결과를 위해 원칙을 어겨도 되는가?',ch:['kan','mil']},
+{k:'IC',n:'삶의 단위',L:'개인',R:'공동체',Ld:'나는 나로서 산다는 쪽이에요.',Rd:'사람은 관계 속에서 완성된다고 봐요.',topic:'나의 꿈과 우리의 의리가 부딪히면?',ch:['nie','con']},
+{k:'OR',n:'세상을 대하는 법',L:'질서',R:'변혁',Ld:'지켜 온 것에는 이유가 있다고 봐요.',Rd:'틀은 깨라고 있는 것이라고 봐요.',topic:'전통은 지켜야 할 지혜인가, 깨야 할 틀인가?',ch:['hob','mrx']},
+{k:'TN',n:'의미의 자리',L:'초월',R:'자연',Ld:'보이는 세계 너머가 있다고 느껴요.',Rd:'이 세계가 전부이고 그걸로 충분하다고 봐요.',topic:'삶의 의미는 이 세계 너머에 있는가?',ch:['aug','epi']},
+{k:'CA',n:'삶의 자세',L:'관조',R:'참여',Ld:'한 걸음 물러서야 보인다고 믿어요.',Rd:'뛰어들어야 바뀐다고 믿어요.',topic:'세상을 바꾸려면 물러서야 하나, 뛰어들어야 하나?',ch:['lao','are']},
+{k:'FF',n:'인간의 조건',L:'수용',R:'자유',Ld:'바꿀 수 없는 것을 받아들이는 편이에요.',Rd:'나는 선택으로 나를 만든다고 믿어요.',topic:'우리는 정말 자유로운가?',ch:['spi','sar']},
+{k:'OP',n:'세계의 온도',L:'희망',R:'직시',Ld:'세상은 나아질 수 있다고 믿어요.',Rd:'삶의 그늘을 똑바로 보는 편이에요.',topic:'세상은 나아지고 있는가?',ch:['heg','sch']}];
+const AK=AX.map(a=>a.k),AXI={};AK.forEach((k,i)=>AXI[k]=i);
+const POLE={
+RE0:{s:'흩어진 정보 속에서 원리를 뽑아내는 힘이 있어요. 사례가 적어도 구조부터 봅니다.',b:'그럴듯한 논리가 현실과 어긋날 때, 현실 쪽을 의심하기 쉬워요.',x:'큰 결정 전, 논리로 세운 계획을 작은 실험 하나로 확인하세요. 흄이라면 ‘증거는 몇 번이었지?’라고 물을 거예요.',ath:'아카데메이아에서 기하학으로 세계를 증명하는 학자',jos:'성리학의 이(理)를 밤새 따지는 이론가 선비',adj:'논리로 세우는',noun:'설계자',mid:'생각으로 진리에 닿고',club:'이데아 살롱'},
+RE1:{s:'직접 확인한 것만 믿는 단단함이 있어요. 현장 감각이 빠르고 쉽게 속지 않아요.',b:'아직 겪어 보지 못한 가능성을 너무 빨리 지워 버릴 수 있어요.',x:'경험이 없는 영역에선 ‘원리상 가능한가’부터 따져 보세요. 데카르트처럼 바닥부터 생각하는 연습이 시야를 넓혀요.',ath:'직접 해부하고 관찰해 기록하는 리케이온의 박물학자',jos:'고을을 발로 누비며 백성의 삶을 기록하는 실학자',adj:'직접 확인하는',noun:'관찰자',mid:'직접 겪어서 확인하고',club:'관찰자 클럽'},
+CD0:{s:'결론을 내리고 밀고 나가는 힘이 있어요. 모두가 흔들릴 때 사람들이 당신에게 기댑니다.',b:'반대 증거를 ‘예외’로 처리하고 넘어가기 쉬워요.',x:'가장 확신하는 믿음 하나에 대해, 반대편의 가장 강한 논리를 직접 써 보세요. 소크라테스식 자기 검증이에요.',ath:'정의(定義)를 세우고 학파를 이끄는 학두',jos:'경전 해석의 정통을 지키는 성균관 대사성',adj:'답을 끝까지 쫓는',noun:'구도자',mid:'답을 찾아 끝까지 따지고',club:'진리 탐험대'},
+CD1:{s:'쉽게 속지 않고, 확신에 찬 주장일수록 한 번 더 따져 봐요. 오류를 잡아내는 눈이 있어요.',b:'모든 걸 의심하다 결정을 미루거나, 냉소로 굳어질 수 있어요.',x:'‘충분히 좋은 확신’의 기준을 정하세요. 70%면 움직이고, 틀리면 고치면 돼요. 흄도 의심은 서재에 두고 저녁은 친구와 먹었어요.',ath:'광장에서 모두의 확신을 질문으로 흔드는 등에',jos:'정답이라던 학설에 ‘과연?’을 던지는 양명학 선비',adj:'모든 것을 묻는',noun:'질문자',mid:'확신을 늘 의심하고',club:'물음표 동아리'},
+HR0:{s:'감정의 파도 속에서도 판단을 지키는 냉정함이 있어요. 위기에 강합니다.',b:'감정을 ‘잡음’으로 취급하다 중요한 신호를 놓칠 수 있어요.',x:'결정 전에 ‘이 선택을 하면 내 마음은 어떨까?’를 한 줄 적어 보세요. 흄은 감정 없이는 이성이 아무것도 원하지 못한다고 했어요.',ath:'스토아 기둥 아래서 감정 다스리는 법을 가르치는 교사',jos:'희로애락을 다스리는 경(敬) 공부에 매진하는 선비',adj:'냉철한',noun:'판관',mid:'머리로 감정을 다스리고',club:'냉철한 아카데메이아'},
+HR1:{s:'말로 설명되지 않는 진짜를 감지하는 힘이 있어요. 사람과 상황의 온도를 잘 읽어요.',b:'강한 감정이 판단을 대신하는 날, 나중에 후회할 선택을 할 수 있어요.',x:'감정이 클 때는 결정을 24시간만 미루세요. 스피노자처럼 ‘왜 이 감정이 생겼나’를 이해하면 감정은 나침반이 됩니다.',ath:'디오니소스 축제에 올릴 비극을 쓰는 극작가',jos:'마음을 노래한 시조와 가사를 짓는 풍류객',adj:'마음을 믿는',noun:'시인',mid:'마음의 소리를 믿고',club:'감성 살롱'},
+PC0:{s:'상황이 바뀌어도 흔들리지 않는 선이 있어요. 사람들이 당신을 믿는 이유예요.',b:'원칙을 지키느라 눈앞의 사람이 겪는 결과를 외면할 수 있어요.',x:'원칙이 부딪칠 땐 ‘이 원칙은 누구를 지키려고 있나?’를 물어보세요. 밀이라면 결과도 함께 보라고 할 거예요.',ath:'독배를 들지언정 신념을 굽히지 않는 시민',jos:'왕 앞에서도 바른말을 하는 사간원의 대간',adj:'선을 지키는',noun:'수호자',mid:'지켜야 할 선을 지키고',club:'원칙의 기사단'},
+PC1:{s:'말보다 실제로 무엇이 나아졌는지를 봐요. 문제를 해결하는 실용 감각이 뛰어나요.',b:'좋은 목적을 위해 수단의 선을 조금씩 넘기 쉬워요. 그 작은 선들이 신뢰를 갉아먹어요.',x:'결과를 계산할 때 ‘이 방법이 공개돼도 괜찮은가’를 함께 물어보세요. 칸트의 질문이 브레이크가 되어 줍니다.',ath:'결과로 말하는 민회의 개혁 정치가',jos:'백성의 살림을 숫자로 바꾸는 개혁 관료',adj:'결과로 말하는',noun:'전략가',mid:'결과로 옳음을 증명하고',club:'결과주의 연구회'},
+IC0:{s:'남의 기준에 휩쓸리지 않고 자기 길을 가는 힘이 있어요. 독창성이 여기서 나와요.',b:'혼자 감당하는 것을 강함으로 착각해, 도움이 필요한 때를 놓칠 수 있어요.',x:'이번 주에 한 번은 도움을 요청해 보세요. 아리스토텔레스는 친구 없이는 아무도 행복할 수 없다고 했어요.',ath:'어떤 학파에도 속하지 않고 홀로 걷는 사상가',jos:'벼슬을 마다하고 산림에 묻힌 처사',adj:'홀로 걷는',noun:'방랑자',mid:'나만의 길을 걷고',club:'단독자 모임'},
+IC1:{s:'사람과 사람을 잇고, 함께 사는 법을 아는 사람이에요. 조직의 접착제입니다.',b:'모두를 챙기다 정작 ‘나는 무엇을 원하나’를 잊기 쉬워요.',x:'관계 속 역할을 모두 내려놓고 ‘그냥 나’로서 원하는 것 세 가지를 적어 보세요. 키르케고르의 단독자 연습이에요.',ath:'민회에서 시민들을 모아 폴리스의 법을 다듬는 입법가',jos:'마을의 약속인 향약을 만드는 고을의 어른',adj:'사람을 잇는',noun:'중재자',mid:'관계 속에서 완성되고',club:'폴리스 공동체'},
+OR0:{s:'검증된 것의 가치를 알고 안정적으로 지켜 내는 힘이 있어요. 혼란 속의 버팀목입니다.',b:'익숙함을 옳음으로 착각해, 바뀌어야 할 것까지 지킬 수 있어요.',x:'지키고 있는 관습 하나에 ‘왜?’를 세 번 물어보세요. 이유가 남으면 지키고, 없으면 놓아주세요.',ath:'오래된 의례를 지키는 신전의 사제',jos:'나라의 예법을 바로 세우는 예조의 관리',adj:'뿌리를 지키는',noun:'정원사',mid:'지켜 온 것을 존중하고',club:'고전 수호회'},
+OR1:{s:'당연한 것을 의심하고 더 나은 판을 상상하는 힘이 있어요. 변화의 불씨입니다.',b:'부수는 데 힘을 쓰다 무엇을 세울지 놓치거나, 지켜야 할 것까지 버릴 수 있어요.',x:'바꾸고 싶은 것 옆에 ‘지켜야 할 것’을 하나씩 적어 보세요. 헤겔의 지양은 버리면서 보존하는 거예요.',ath:'신들을 의심했다는 죄목으로 법정에 선 위험한 철학자',jos:'신분의 벽을 넘자고 외치는 개혁파 선비',adj:'판을 바꾸는',noun:'혁명가',mid:'낡은 틀을 깨고',club:'혁명 카페'},
+TN0:{s:'눈앞의 이익 너머 더 큰 의미를 보는 깊이가 있어요. 쉽게 허무해지지 않아요.',b:'보이지 않는 것을 좇다 지금 여기의 삶과 몸을 소홀히 할 수 있어요.',x:'오늘 하루 ‘지금 이 순간’의 감각 다섯 가지를 적어 보세요. 에피쿠로스는 소박한 지금이 이미 충분하다고 했어요.',ath:'델포이 신탁의 뜻을 풀이하는 신비주의 사상가',jos:'산사에서 한마음을 깨치려 정진하는 선승',adj:'너머를 보는',noun:'순례자',mid:'보이는 것 너머를 보고',club:'구도자 수도원'},
+TN1:{s:'이 삶과 이 세계를 있는 그대로 사랑하는 힘이 있어요. 현실에 뿌리내린 사람이에요.',b:'측정할 수 없는 것의 가치를 너무 쉽게 지울 수 있어요.',x:'설명할 수 없지만 소중한 것(음악, 경외감, 사랑) 하나를 적어 보세요. 비트겐슈타인도 말할 수 없는 것이 가장 중요하다고 봤어요.',ath:'원자와 허공으로 세계를 설명하는 자연철학자',jos:'하늘의 이치보다 땅의 농사법을 연구하는 농학자',adj:'땅에 발 딛은',noun:'자연인',mid:'이 세계를 있는 그대로 사랑하고',club:'자연학 정원'},
+CA0:{s:'한 발 물러서 큰 그림을 보는 힘이 있어요. 소란 속에서도 본질을 짚어 냅니다.',b:'생각이 깊어질수록 행동이 늦어지고, 세상일을 남의 일로 둘 수 있어요.',x:'생각한 것 하나를 이번 주 안에 작게라도 실행하세요. 마르크스라면 해석보다 변화를 요구할 거예요.',ath:'정원에서 친구들과 조용히 사는 은둔의 현자',jos:'강가 정자에서 자연을 벗 삼는 강호의 시인',adj:'물러서 바라보는',noun:'은자',mid:'한 걸음 물러서 보고',club:'은자의 정원'},
+CA1:{s:'생각을 행동으로 옮기고 세상에 흔적을 남기는 사람이에요. 추진력이 강점입니다.',b:'바쁘게 움직이다 ‘왜 이 일을 하는가’를 묻는 시간을 잃을 수 있어요.',x:'일주일에 한 번, 아무것도 하지 않는 30분을 지키세요. 노자는 물러섬이 곧 힘이라고 했어요.',ath:'아고라 한복판에서 연설하는 민회의 웅변가',jos:'탐관오리를 찾아 고을을 누비는 암행어사',adj:'세상에 뛰어드는',noun:'행동가',mid:'세상에 뛰어들고',club:'아고라 행동단'},
+FF0:{s:'바꿀 수 없는 것 앞에서 평정을 지키는 힘이 있어요. 위기에 무너지지 않아요.',b:'받아들일 것과 바꿔야 할 것을 혼동해 체념이 될 수 있어요.',x:'‘어쩔 수 없다’고 생각한 일 하나를 골라, 그 안에서도 고를 수 있는 반응 세 가지를 찾아보세요. 사르트르식 자유 찾기예요.',ath:'운명의 실을 담담히 받아들이는 스토아의 노학자',jos:'하늘의 뜻(천명)을 알고 담담히 사는 선비',adj:'흐름을 타는',noun:'현자',mid:'바꿀 수 없는 것을 받아들이고',club:'스토아 회랑'},
+FF1:{s:'환경 탓 대신 ‘그래서 나는 무엇을 할까’를 묻는 사람이에요. 스스로를 만들어 갑니다.',b:'모든 걸 내 선택으로 보다 보면, 바꿀 수 없는 일까지 자책하게 돼요.',x:'내 책임과 내 통제 밖의 일을 두 칸으로 나눠 적어 보세요. 마르쿠스 아우렐리우스의 처방이 자유를 가볍게 해 줘요.',ath:'신탁을 거슬러 자기 운명을 쓰는 비극의 주인공',jos:'정해진 신분을 박차고 자기 길을 가는 풍운아',adj:'스스로를 짓는',noun:'창조자',mid:'선택으로 나를 만들어 가고',club:'실존 카페'},
+OP0:{s:'더 나아질 수 있다는 믿음으로 사람들을 움직이는 힘이 있어요. 회복이 빨라요.',b:'문제가 저절로 풀릴 거라 믿고 위험 신호를 늦게 볼 수 있어요.',x:'계획마다 ‘최악의 경우’를 한 줄 적어 두세요. 쇼펜하우어식 기대치 관리가 희망을 더 단단하게 만들어요.',ath:'올리브 나무를 심으며 다음 세대를 이야기하는 교사',jos:'서당에서 아이들에게 내일을 가르치는 훈장',adj:'내일을 믿는',noun:'등불지기',mid:'더 나은 내일을 믿고',club:'희망의 학당'},
+OP1:{s:'불편한 현실도 외면하지 않는 용기가 있어요. 위기를 먼저 보고 대비합니다.',b:'어두운 면을 너무 오래 보면 냉소와 무력감에 젖을 수 있어요.',x:'하루 한 가지, 이유 없이 좋았던 순간을 기록하세요. 카뮈는 부조리를 직시하면서도 햇빛을 사랑했어요.',ath:'인간의 운명을 비극으로 그리는 극작가',jos:'세상의 부조리를 풍자하는 탈춤판의 말뚝이',adj:'그늘을 직시하는',noun:'목격자',mid:'삶의 그늘을 똑바로 보고',club:'비극 낭독회'}};
+const PH=[
+{id:'soc',n:'소크라테스',y:'기원전 470–399',nick:'아테네의 등에',core:'모른다는 것을 아는 데서 지혜가 시작된다. 질문으로 상대의 확신을 흔들어 진리에 다가간다.',say:'검토하지 않는 삶은 살 가치가 없다.',bk:'플라톤, 『소크라테스의 변명』',pr:['오늘 당연하게 쓴 단어 하나(성공, 행복, 공정)를 골라 ‘그게 정확히 뭔데?’를 세 번 연속 물어보세요.','의견이 다른 사람과 대화할 때 반박 대신 질문만으로 10분을 버텨 보세요.'],blind:'맨발로 시장을 돌며 아무나 붙잡고 ‘정의가 뭔가요?’라고 묻는 노인',bio:'질문 많음 주의 · 책은 안 씀 · 제자가 대신 씀',ic:'ti-message-question',col:'#c98a3b',v:['진리','정의'],p:[-1,1,-2,-2,0,1,-1,1,0,-1],s:'CD PC CA'},
+{id:'pla',n:'플라톤',y:'기원전 427–347',nick:'이데아의 건축가',core:'눈에 보이는 세계는 그림자이고, 이성으로만 닿는 완전한 형상(이데아)이 진짜다.',say:'동굴 밖으로 나가라. 우리가 보는 것은 그림자다.',bk:'『국가』 7권 · 동굴의 비유',pr:['요즘 나를 흔드는 ‘그림자’(SNS 비교, 남의 평가) 하나를 적고, 그 뒤의 ‘진짜’가 무엇인지 한 문장으로 써 보세요.','‘이상적인 하루’를 구체적으로 설계하고, 오늘 그중 한 조각만 실현해 보세요.'],blind:'동굴 벽의 그림자를 진짜로 믿는 사람들을 안타까워하는, 레슬링 선수였다는 소문의 학자',bio:'아카데메이아 설립 · 기하학 모르면 입장 불가',ic:'ti-building-arch',col:'#5a6fb5',v:['진리','정의'],p:[-2,-2,-2,-1,1,-2,-2,-1,0,-1],s:'RE TN CD'},
+{id:'ari',n:'아리스토텔레스',y:'기원전 384–322',nick:'중용의 박물학자',core:'행복은 탁월함을 습관으로 실천하는 삶이다. 지나침과 모자람 사이의 중용을 찾는다.',say:'용기는 비겁과 무모함 사이에 있다.',bk:'『니코마코스 윤리학』',pr:['고치고 싶은 성격 하나를 골라 ‘모자람 · 중용 · 지나침’ 세 칸 표를 만들고, 중용 칸의 행동을 하루 한 번 연습하세요.','좋은 습관은 의지가 아니라 반복이 만들어요. 3주 동안 지킬 아주 작은 행동 하나를 정하세요.'],blind:'동물 해부부터 정치·시·논리까지 다 정리해야 직성이 풀리는 왕자의 가정교사',bio:'알렉산더 대왕 과외 선생 · 걸어 다니는 백과사전',ic:'ti-scale',col:'#3f8f6b',v:['행복','조화'],p:[1,-1,-1,0,1,-1,1,0,0,-1],s:'RE IC'},
+{id:'dio',n:'디오게네스',y:'기원전 412–323',nick:'항아리 속 자유인',core:'남의 시선과 관습은 가짜 화폐다. 필요를 줄일수록 인간은 자유로워진다.',say:'햇빛을 가리지 말고 비켜 주시오.',bk:'디오게네스 라에르티오스, 『그리스 철학자 열전』 6권',pr:['오늘 ‘남들이 하니까’ 하는 일 하나를 찾아 하루만 하지 않아 보세요.','가진 물건 중 없어도 되는 것 세 개를 골라 보세요. 필요가 줄어든 만큼 자유가 늘어나요.'],blind:'대낮에 등불을 들고 ‘사람을 찾는다’며 시장을 돌아다니는 노숙 철학자',bio:'주소: 항아리 · 알렉산더 대왕 차단함',ic:'ti-lamp',col:'#b0773a',v:['자유','진리'],p:[2,0,0,0,-2,2,2,2,2,-1],s:'OR IC CA'},
+{id:'epi',n:'에피쿠로스',y:'기원전 341–270',nick:'정원의 행복 설계자',core:'행복은 고통과 불안이 없는 평온이다. 소박한 즐거움과 우정이면 충분하다.',say:'죽음은 우리에게 아무것도 아니다.',bk:'『메노이케우스에게 보내는 편지』',pr:['지금 원하는 것을 ‘자연스럽고 필요한 것 / 자연스럽지만 불필요한 것 / 헛된 것’으로 나눠 보세요.','이번 주, 비싸지 않은 즐거움(산책, 친구와의 빵 한 조각)을 의도적으로 세 번 누리세요.'],blind:'정원에 친구들을 모아 빵과 물만으로 최고의 잔치를 여는 사람',bio:'정원 운영 중 · 쾌락주의자(라 쓰고 미니멀리스트라 읽음)',ic:'ti-plant-2',col:'#6b9b3a',v:['행복','평온'],p:[2,-1,0,2,-1,-1,2,-2,1,-1],s:'TN CA PC'},
+{id:'mar',n:'마르쿠스 아우렐리우스',y:'121–180',nick:'일기 쓰는 황제',core:'통제할 수 있는 것과 없는 것을 구분하고, 내 판단과 행동에만 집중한다. 마음의 요새를 지킨다.',say:'일어나는 모든 일은 일어나야 할 대로 일어난다.',bk:'『명상록』',pr:['자기 전 3분, ‘오늘 내가 통제할 수 있었던 것과 없었던 것’을 두 칸으로 적으세요.','아침에 ‘오늘 무례한 사람을 만날 수도 있다’고 미리 떠올려 보세요. 대비한 마음은 덜 흔들려요.'],blind:'전쟁터 막사에서 밤마다 자기 자신에게 쓰는 일기를 남긴 황제',bio:'로마 황제 · 본업은 일기 · 출판 의도 없었음',ic:'ti-shield',col:'#8a5a9a',v:['평온','정의'],p:[-1,-1,-2,-2,1,-1,0,0,-2,0],s:'FF HR'},
+{id:'con',n:'공자',y:'기원전 551–479',nick:'관계의 스승',core:'사람은 관계 속에서 사람다워진다. 예(禮)와 인(仁)을 닦아 나와 사회를 함께 바로 세운다.',say:'배우고 때때로 익히면 기쁘지 아니한가.',bk:'『논어』',pr:['오늘 만나는 사람의 관계(부모, 동료, 친구)에 맞는 예의 한 가지를 정해 실천해 보세요.','하루를 마치며 묻기: 남을 위한 일에 충실했나, 친구에게 믿음을 지켰나, 배운 것을 익혔나.'],blind:'제자 3천 명을 거느리고 14년 동안 자신을 써 줄 나라를 찾아 떠돈 선생님',bio:'학습 인플루언서 · 어록은 제자들이 정리함',ic:'ti-users',col:'#b5473a',v:['조화','정의'],p:[1,-1,0,-2,2,-2,1,1,-1,-1],s:'OR IC PC'},
+{id:'lao',n:'노자',y:'기원전 6세기경',nick:'물처럼 사는 현자',core:'억지로 하지 않을 때 모든 것이 이루어진다. 물처럼 낮은 곳으로 흐르며 다투지 않는다.',say:'가장 좋은 것은 물과 같다.',bk:'『도덕경』',pr:['이번 주 가장 힘을 주고 있는 일 하나를 골라, 하루만 ‘덜 하기’를 실험해 보세요.','말하기 전에 한 박자 쉬세요. 아는 사람은 말이 적습니다.'],blind:'황소를 타고 국경을 넘다가, 문지기의 부탁에 5천 자만 남기고 사라진 노인',bio:'글 5천 자 남기고 잠적 · 무위(無爲) 실천 중',ic:'ti-droplet',col:'#3a8a8f',v:['평온','조화'],p:[-1,1,1,0,1,-1,1,-2,-2,-1],s:'CA FF'},
+{id:'zhu',n:'장자',y:'기원전 369–286경',nick:'나비 꿈의 자유인',core:'세상의 기준은 상대적이다. 쓸모의 굴레에서 벗어나 거닐 듯 자유롭게 산다.',say:'내가 나비 꿈을 꾼 걸까, 나비가 내 꿈을 꾸는 걸까.',bk:'『장자』 내편 (소요유 · 제물론)',pr:['나를 괴롭히는 ‘좋다/나쁘다’ 판단 하나를 골라, 반대 관점에서 쓸모를 세 가지 찾아보세요.','쓸모없어 보이는 일(멍때리기, 산책)에 일부러 30분을 써 보세요. 쓸모없음의 쓸모가 있어요.'],blind:'재상 자리를 제안받자 ‘진흙탕에서 꼬리를 끌며 사는 거북이 낫다’며 거절한 사람',bio:'나비일 수도 있음 · 쓸모없음 전문가',ic:'ti-butterfly',col:'#5aa36b',v:['자유','평온'],p:[0,2,1,0,-2,1,1,-2,-1,-1],s:'CD IC CA'},
+{id:'bud',n:'붓다',y:'기원전 563–483경',nick:'깨어난 사람',core:'삶의 괴로움은 집착에서 온다. 모든 것이 변한다는 것을 알면 마음이 풀려난다.',say:'모든 것은 변한다. 게으르지 말고 정진하라.',bk:'『숫타니파타』 또는 『법구경』',pr:['하루 5분, 호흡만 바라보세요. 생각이 떠오르면 ‘생각’이라고 이름 붙이고 다시 호흡으로.','괴로운 감정이 올라오면 마음속으로 ‘이것도 지나간다’고 말해 보세요.'],blind:'왕자의 자리와 궁전을 버리고 나무 아래서 깨달음을 얻은 사람',bio:'前 왕자 · 現 명상 마스터 · 집착 안 함',ic:'ti-flower',col:'#d29a2a',v:['평온','사랑'],p:[1,0,-1,-1,0,1,-1,-2,-1,2],s:'OP CA'},
+{id:'won',n:'원효',y:'617–686',nick:'해골물의 자유인',core:'모든 것은 마음이 짓는다. 서로 다른 주장도 하나의 진리를 비추는 여러 면이다(화쟁).',say:'마음이 일어나면 온갖 것이 생기고, 마음이 사라지면 해골물도 그냥 물이다.',bk:'『대승기신론소』 (쉬운 원효 평전과 함께)',pr:['다툼이 생기면 ‘둘 다 맞는 부분’을 하나씩 찾아 말해 보세요. 화쟁의 첫걸음이에요.','오늘 기분을 망친 일 하나를 떠올리고, 상황이 아니라 내 마음이 붙인 해석을 적어 보세요.'],blind:'유학길 동굴에서 달게 마신 물이 해골물이었음을 알고 그 길로 돌아온 스님',bio:'유학 취소하고 귀국 · 길거리 노래(무애가) 공연 중',ic:'ti-yin-yang',col:'#7a5ab0',v:['조화','사랑'],p:[-1,1,1,0,1,1,-2,1,1,-1],s:'TN CA'},
+{id:'aug',n:'아우구스티누스',y:'354–430',nick:'고백하는 영혼',core:'인간의 마음은 더 큰 사랑 안에서 쉬기 전까지 불안하다. 내면을 깊이 들여다볼 때 진리를 만난다.',say:'사랑하라, 그리고 네가 원하는 것을 하라.',bk:'『고백록』',pr:['오늘 하루를 솔직한 ‘고백 일기’로 적어 보세요. 잘한 일보다 흔들린 순간을 중심으로.','‘나는 무엇을 사랑하는가?’ 목록을 만들고 순서를 매겨 보세요. 사랑의 순서가 삶을 결정해요.'],blind:'방황하던 청춘 끝에, 정원에서 들린 아이 목소리에 삶을 바꾼 사람',bio:'前 파티피플 · 시간이란 무엇인가 연구 중',ic:'ti-heart',col:'#a8456b',v:['사랑','진리'],p:[-1,-2,1,-1,1,-1,-2,-1,-1,1],s:'TN CD'},
+{id:'mac',n:'마키아벨리',y:'1469–1527',nick:'냉정한 현실주의자',core:'세상은 있어야 할 모습이 아니라 있는 모습대로 봐야 한다. 결과를 내는 사람이 판을 지킨다.',say:'사랑받는 것보다 두려움의 대상이 되는 편이 안전하다. 둘 다 가질 수 없다면.',bk:'『군주론』',pr:['목표 하나를 정하고, 이상적인 계획이 아니라 ‘사람들이 실제로 움직이는 방식’에 맞춰 계획을 다시 짜 보세요.','최근 실패를 운(포르투나)의 몫과 대비할 수 있었던 실력(비르투)의 몫으로 나눠 보세요.'],blind:'공직에서 쫓겨난 뒤, 밤마다 관복을 차려입고 고전을 읽으며 권력의 원리를 쓴 외교관',bio:'피렌체 前 외교관 · 리더십 컨설팅(냉정함 주의)',ic:'ti-chess-queen',col:'#7a2f2f',v:['힘','자유'],p:[2,0,-1,2,1,0,2,2,1,2],s:'PC CA OP'},
+{id:'des',n:'데카르트',y:'1596–1650',nick:'의심의 설계자',core:'모든 것을 의심해도 의심하는 나는 남는다. 확실한 토대 위에 지식을 다시 쌓는다.',say:'나는 생각한다, 그러므로 나는 존재한다.',bk:'『방법서설』',pr:['복잡한 문제를 가장 작은 조각으로 쪼개고, 쉬운 것부터 순서대로 풀어 보세요. 데카르트의 방법 규칙이에요.','강하게 믿는 것 하나를 골라 ‘이게 틀렸다면?’을 끝까지 따라가 보세요.'],blind:'따뜻한 난로 방에 틀어박혀 생각만 하다가 좌표평면까지 발명한 늦잠꾸러기',bio:'늦잠 필수 · 좌표 발명 · 의심 많음',ic:'ti-brain',col:'#3f5a8f',v:['진리','평온'],p:[-2,-1,-2,0,-1,1,-1,-1,1,-1],s:'RE HR'},
+{id:'spi',n:'스피노자',y:'1632–1677',nick:'렌즈 깎는 현자',core:'신은 곧 자연이다. 모든 일은 필연이며, 그 필연을 이해할 때 감정에서 자유로워진다.',say:'감정을 이해하는 순간, 감정은 더 이상 우리를 지배하지 못한다.',bk:'『에티카』 (해설서와 함께)',pr:['화가 나면 ‘이 감정이 생길 수밖에 없었던 원인’을 세 개 적어 보세요. 이해가 곧 해방이에요.','비웃거나 한탄하지 말고 이해하려 해 보세요. 오늘 이해 안 되는 사람 한 명을 골라서.'],blind:'공동체에서 파문당한 뒤 조용히 안경 렌즈를 깎으며 신과 자연을 증명한 사람',bio:'렌즈 장인 · 윤리학을 기하학처럼 씀',ic:'ti-eyeglass',col:'#4a7f8a',v:['진리','평온'],p:[-2,-2,-1,0,-1,1,0,-2,-2,-1],s:'FF CA RE'},
+{id:'hob',n:'홉스',y:'1588–1679',nick:'질서의 설계자',core:'자연 상태의 인간은 서로를 두려워한다. 평화를 위해 우리는 강한 질서에 권리를 맡긴다.',say:'자연 상태의 삶은 고독하고, 가난하고, 험악하고, 잔인하고, 짧다.',bk:'『리바이어던』 (13~17장부터)',pr:['팀이나 가족 안의 갈등 하나를 골라, 모두가 지킬 수 있는 최소 규칙 하나를 제안해 보세요.','불안이 클 때는 ‘무엇이 나를 안전하게 하는가’부터 확보하세요. 안전이 먼저, 이상은 그다음.'],blind:'무적함대 소식에 어머니가 놀라 조산했다며 ‘나는 공포와 쌍둥이로 태어났다’고 말한 사람',bio:'공포와 쌍둥이 · 91세 장수 · 테니스 즐김',ic:'ti-building-castle',col:'#5a5a6e',v:['힘','평온'],p:[1,-1,0,1,2,-2,2,1,-1,2],s:'OR OP'},
+{id:'hum',n:'흄',y:'1711–1776',nick:'유쾌한 회의주의자',core:'모든 앎은 경험에서 오고, 인과는 습관일 뿐이다. 이성은 감정의 안내를 받는다.',say:'이성은 감정의 노예이며, 또 그래야만 한다.',bk:'『인간 오성에 관한 탐구』',pr:['확신하는 인과관계 하나(‘이걸 하면 저렇게 된다’)를 골라, 실제 증거가 몇 번이었는지 세어 보세요.','생각이 꼬이면 철학을 내려놓고 친구와 식사하세요. 흄은 보드게임으로 회의주의를 달랬어요.'],blind:'모든 것을 의심하는 책을 쓰고도, 저녁엔 친구들과 보드게임을 즐긴 넉넉한 체구의 신사',bio:'인과관계 의심 중 · 백개먼 고수 · 성격 좋음',ic:'ti-question-mark',col:'#4f7a9a',v:['행복','진리'],p:[2,2,2,1,1,-1,2,0,-1,0],s:'CD RE HR'},
+{id:'rou',n:'루소',y:'1712–1778',nick:'자연을 꿈꾼 몽상가',core:'인간은 본래 선하지만 사회가 타락시킨다. 진정한 자유는 함께 정한 규칙을 스스로 따르는 것이다.',say:'인간은 자유롭게 태어났지만, 어디서나 사슬에 묶여 있다.',bk:'『사회계약론』 또는 『에밀』',pr:['혼자 걷는 산책을 하며 떠오르는 감정을 그대로 적어 보세요. 『고독한 산책자의 몽상』처럼.','나를 묶는 사슬(비교, 체면, 소비) 하나를 적고, 그게 원래 내 것이었는지 물어보세요.'],blind:'자연 속 고독한 산책을 사랑하면서, 훗날 혁명가들의 경전이 될 책을 쓴 작곡가 출신 사상가',bio:'산책 중 · 오페라 작곡도 함 · 혁명의 원조(본인은 모름)',ic:'ti-trees',col:'#5c8a3a',v:['자유','정의'],p:[1,0,2,-1,1,2,0,0,2,-1],s:'HR OR FF'},
+{id:'kan',n:'칸트',y:'1724–1804',nick:'산책 시계 철학자',core:'옳은 행동은 결과가 아니라 원칙에서 나온다. 사람을 결코 수단으로만 대하지 마라.',say:'네 행동의 원칙이 모두의 법칙이 되어도 좋은지 물어라.',bk:'『도덕 형이상학의 기초』 (짧고 핵심적)',pr:['고민되는 결정 앞에서 ‘모두가 이렇게 한다면?’을 물어보세요. 정언명령 테스트예요.','오늘 만나는 사람을 내 목적의 도구로만 대하고 있지 않은지 한 번 점검하세요.'],blind:'평생 고향을 거의 떠나지 않았고, 매일 같은 시각에 산책해 이웃들이 시계를 맞췄다는 교수',bio:'산책 루틴 칼같음 · 고향 밖 안 나감 · 의무 중시',ic:'ti-clock',col:'#3a4f7a',v:['정의','자유'],p:[-1,0,-2,-2,0,-1,-1,-1,1,-1],s:'PC HR'},
+{id:'heg',n:'헤겔',y:'1770–1831',nick:'역사의 지휘자',core:'모든 것은 대립과 종합을 거치며 발전한다. 역사는 자유가 실현되어 가는 과정이다.',say:'미네르바의 부엉이는 황혼이 깃들어야 날개를 편다.',bk:'『역사철학 강의』 (입문서와 함께)',pr:['갈등 중인 두 입장을 적고, 둘을 모두 품는 ‘제3의 입장’을 만들어 보세요. 정·반·합.','지난 1년의 나를 ‘더 과거의 나’와 대립시키고, 그 충돌이 나를 어떻게 키웠는지 써 보세요.'],blind:'말을 타고 지나가는 나폴레옹을 보고 ‘말 위의 세계정신’을 봤다며 감탄한 교수',bio:'세계정신 관찰 중 · 문장 길이 주의',ic:'ti-git-merge',col:'#6a4a8f',v:['진리','조화'],p:[-2,-2,-1,0,2,1,-1,-1,-1,-2],s:'CD OP IC'},
+{id:'mil',n:'밀',y:'1806–1873',nick:'자유의 수호자',core:'남에게 해를 끼치지 않는 한 개인은 자유로워야 한다. 옳음은 행복을 늘리는가로 판단한다.',say:'만족한 돼지보다 불만족한 인간이 낫다.',bk:'『자유론』',pr:['누군가의 선택이 못마땅할 때 ‘그게 남에게 해를 끼치는가?’만 물어보세요. 아니라면 존중.','결정 앞에서 관련된 사람들의 행복과 불행을 표로 적어 합산해 보세요.'],blind:'세 살에 그리스어를 배운 혹독한 영재교육 끝에, 스무 살에 깊은 우울을 겪고 시에서 위로를 찾은 사람',bio:'영재교육 생존자 · 여성 참정권 법안 발의 의원',ic:'ti-feather',col:'#3a7a6a',v:['자유','행복'],p:[2,1,-1,2,-1,1,1,1,1,-1],s:'PC IC'},
+{id:'mrx',n:'마르크스',y:'1818–1883',nick:'세상을 바꾸려는 비판가',core:'역사는 계급 투쟁의 역사다. 철학은 세계를 해석하는 데서 멈추지 말고 바꿔야 한다.',say:'철학자들은 세계를 해석해 왔을 뿐이다. 중요한 것은 세계를 바꾸는 것이다.',bk:'『공산당 선언』 (짧다) → 입문서와 함께',pr:['내 하루의 일 중 ‘내 것이라고 느껴지지 않는 일’의 비율을 적어 보세요. 소외의 점검이에요.','불편한 사회 현상 하나를 골라 ‘누가 이익을 보는가?’를 물어보세요.'],blind:'대영박물관 열람실에 매일 출근해 자본의 비밀을 파헤친, 덥수룩한 수염의 망명객',bio:'도서관 죽돌이 · 수염 관리 안 함 · 혁명 예정',ic:'ti-hammer',col:'#b03a3a',v:['정의','자유'],p:[1,-2,0,1,2,2,2,2,-1,-1],s:'OR CA IC'},
+{id:'kie',n:'키르케고르',y:'1813–1855',nick:'단독자의 고백자',core:'진리는 체계가 아니라 내가 그것을 위해 살 수 있는 것이다. 불안은 자유의 현기증이다.',say:'삶은 뒤를 돌아볼 때 이해되지만, 앞을 향해 살아야 한다.',bk:'『두려움과 떨림』 또는 『죽음에 이르는 병』',pr:['미뤄 둔 ‘이것이냐 저것이냐’ 결정 하나를 골라, 오늘 안에 선택하고 책임지는 문장을 써 보세요.','남들이 다 그렇게 산다는 이유로 고른 것 하나를 찾아, 내가 진심으로 원하는지 물어보세요.'],blind:'사랑하는 약혼녀와 파혼한 뒤, 평생 여러 가명으로 신앙과 불안에 관한 책을 쓴 산책자',bio:'필명 다수 · 파혼 후 집필 폭주',ic:'ti-stairs-up',col:'#5a4a7a',v:['의미','사랑'],p:[0,1,2,0,-2,1,-2,-1,2,1],s:'IC HR TN'},
+{id:'sch',n:'쇼펜하우어',y:'1788–1860',nick:'비관의 위로자',core:'삶은 끝없는 욕망과 권태 사이를 오간다. 예술과 연민, 욕망을 내려놓음이 구원이다.',say:'삶은 고통과 권태 사이를 오가는 시계추다.',bk:'에세이 선집 『소품과 부록』 → 『의지와 표상으로서의 세계』',pr:['괴로울 때 음악 한 곡을 ‘온전히’ 들어 보세요. 쇼펜하우어는 예술이 고통을 잠시 멈춘다고 봤어요.','기대치 낮추기 연습: 오늘 일어날 수 있는 최악을 적고, 저녁에 그보다 나았던 점을 확인하세요.'],blind:'헤겔과 같은 시간에 강의를 열었다가 수강생이 거의 없었던, 푸들을 사랑한 독설가',bio:'푸들 아빠 · 헤겔 안티 · 인생 쓴맛 전문',ic:'ti-cloud-rain',col:'#5a6070',v:['평온','사랑'],p:[-1,0,1,0,-2,-1,-1,-2,-2,2],s:'OP FF'},
+{id:'nie',n:'니체',y:'1844–1900',nick:'망치를 든 철학자',core:'신은 죽었다. 남이 준 가치 대신 스스로 가치를 창조하고, 운명조차 사랑하라.',say:'나를 죽이지 못하는 것은 나를 더 강하게 만든다.',bk:'『즐거운 학문』 → 『차라투스트라는 이렇게 말했다』',pr:['같은 삶이 영원히 반복된다면 오늘 하루를 기꺼이 다시 살 수 있나요? 아니라면 무엇을 바꾸겠어요?','당연하게 여겨 온 도덕 하나(‘착해야 한다’ 등)의 기원을 추적해 보세요. 누구에게 이로웠나요?'],blind:'산과 호숫가를 몇 시간씩 걸으며 사색한, 콧수염이 인상적인 문헌학 교수 출신 방랑자',bio:'콧수염 · 망치 · 산책 중독 · 신의 부고 전함',ic:'ti-bolt',col:'#8f3a5a',v:['힘','의미'],p:[1,1,2,0,-2,2,2,-1,0,2],s:'OR IC HR'},
+{id:'wit',n:'비트겐슈타인',y:'1889–1951',nick:'언어의 한계를 그린 사람',core:'철학의 많은 문제는 언어의 혼란에서 생긴다. 말할 수 없는 것 앞에서는 침묵해야 한다.',say:'말로 할 수 없는 것 앞에서는 침묵하라.',bk:'『철학적 탐구』 해설서로 시작하기',pr:['다툼이 생기면 ‘우리가 같은 단어를 같은 뜻으로 쓰고 있나?’부터 확인하세요.','말로 정리되지 않는 감정은 억지로 설명하지 말고, 그림이나 산책으로 ‘보여’ 주세요.'],blind:'엄청난 유산을 형제들에게 넘기고, 노르웨이 오두막과 시골 학교에서 지낸 천재',bio:'유산 포기 · 오두막 거주 · 내 책은 내가 반박함',ic:'ti-language',col:'#3a6a8f',v:['진리','의미'],p:[1,2,-1,0,-1,1,-1,-1,0,1],s:'CD HR'},
+{id:'sar',n:'사르트르',y:'1905–1980',nick:'자유를 선고받은 사람',core:'실존은 본질에 앞선다. 정해진 나는 없고, 선택으로 나를 만들며 그 책임도 진다.',say:'우리는 자유를 피할 수 없다. 선택하지 않는 것도 선택이다.',bk:'『실존주의는 휴머니즘이다』 (짧은 강연록)',pr:['‘원래 내가 그런 사람이라서’라는 말을 오늘 하루 금지해 보세요.','회피 중인 선택 하나를 적고, 선택하지 않음으로써 무엇을 선택하고 있는지 써 보세요.'],blind:'카페 테이블에서 글을 쓰고, 노벨문학상을 거절한 동그란 안경의 파리 지식인',bio:'카페 상주 · 노벨상 거절 · 자유 과다',ic:'ti-coffee',col:'#4a4a4a',v:['자유','의미'],p:[1,-1,0,1,-1,2,2,2,2,1],s:'FF CA TN'},
+{id:'cam',n:'카뮈',y:'1913–1960',nick:'부조리 앞의 반항아',core:'세계는 우리의 물음에 답하지 않는다. 그 부조리를 직시하고도 기꺼이 살아가는 것이 반항이다.',say:'우리는 행복한 시시포스를 상상해야 한다.',bk:'『시지프 신화』 (『이방인』과 함께)',pr:['반복되는 일상 하나를 골라, 오늘은 ‘바위를 미는 감각’ 자체를 음미해 보세요.','의미를 찾지 못한 날에도 햇빛, 바다, 공놀이처럼 몸으로 느끼는 기쁨 하나를 챙기세요.'],blind:'알제리의 태양과 바다, 축구를 사랑한 골키퍼 출신 노벨상 작가',bio:'前 골키퍼 · 햇빛 성애자 · 부조리 직시 중',ic:'ti-sun',col:'#d07a2a',v:['의미','행복'],p:[1,1,1,-1,1,1,2,1,1,1],s:'TN OP HR'},
+{id:'bea',n:'보부아르',y:'1908–1986',nick:'되어 가는 자유의 철학자',core:'인간은 무엇으로 태어나지 않고 되어 간다. 나의 자유는 타인의 자유와 함께일 때 완성된다.',say:'우리는 무엇으로 태어나지 않는다. 되어 간다.',bk:'『모호성의 윤리』 또는 『제2의 성』 발췌본',pr:['‘나는 원래 ~한 사람’이라는 꼬리표 하나를 골라, 언제 누구에게서 왔는지 추적해 보세요.','내 자유가 누군가의 자유를 줄이고 있지 않은지 오늘의 한 장면을 점검하세요.'],blind:'평생 ‘계약 연애’를 이어 가며, 여성의 조건을 처음으로 철학의 중심에 올린 작가',bio:'계약 연애 원조 · 카페 집필 · 되어 가는 중',ic:'ti-pencil',col:'#a0507a',v:['자유','정의'],p:[2,0,0,-1,1,2,2,2,2,0],s:'OR FF'},
+{id:'are',n:'한나 아렌트',y:'1906–1975',nick:'생각하는 시민',core:'악은 생각하지 않는 평범함에서 나온다. 사람들 앞에서 말하고 행동할 때 인간은 자유롭다.',say:'가장 큰 악은 생각하기를 멈춘 평범한 사람들에게서 나온다.',bk:'『예루살렘의 아이히만』 또는 『인간의 조건』',pr:['오늘 ‘시키니까’, ‘다들 하니까’ 한 일 하나를 골라, 내가 판단했다면 어땠을지 써 보세요.','모임에서 한 번은 내 의견을 공개적으로 말해 보세요. 아렌트에게 자유는 ‘함께 나타나는 것’이에요.'],blind:'나치를 피해 망명한 뒤, 전범 재판을 취재하며 ‘악의 평범성’이라는 말을 남긴 정치철학자',bio:'망명자 · 재판 취재 · 생각 안 하는 사람 경계',ic:'ti-speakerphone',col:'#2f6f7a',v:['자유','진리'],p:[1,1,-1,-1,2,0,1,2,1,0],s:'CA IC'}];
+const PHI={};PH.forEach((p,i)=>PHI[p.id]=i);
+const LQ={RE1:[1,'이론보다 데이터와 실제 사례를 더 믿는다.'],RE2:[-1,'경험하지 않아도 생각만으로 확실히 알 수 있는 진리가 있다.'],RE3:[1,'머릿속 논리보다 눈으로 확인한 것이 더 강하다.'],
+CD1:[1,'내가 확신하는 것도 틀렸을 수 있다고 늘 생각한다.'],CD2:[-1,'옳고 그름에는 누구에게나 통하는 정답이 있다.'],CD3:[-1,'끝까지 따져 보면 결국 하나의 답에 도달할 수 있다.'],
+HR1:[1,'중요한 결정일수록 마지막엔 마음이 끌리는 쪽을 고른다.'],HR2:[-1,'감정이 앞설 때는 판단을 잠시 미룬다.'],HR3:[1,'논리적으로 맞아도 마음이 아니라고 하면, 그 느낌을 믿는다.'],
+PC1:[1,'더 많은 사람이 행복해진다면 작은 거짓말은 괜찮다.'],PC2:[-1,'결과가 아무리 좋아도 해서는 안 되는 일이 있다.'],PC3:[1,'의도보다 실제 결과로 행동을 평가해야 한다.'],
+IC1:[-1,'남에게 피해만 주지 않는다면, 내 삶은 내 뜻대로 살아도 된다.'],IC2:[1,'나라는 사람은 내가 속한 관계들로 만들어진다.'],IC3:[-1,'무리에 맞추느니 혼자인 편이 낫다.'],
+OR1:[1,'이유가 납득되지 않는 관습은 따르지 않는다.'],OR2:[-1,'오래 이어진 전통에는 우리가 모르는 지혜가 담겨 있다.'],OR3:[1,'세상을 바꾸려면 때로는 판을 엎어야 한다.'],
+TN1:[-1,'눈에 보이는 세계 너머에 더 깊은 무언가가 있다고 느낀다.'],TN2:[1,'인간도 결국 자연의 일부일 뿐, 특별한 영혼 같은 건 없다.'],TN3:[-1,'과학이 끝내 설명하지 못할 영역이 있다고 믿는다.'],
+CA1:[1,'생각만 하기보다 일단 부딪혀 보는 쪽이 낫다.'],CA2:[-1,'세상일에서 한 걸음 물러나 있을 때 마음이 가장 맑다.'],CA3:[1,'사회 문제를 보면 내가 할 수 있는 일부터 떠올린다.'],
+FF1:[-1,'바꿀 수 없는 일에는 마음을 쓰지 않으려 한다.'],FF2:[1,'사람은 타고난 본성이 아니라 선택으로 자신을 만든다.'],FF3:[-1,'모든 일에는 그렇게 될 수밖에 없었던 이유가 있다.'],
+OP1:[1,'삶에는 근본적으로 고통이 깔려 있다.'],OP2:[-1,'길게 보면 인류는 점점 나아지고 있다.'],OP3:[1,'세상이 공정할 거라고 기대하지 않는다.']};
+const FQ={
+'RE-D':{ti:'메리의 방',t:'평생 흑백 방에서 색의 과학을 완벽히 공부한 메리가, 처음으로 빨간 사과를 본다. 메리는 새로운 것을 배웠을까?',A:'그렇다. 직접 봐야만 아는 것이 있다',B:'아니다. 이미 아는 것을 확인했을 뿐이다',pl:'A',ex:'철학자 프랭크 잭슨의 ‘지식 논증’(1982)이에요. 물리적 사실을 전부 알아도 ‘빨강을 보는 느낌’이 따로 있다면, 앎에는 경험으로만 열리는 문이 있다는 뜻이 됩니다.'},
+'CD-D':{ti:'똑똑한 친구의 반대',t:'당신이 확신하는 생각에, 당신만큼 똑똑하고 정직한 친구가 정반대 의견을 낸다.',A:'근거를 더 찾아 친구를 설득한다',B:'내 확신을 한 단계 낮춘다',pl:'B',ex:'현대 인식론의 ‘동료 불일치’ 문제예요. 나만큼 유능한 사람이 반대한다면 확신을 낮추는 게 합리적이라는 쪽(회의)과, 근거가 충분하면 버텨도 된다는 쪽(확신)이 맞섭니다.'},
+'HR-D':{ti:'설명할 수 없는 끌림',t:'이직 제안이 두 개 왔다. 하나는 모든 조건이 낫고, 다른 하나는 이유는 모르겠지만 끌린다.',A:'설명할 수 없어도 끌리는 쪽',B:'모든 조건이 나은 쪽',pl:'A',ex:'흄은 이성이 목표를 정하지 못하고 감정이 정한다고 봤고, 스토아학파는 감정을 판단의 오류로 봤어요. 현대 심리학은 감정이 경험이 압축된 빠른 정보라는 쪽에 가깝습니다.'},
+'PC-D':{ti:'전차 문제',t:'브레이크가 고장 난 전차가 다섯 명에게 돌진한다. 레버를 당기면 다른 선로의 한 명이 희생된다.',A:'당기지 않는다. 내가 죽음을 고를 순 없다',B:'당긴다. 한 명보다 다섯 명이다',pl:'B',ex:'필리파 풋(1967)이 만들고 주디스 톰슨이 발전시킨 사고실험이에요. 결과를 따지는 공리주의와, ‘죽이는 것’과 ‘죽게 두는 것’을 구분하는 의무론이 정면으로 부딪힙니다.'},
+'IC-D':{ti:'위기의 팀과 나의 기회',t:'팀이 큰 위기다. 당신이 남아야 동료들이 버틴다. 그때 꿈꾸던 기회가 다른 곳에서 왔다.',A:'남는다. 함께한 사람들을 두고 갈 수 없다',B:'떠난다. 내 인생은 한 번뿐이다',pl:'A',ex:'개인의 자율(밀, 니체)과 관계의 의무(공자, 아리스토텔레스)가 충돌하는 장면이에요. 공동체주의는 ‘나’를 관계와 떼어 놓고 생각할 수 없다고 봅니다.'},
+'OR-D':{ti:'오래된 규칙',t:'새로 들어간 곳에 비효율적이지만 모두가 지키는 오래된 규칙이 있다.',A:'일단 따른다. 오래된 데는 이유가 있다',B:'바꾸자고 말한다. 이유 없는 불편은 참을 필요 없다',pl:'B',ex:'‘이유를 모르는 울타리는 함부로 허물지 말라’는 체스터턴의 울타리 비유가 있어요. 반대로 마르크스와 보부아르는 자연스러워 보이는 규칙이 누군가의 이익을 지킨다고 봤습니다.'},
+'TN-D':{ti:'아무것도 남지 않는다면',t:'죽은 뒤엔 아무것도 남지 않는다는 사실이 완벽히 증명됐다.',A:'달라질 건 없다. 의미는 지금 여기에 있다',B:'삶의 의미가 크게 흔들릴 것 같다',pl:'A',ex:'에피쿠로스는 죽음 뒤가 없다면 두려워할 이유도 없다고 했고, 아우구스티누스와 키르케고르는 영원과의 관계가 삶에 의미를 준다고 봤어요.'},
+'CA-D':{ti:'남은 인생의 시간',t:'평생 쓸 돈이 생겼다. 남은 인생을 한 가지에 쓴다면?',A:'조용한 곳에서 읽고, 쓰고, 사색하며 산다',B:'세상의 문제 하나를 붙잡고 바꾸는 데 쓴다',pl:'B',ex:'아리스토텔레스는 관조하는 삶을 최고의 행복으로 꼽았고, 아렌트는 사람들 사이에서 행동하는 삶을 인간다움의 핵심으로 봤어요.'},
+'FF-D':{ti:'미래를 아는 기계',t:'당신의 모든 선택을 100% 맞히는 기계가, 당신의 내일을 미리 적어 두었다.',A:'일부러 다르게 행동해서라도 틀리게 만든다',B:'받아들인다. 알고 사는 것도 나쁘지 않다',pl:'A',ex:'‘라플라스의 악마’로 알려진 결정론의 사고실험이에요. 스피노자는 필연을 이해하는 것이 자유라고 했고, 사르트르는 어떤 예측도 지금의 선택을 대신할 수 없다고 봤습니다.'},
+'OP-D':{ti:'시시포스의 바위',t:'매일 바위를 산 위로 밀어 올리지만, 바위는 늘 다시 굴러떨어진다.',A:'언젠가 바위가 꼭대기에 머물 날을 믿고 민다',B:'떨어질 걸 알면서 미는 지금이 전부다',pl:'B',ex:'카뮈는 『시지프 신화』에서 의미 없는 반복을 직시하면서도 기꺼이 사는 것을 ‘반항’이라 불렀어요. 헤겔식 희망은 역사가 결국 어딘가로 나아간다고 믿습니다.'},
+'RE-M':{A:'눈에 보이는 세계는 그림자다. 진짜는 생각으로만 보인다.',B:'모든 생각은 결국 감각에서 온 복사본이다.',wa:'pla',wb:'hum',pl:'B'},
+'CD-M':{A:'내가 나비 꿈을 꾼 건지, 나비가 내 꿈을 꾸는 건지 누가 알까.',B:'모든 걸 의심해도, 의심하는 나만은 확실하다.',wa:'zhu',wb:'des',pl:'A'},
+'HR-M':{A:'감정을 이해하는 순간, 감정은 더 이상 나를 지배하지 못한다.',B:'우리에게 존재한다는 것은 곧 느낀다는 것이다.',wa:'spi',wb:'rou',pl:'B'},
+'PC-M':{A:'행복을 늘리는 만큼 옳고, 불행을 낳는 만큼 그르다.',B:'네 행동의 원칙이 모두의 법칙이 되어도 좋은지 물어라.',wa:'mil',wb:'kan',pl:'A'},
+'IC-M':{A:'무리가 정한 가치를 벗어나, 너 자신이 되어라.',B:'인간은 공동체 속에서만 온전해지는 존재다.',wa:'nie',wb:'ari',pl:'B'},
+'OR-M':{A:'세계를 해석하는 것으로는 부족하다. 바꿔야 한다.',B:'나는 옛것을 전할 뿐, 새로 지어내지 않는다.',wa:'mrx',wb:'con',pl:'A'},
+'TN-M':{A:'우리 마음은 더 큰 존재 안에서 쉬기 전까지 불안하다.',B:'죽음이 있을 땐 우리가 없고, 우리가 있을 땐 죽음이 없다.',wa:'aug',wb:'epi',pl:'B'},
+'CA-M':{A:'사람들 앞에서 말하고 행동할 때, 우리는 비로소 자유롭다.',B:'억지로 하지 않을 때, 이루어지지 않는 것이 없다.',wa:'are',wb:'lao',pl:'A'},
+'FF-M':{A:'일어나는 모든 일은 일어나야 할 대로 일어난다.',B:'우리는 자유를 피할 수 없다. 선택하지 않는 것도 선택이다.',wa:'mar',wb:'sar',pl:'B'},
+'OP-M':{A:'삶은 고통과 권태 사이를 오가는 시계추다.',B:'역사는 자유가 조금씩 실현되어 가는 과정이다.',wa:'sch',wb:'heg',pl:'A'}};
+const ORDER=[[1,'RE1 CD1 HR1 RE-D CD2 HR2 CD-M RE2 HR-D CD3 RE-M HR3 CD-D RE3 HR-M'],[2,'PC1 IC1 OR1 PC-D IC2 OR2 IC-M PC2 OR-D IC3 PC-M OR3 IC-D PC3 OR-M'],[3,'TN1 CA1 FF1 OP1 TN-D CA2 FF2 OP-M TN2 CA-D FF3 OP2 TN-M CA3 FF-D OP3 CA-M TN3 FF-M OP-D']];
+const ITEMS=[];ORDER.forEach(([p,s])=>s.split(' ').forEach(code=>{const a=code.slice(0,2),it={id:ITEMS.length,p,a,ai:AXI[a],code};if(code.indexOf('-')<0){it.ty='L';it.k=LQ[code][0];it.t=LQ[code][1];it.len=it.t.length}else{const f=FQ[code];Object.assign(it,f);it.ty=code.slice(3)=='D'?'D':'M';it.len=(it.t||'').length+f.A.length+f.B.length+(it.ty=='M'?14:0)}ITEMS.push(it)}));
+const NQ=ITEMS.length,AXITEMS={};AK.forEach(a=>AXITEMS[a]=ITEMS.filter(x=>x.a==a));
+const VAL={'진리':['ti-bulb','속지 않고 참을 아는 것'],'정의':['ti-scale','모두에게 공정한 세상'],'자유':['ti-feather','내 뜻대로 살 권리'],'평온':['ti-droplet','흔들리지 않는 마음'],'의미':['ti-compass','살 이유가 있는 삶'],'조화':['ti-yin-yang','어울려 사는 관계'],'행복':['ti-mood-smile','기쁨이 있는 하루'],'힘':['ti-flame','원하는 것을 이루는 힘'],'사랑':['ti-heart','아끼고 아껴지는 것']};
+const VK=Object.keys(VAL);
+const MARS={'진리':'화성 기지의 정보 검증관 · 지구에서 온 소식의 진위를 가리는 사람','정의':'화성 최초 헌법의 기초자 · 산소 배분의 공정을 설계하는 사람','자유':'돔 밖 개척지에 홀로 정착한 자유 탐사가','평온':'기지 명상실 관리인 · 고립된 대원들의 마음을 고요하게 하는 사람','의미':'‘우리는 왜 화성에 왔는가’를 묻는 기지의 철학 담당관','조화':'서로 다른 나라에서 온 대원들을 하나로 묶는 중재관','행복':'제한된 식량으로 최고의 저녁을 차리는 기지의 요리사','힘':'지구와의 협상을 책임지는 기지 사령관','사랑':'기지에서 태어난 첫 아이를 돌보는 보육 책임자'};
+const DOM={work:['진로·일','CA',['당신은 물러서서 생각할 때 답이 보이는 사람이에요. 정보를 더 모으기보다, 조용히 ‘나는 무엇을 할 때 시간을 잊나’를 적어 보는 데서 진로 고민이 풀려요.','당신은 해 보면서 알아 가는 사람이에요. 머릿속에서만 굴리지 말고, 2주짜리 작은 실험(사이드 프로젝트, 현직자 인터뷰)을 바로 시작하세요.','생각과 실행 사이를 오가는 사람이에요. 한 주는 탐색, 한 주는 실행으로 번갈아 보세요. 둘 다 당신의 무기예요.']],
+rel:['관계','IC',['당신에겐 혼자만의 영역이 숨구멍이에요. 관계의 피로는 ‘여기까지는 내 시간’이라는 경계를 말로 정해 둘 때 줄어들어요.','당신은 관계에서 힘을 얻지만, 관계에 휘둘리기도 쉬워요. 모든 관계를 지키려 하기보다 가장 소중한 세 사람에게 먼저 마음을 쓰세요.','혼자와 함께 사이의 균형 감각이 좋아요. 지금 지친 쪽이 어디인지(너무 혼자인지, 너무 함께인지)부터 확인하세요.']],
+anx:['불안·스트레스','FF',['당신은 받아들이는 힘이 강해요. 불안할 땐 ‘내가 통제할 수 있는 것’ 목록을 쓰고, 나머지는 의식적으로 흘려보내세요.','당신은 스스로 바꿀 수 있다고 믿는 사람이라, 통제 밖의 일까지 짊어지기 쉬워요. 불안의 절반은 애초에 내 몫이 아니라는 걸 적어 두세요.','받아들일 때와 바꿀 때를 구분하는 감각이 있어요. 지금 불안이 ‘행동이 필요한 신호’인지 ‘놓아야 할 걱정’인지 먼저 나눠 보세요.']],
+mean:['삶의 의미','TN',['당신은 나보다 큰 무언가와 연결될 때 의미를 느껴요. 신앙이든 자연이든 예술이든, 그 앞에 서는 시간을 정기적으로 가지세요.','당신에게 의미는 찾는 게 아니라 만드는 거예요. 이번 달 ‘이걸 했다’고 말할 수 있는 작은 것 하나를 정하세요.','당신은 일상에서도, 그 너머에서도 의미를 찾을 수 있는 사람이에요. 최근 ‘살아 있다’고 느낀 순간 세 개를 적고 공통점을 찾아보세요.']],
+dec:['큰 결정','HR',['당신은 머리로 결정하는 사람이에요. 장단점 표는 이미 충분해요. 마지막 칸에 ‘1년 뒤 내 마음은?’을 추가하세요.','당신은 끌림으로 결정하는 사람이에요. 끌림을 믿되, 일주일 뒤에도 같은 끌림인지 확인하는 숙성 기간을 두세요.','머리와 가슴이 함께 일하는 사람이에요. 둘이 같은 답을 내면 바로 움직이고, 다르면 무엇이 다른지부터 적어 보세요.']]};
+const SCH=[['고대 그리스 철학',['soc','pla','ari'],'질문과 이성으로 좋은 삶과 진리를 탐구한 서양 철학의 뿌리'],['헬레니즘 행복론',['dio','epi','mar'],'혼란한 시대에 ‘흔들리지 않고 행복하는 법’을 실용적으로 고민한 학파들'],['유가·도가',['con','lao','zhu'],'관계의 도리와 자연의 길, 동아시아 사유의 두 기둥'],['불교 사상',['bud','won'],'집착을 내려놓고 마음을 깨우는 지혜의 전통'],['신앙의 철학',['aug','kie'],'내면 깊은 곳에서 초월과 만나는 고백의 철학'],['합리론·관념론',['des','spi','kan','heg'],'이성으로 세계의 구조와 도덕의 법칙을 세운 근대 철학'],['경험론·분석철학',['hum','mil','wit'],'경험과 증거, 언어의 명료함으로 생각을 다듬는 전통'],['정치 현실주의·사회계약',['mac','hob','rou'],'권력과 질서, 함께 사는 규칙을 냉정하게 설계한 사상'],['비판과 해방의 사상',['mrx','bea','are'],'당연해 보이는 구조를 의심하고 자유의 조건을 묻는 사상'],['실존과 생의 철학',['sch','nie','sar','cam'],'의미 없는 세계에서 어떻게 살 것인가를 정면으로 묻는 철학']];
+const ERA=[['기원전 동아시아·인도',['con','lao','zhu','bud'],'제자백가가 다투고 붓다가 길을 걷던 시대. 마음과 관계, 자연의 길을 묻던 곳이에요.'],['기원전 그리스',['soc','pla','ari','dio','epi'],'광장에서 누구나 질문하던 시대. 서양 철학이 태어난 곳이에요.'],['로마와 중세',['mar','aug','won'],'제국과 신앙의 시대. 흔들리는 세상에서 내면의 요새를 쌓던 곳이에요.'],['르네상스와 계몽',['mac','hob','des','spi','hum','rou','kan'],'이성으로 세계를 다시 설계하던 시대. 근대가 시작된 곳이에요.'],['혁명의 19세기',['heg','sch','mil','kie','mrx','nie'],'모든 것이 뒤집히던 시대. 역사와 계급, 신의 죽음을 묻던 곳이에요.'],['격동의 20세기',['wit','sar','are','bea','cam'],'전쟁과 부조리의 시대. 자유와 책임을 다시 묻던 곳이에요.']];
 </script>
-<script>
-window.TYPES = window.TYPES || {};
-Object.assign(window.TYPES, {
-ENFJ:{breed:"골든 리트리버", en:"Golden Retriever", size:"대형견", energy:4, nick:"모두를 챙기는 다정한 리더",
- dog:{len:12,h:6,leg:4,hs:6,sn:3,ear:"flop",tail:"plume",c1:"#e0a44a",c2:"#f3cf86",c3:"#c98a35",pat:["belly"],fluffy:true},
- desc:"처음 보는 강아지든 사람이든 금세 친구로 만들어요. 무리에 불편한 친구가 있으면 먼저 다가가 챙기는 타고난 리더예요. 다만 모두를 기쁘게 하려다 정작 내 마음은 뒷전이 되기 쉬워요.",
- traits:["누구에게나 다정함","분위기를 이끄는 리더십","칭찬에 약함"],
- walk:[{c:"ISFJ",why:"시츄의 느긋한 발걸음에 맞춰 걸어 주고, 시츄는 골든 옆에서 마음 놓고 따라와요."},{c:"INFP",why:"예민한 말티즈를 다독일 줄 알아서, 골든과 걸을 땐 말티즈도 꼬리를 내리지 않아요."}],
- growl:[{c:"INTJ",why:"반가워서 들이대는 골든에게 시바는 '선 넘지 마'라며 낮게 으르렁대요."},{c:"ESTP",why:"규칙 없이 판을 휘젓는 잭 러셀 때문에 다정한 골든도 결국 한마디 해요."}],
- good:{c:"ESFJ",t:"사람이 북적이는 집의 다정한 주인",why:"가족 모임, 친구 초대가 잦고 칭찬을 아끼지 않는 주인이면 골든은 매일이 축제예요."},
- bad:{c:"ISTP",t:"혼자만의 시간이 긴 무심한 주인",why:"표현이 적고 집을 오래 비우면 골든은 외로움에 쿠션을 해체하기 시작해요.",tip:"출근 전 10분이라도 눈 맞추고 말 걸어 주기, 그거면 충분해요."}},
-
-ENFP:{breed:"웰시 코기", en:"Welsh Corgi", size:"중형견", energy:5, nick:"궁둥이로 행복을 퍼뜨리는 분위기 메이커",
- dog:{len:12,h:5,leg:2,hs:6,sn:3,ear:"bigprick",tail:"stub",c1:"#de8a3c",c2:"#fff6e6",c3:"#c06f28",pat:["belly","blaze","socks"],fluffy:false},
- desc:"짧은 다리로 온 공원을 누비며 누구에게나 말을 거는 호기심 대장이에요. 새로운 놀이를 끝없이 만들어 내고, 그 흥이 주변까지 번져요. 다만 하나에 오래 집중하긴 어려워요.",
- traits:["넘치는 호기심","어디서나 인싸","아이디어 뱅크"],
- walk:[{c:"ESFP",why:"비글과 만나면 둘 다 텐션 최고치. 산책이 놀이공원이 돼요."},{c:"ENFJ",why:"골든이 코기의 즉흥 코스를 다정하게 받아 줘요."}],
- growl:[{c:"ISTJ",why:"서열과 규칙을 중시하는 진돗개는 코기의 장난을 버릇없다고 여겨요."},{c:"ESTJ",why:"줄 맞춰 걷자는 셰퍼드와 자유로운 코기는 산책 3분 만에 신경전을 벌여요."}],
- good:{c:"ENFP",t:"주말마다 새 장소로 떠나는 즉흥파 주인",why:"카페, 바다, 캠핑까지 데려가는 주인이면 코기의 호기심이 매일 채워져요."},
- bad:{c:"ISTJ",t:"매일 같은 짧은 루틴만 도는 주인",why:"같은 길 10분 산책만 반복되면 코기는 지루해서 신발을 물어뜯어요.",tip:"일주일에 한 번만 산책 코스를 바꿔 줘도 코기는 행복해해요."}},
-
-ESFJ:{breed:"래브라도 리트리버", en:"Labrador Retriever", size:"대형견", energy:4, nick:"누구든 돕고 싶은 모범생",
- dog:{len:12,h:6,leg:4,hs:6,sn:3,ear:"flop",tail:"otter",c1:"#7a4b2e",c2:"#94603d",c3:"#5e3820",pat:[],fluffy:false},
- desc:"맡은 일을 해내고 칭찬받을 때 가장 행복해요. 다른 강아지와 사람의 기분을 잘 살피고 분위기를 맞춰 주는 사교의 달인이에요. 다만 남의 평가에 쉽게 흔들려요.",
- traits:["뛰어난 사회성","책임감과 성실함","인정받고 싶은 마음"],
- walk:[{c:"ISFJ",why:"둘 다 배려왕이라 서로 냄새 맡을 시간을 양보하며 평화롭게 걸어요."},{c:"ENFJ",why:"골든과 래브라도는 리트리버 단짝. 공 하나로 한 시간도 거뜬해요."}],
- growl:[{c:"ENTP",why:"규칙을 비웃는 허스키의 장난에 모범생 래브라도의 인내심이 바닥나요."},{c:"ISTP",why:"자꾸 챙겨 주려는 래브라도에게 닥스훈트는 '혼자 둬' 하며 으르렁대요."}],
- good:{c:"ISFJ",t:"꾸준히 칭찬하고 챙겨 주는 주인",why:"작은 성공에도 크게 칭찬해 주는 주인 곁에서 래브라도는 최고의 반려견이 돼요."},
- bad:{c:"INTP",t:"반응이 늦고 칭찬을 잊는 주인",why:"열심히 공을 물어 와도 반응이 없으면 래브라도는 금세 풀이 죽어요.",tip:"잘했을 때 바로 '옳지!' 한마디. 타이밍이 생명이에요."}},
-
-ESFP:{breed:"비글", en:"Beagle", size:"중형견", energy:5, nick:"코와 흥이 이끄는 파티견",
- dog:{len:11,h:5,leg:4,hs:6,sn:3,ear:"longflop",tail:"up",c1:"#fff6e6",c2:"#fff6e6",c3:"#3b3646",ec:"#b86b2a",hc:"#c47a35",pat:["tri","mask","tailTip"],fluffy:false},
- desc:"재미있는 냄새와 소리가 있는 곳이라면 어디든 달려가요. 지금 이 순간을 제일 신나게 즐길 줄 아는 타고난 엔터테이너예요. 다만 흥이 넘치면 통제가 잘 안 돼요.",
- traits:["지칠 줄 모르는 흥","뛰어난 후각과 호기심","목청 자랑"],
- walk:[{c:"ENFP",why:"코기와 비글이 만나면 산책이 축제가 돼요. 둘 다 지치지 않아요."},{c:"ESTP",why:"잭 러셀과 냄새 추적 레이스를 벌이며 공원을 누벼요."}],
- growl:[{c:"INTJ",why:"고요를 사랑하는 시바에게 비글의 하울링은 소음 공해예요."},{c:"ISFJ",why:"느긋하게 쉬던 시츄는 정신없는 비글이 다가오면 깜짝 놀라 으르렁대요."}],
- good:{c:"ESTP",t:"매일 긴 산책과 운동을 즐기는 활동파 주인",why:"하루 두 번, 한 시간씩 뛰어 주는 주인이면 '악마견' 소리는 쏙 들어가요."},
- bad:{c:"INTJ",t:"조용한 집에서 계획대로 사는 주인",why:"에너지를 못 푼 비글은 조용한 집을 하울링 콘서트장으로 만들어요.",tip:"노즈워크 매트로 코를 쓰게 해 주면 비글의 에너지가 금방 풀려요."}},
-
-ESTP:{breed:"잭 러셀 테리어", en:"Jack Russell Terrier", size:"소형견", energy:5, nick:"멈추지 않는 모험가",
- dog:{len:10,h:5,leg:4,hs:5,sn:3,ear:"fold",tail:"up",c1:"#fbf6ec",c2:"#fbf6ec",c3:"#b5743a",ec:"#b5743a",pat:["patch"],fluffy:false},
- desc:"작은 몸에 엔진을 단 것처럼 일단 뛰고 생각은 나중에 해요. 겁이 없어서 큰 개 앞에서도 물러서지 않는 배짱이 있어요. 다만 지루하면 스스로 사고를 쳐서라도 재미를 만들어요.",
- traits:["겁 없는 배짱","폭발적인 순발력","지루함을 못 참음"],
- walk:[{c:"ESFP",why:"비글과 함께라면 냄새 추적부터 달리기까지 뭐든 시합이 돼요."},{c:"ENTP",why:"허스키와 장난을 주고받으며 공원 끝까지 질주해요."}],
- growl:[{c:"ENTJ",why:"덩치 큰 도베르만에게도 먼저 덤비는 바람에 늘 긴장감이 흘러요."},{c:"INFP",why:"말티즈도 참지 않고 잭 러셀도 물러서지 않아요. 둘이 만나면 시끄러워요."}],
- good:{c:"ESTP",t:"러닝과 하이킹을 즐기는 행동파 주인",why:"같이 뛰고 같이 땀 흘리는 주인이면 잭 러셀의 에너지가 건강하게 쓰여요."},
- bad:{c:"ISFJ",t:"실내 생활 위주로 오냐오냐하는 주인",why:"운동은 부족한데 다 받아 주기만 하면 잭 러셀은 집을 놀이터 삼아 부숴요.",tip:"공 던지기 15분이면 잭 러셀은 훨씬 차분해져요."}},
-
-ESTJ:{breed:"저먼 셰퍼드", en:"German Shepherd", size:"대형견", energy:4, nick:"질서를 지키는 경비대장",
- dog:{len:14,h:6,leg:5,hs:6,sn:4,ear:"prick",tail:"plume",c1:"#c9803c",c2:"#d99a55",c3:"#3b3646",pat:["saddle","darkmask"],fluffy:false},
- desc:"맡은 구역과 가족은 반드시 지켜요. 규칙을 빠르게 익히고 정확히 지키며, 무리에 질서를 세우는 데 능해요. 다만 다른 강아지에게도 그 기준을 요구해서 깐깐해 보일 수 있어요.",
- traits:["강한 책임감","규칙과 질서","빠른 학습력"],
- walk:[{c:"ISTJ",why:"진돗개와 나란히 걸으면 군더더기 없는 완벽한 산책이 돼요."},{c:"ENTJ",why:"도베르만과는 말이 통하는 동료 사이. 서로의 실력을 인정해요."}],
- growl:[{c:"ENTP",why:"규칙을 장난으로 아는 허스키는 셰퍼드의 영원한 골칫거리예요."},{c:"ESTP",why:"질서를 흐트러뜨리는 잭 러셀에게 셰퍼드는 경고성 으르렁을 날려요."}],
- good:{c:"ENTJ",t:"체계적으로 훈련하는 단호한 주인",why:"분명한 규칙과 일관된 리더십을 보여 주는 주인을 셰퍼드는 진심으로 따라요."},
- bad:{c:"INFP",t:"훈련을 미루고 그때그때 다른 주인",why:"규칙이 매번 바뀌면 셰퍼드는 혼란스러워하다 스스로 대장 노릇을 시작해요.",tip:"'앉아', '기다려' 같은 기본 명령만이라도 매일 같은 말로 해 주세요."}},
-
-ENTJ:{breed:"도베르만", en:"Dobermann", size:"대형견", energy:4, nick:"카리스마 넘치는 사령관",
- dog:{len:13,h:6,leg:6,hs:5,sn:4,ear:"tallprick",tail:"stub",c1:"#3b3646",c2:"#b8652e",c3:"#3b3646",pat:["points"],fluffy:false},
- desc:"늘씬한 몸과 날카로운 눈빛으로 등장만 해도 공원 분위기가 정리돼요. 목표가 생기면 끝까지 해내는 집중력과 판단력이 있어요. 다만 주도권을 놓치는 걸 싫어해요.",
- traits:["압도적 카리스마","목표를 향한 집중력","주도권 사수"],
- walk:[{c:"ESTJ",why:"셰퍼드와는 서로 실력을 인정하는 든든한 산책 파트너예요."},{c:"INTP",why:"보더 콜리와 함께라면 머리 쓰는 놀이로 산책이 훈련장이 돼요."}],
- growl:[{c:"ESTP",why:"자꾸 덤비는 잭 러셀은 도베르만의 인내심을 시험해요."},{c:"INTJ",why:"서로 대장을 하겠다는 시바와는 눈빛만으로 신경전이 벌어져요."}],
- good:{c:"ESTJ",t:"단호하고 일관된 리더형 주인",why:"선을 분명히 긋고 지키는 주인이면 도베르만은 세상에서 가장 충직한 파트너가 돼요."},
- bad:{c:"ISFP",t:"마음이 여려 선을 못 긋는 주인",why:"주인이 이끌지 않으면 도베르만이 집안의 결정권을 가져가요.",tip:"밥 먹기 전 '기다려' 한 번. 작은 규칙이 관계를 바로 세워요."}},
-
-ENTP:{breed:"시베리안 허스키", en:"Siberian Husky", size:"대형견", energy:5, nick:"탈출 천재 수다쟁이",
- dog:{len:13,h:6,leg:5,hs:6,sn:3,ear:"prick",tail:"curlplume",c1:"#7f8698",c2:"#f4f4f2",c3:"#5f6678",pat:["mask","belly","socks"],fluffy:true,eye:"#4fb3ff"},
- desc:"닫힌 문은 열고, 넘을 수 있는 담은 넘어요. '왜 안 돼?'를 몸으로 묻는 장난꾸러기이자, 하울링으로 할 말은 다 하는 수다쟁이예요. 다만 규칙을 따르는 건 별로 안 좋아해요.",
- traits:["기발한 문제 해결","말 많은 하울링","규칙은 참고 사항"],
- walk:[{c:"ESTP",why:"잭 러셀과는 장난의 합이 척척. 서로 쫓고 쫓기며 지칠 줄 몰라요."},{c:"ENFP",why:"코기와 새로운 길을 탐험하는 데 둘 다 망설임이 없어요."}],
- growl:[{c:"ESTJ",why:"규칙을 강요하는 셰퍼드 앞에서 허스키는 일부러 더 엇나가요."},{c:"ESFJ",why:"모범생 래브라도의 잔소리에 허스키는 '아우우' 하며 대들어요."}],
- good:{c:"ENTP",t:"매번 새로운 놀이를 고안하는 장난꾸러기 주인",why:"주인이 먼저 재미있으면 허스키는 탈출할 이유가 없어요."},
- bad:{c:"ISTJ",t:"엄격한 규칙과 좁은 공간을 고집하는 주인",why:"갇혀 있는 허스키는 탈출과 하울링으로 불만을 표현해요.",tip:"썰매 끌기처럼 힘을 쓰는 놀이를 주면 허스키의 반항기가 줄어요."}}
-});
-
+<script id='engine'>
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0,cl=(v,a,b)=>Math.max(a,Math.min(b,v)),R0=Math.round;
+const med=a=>{if(!a.length)return 1;const b=a.slice().sort((x,y)=>x-y),m=b.length>>1;return b.length%2?b[m]:(b[m-1]+b[m])/2};
+function pear(a,b){const ma=avg(a),mb=avg(b);let n=0,da=0,db=0;a.forEach((v,i)=>{n+=(v-ma)*(b[i]-mb);da+=(v-ma)**2;db+=(b[i]-mb)**2});return da&&db?n/Math.sqrt(da*db):0}
+function rng(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const gauss=r=>{let u=0;while(!u)u=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*r())};
+const hs=s=>{s=String(s);let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619)}return h>>>0};
+const XO=[-1,-.5,.5,1],WT={L:1,D:1.3,M:1};
+function contrib(x,v,acq){return x.ty=='L'?(cl(v-acq,1,5)-3)/2*x.k:(x.pl=='B'?1:-1)*XO[v-1]}
+function axU(A,acq,r){const U=[],SE=[],LM=[],NM=[];AK.forEach(a=>{let its=AXITEMS[a].filter(x=>A[x.id]!=null);if(r)its=its.map(()=>its[Math.floor(r()*its.length)]);let sw=0,s=0;const cs=[];its.forEach(x=>{const c=contrib(x,A[x.id],acq),w=WT[x.ty];sw+=w;s+=w*c;cs.push(c)});const m=sw?s/sw:0;U.push(m);SE.push(Math.max(Math.sqrt(avg(cs.map(c=>(c-m)**2))),.25)/Math.sqrt(Math.max(1,cs.length)));if(!r){LM.push(avg(its.filter(x=>x.ty=='L').map(x=>contrib(x,A[x.id],acq))));NM.push(avg(its.filter(x=>x.ty!='L').map(x=>contrib(x,A[x.id],acq))))}});return {U,SE,LM,NM}}
+function fitPh(ph,U){let n=0,d=0;const sg=ph.s.split(' ');AK.forEach((k,i)=>{const w=sg.includes(k)?2:1,e=U[i]-ph.p[i]/2;n+=w*e*e;d+=w*4});return 100*(1-Math.sqrt(n/d))}
+function bonus(A,elim,sym){const b={};PH.forEach(p=>b[p.id]=0);if(elim&&elim.length==9){const rk=elim.slice().reverse();PH.forEach(p=>p.v.forEach(v=>{b[p.id]+=Math.max(0,2.4-.6*rk.indexOf(v))}))}
+ITEMS.forEach(x=>{if(x.ty=='M'&&A[x.id]!=null){const v=A[x.id];b[v<=2?x.wa:x.wb]+=(v==1||v==4)?1.5:.8}});(sym||[]).forEach((id,i)=>{b[id]+=i?1.5:3});return b}
+const rankPh=(U,b)=>PH.map(ph=>{const base=fitPh(ph,U);return {ph,base,F:base+b[ph.id]}}).sort((x,y)=>y.F-x.F);
+function analyze(rp,boot){const A=rp.ans,Ls=ITEMS.filter(x=>x.ty=='L'&&A[x.id]!=null),acq=avg(Ls.map(x=>A[x.id]-3)),{U,SE,LM,NM}=axU(A,acq),b=bonus(A,rp.elim,rp.sym),fits=rankPh(U,b),top=fits[0];
+let cert=null,alt=null;if(boot){const r=rng(hs((rp.name||'')+'|'+Object.values(A).join(''))),cnt={};for(let k=0;k<200;k++){const id=rankPh(axU(A,acq,r).U,b)[0].ph.id;cnt[id]=(cnt[id]||0)+1}cert=(cnt[top.ph.id]||0)/200;const o=Object.keys(cnt).filter(i=>i!=top.ph.id).sort((x,y)=>cnt[y]-cnt[x])[0];if(o)alt={id:o,f:cnt[o]/200}}
+const lab=U.map((m,i)=>{const lo=m-1.28*SE[i],hi=m+1.28*SE[i],P=AX[i];if(lo>.05)return [1,(m>.55?'뚜렷한 ':'')+P.R+' 쪽'];if(hi<-.05)return [0,(m<-.55?'뚜렷한 ':'')+P.L+' 쪽'];if(Math.abs(m)<.15)return [2,'균형'];return [m>0?1:0,'경계 · '+(m>0?P.R:P.L)+' 쪽']});
+const vals=Ls.map(x=>A[x.id]),mid=vals.filter(v=>v==3).length/(vals.length||1);let run=1,mxr=1;for(let i=1;i<vals.length;i++){run=vals[i]==vals[i-1]?run+1:1;mxr=Math.max(mxr,run)}
+const lat=rp.lat||{},lt=ITEMS.filter(x=>lat[x.id]!=null&&![0,15,30].includes(x.id)).map(x=>({x,ms:lat[x.id],ratio:Math.min(lat[x.id],60000)/(900+x.len*55)})),md=med(lt.map(o=>o.ratio));lt.forEach(o=>o.rel=o.ratio/md);
+const fast=lt.filter(o=>o.ratio<.3).length/(lt.length||1),slow=lt.filter(o=>o.rel>1.8).sort((a,b)=>b.rel-a.rel).slice(0,4),pl={};lt.forEach(o=>{(pl[o.x.p]=pl[o.x.p]||[]).push(o.rel)});
+const inc=AK.filter((a,i)=>Math.abs(LM[i])>.3&&Math.abs(NM[i])>.4&&LM[i]*NM[i]<0);let rel=100;const notes=[];
+if(fast>.3){rel-=45;notes.push(`문항의 ${R0(fast*100)}%를 읽는 데 필요한 최소 시간보다 빠르게 답했어요.`)}else if(fast>.15){rel-=20;notes.push(`문항의 ${R0(fast*100)}%를 아주 빠르게 지나갔어요.`)}
+if(mxr>=9){rel-=15;notes.push(`공감 문항에서 같은 답을 ${mxr}번 연속으로 골랐어요.`)}
+if(mid>.45){rel-=10;notes.push(`공감 문항의 ${R0(mid*100)}%가 ‘보통’이에요. 아직 생각이 정해지지 않았거나, 판단을 미루는 응답 습관일 수 있어요.`)}
+if(inc.length>=4){rel-=20;notes.push(`같은 축을 다른 방식으로 물었을 때 ${inc.length}개 축에서 답이 반대로 나왔어요.`)}else if(inc.length==3)rel-=10;
+if(Math.abs(acq)>.75){rel-=8;notes.push(`방향과 상관없이 ‘${acq>0?'그렇다':'아니다'}’를 고르는 경향이 있어 점수에서 보정했어요.`)}
+return {U,SE,LM,NM,acq,fits,top,cert,alt,lab,mid,mxr,fast,slow,pl,inc,rel:cl(rel,0,100),notes}}
+function persona(r,i){const b=Math.floor(r()*PH.length),t=AK.map((k,j)=>cl(PH[b].p[j]/2*.8+gauss(r)*.4,-1,1)),u=r(),vr=VK.map(v=>[v,gauss(r)+(PH[b].v.includes(v)?1.3:0)]).sort((x,y)=>y[1]-x[1]).map(x=>x[0]);return {i,b,t,vr,acq:gauss(r)*.3,sp:.7+r()*.6,type:u<.1?'careless':u<.2?'mid':'normal'}}
+function respond(p,key,ans,lat){ITEMS.forEach(x=>{const r=rng(hs(key+'|'+x.id)),t=p.t[x.ai];let v;if(x.ty=='L'){v=cl(R0(3+1.9*x.k*t+p.acq+gauss(r)*.75),1,5);if(p.type=='mid'&&r()<.35)v=3}else{const z=(x.pl=='B'?1:-1)*t*1.3+gauss(r)*.45;v=z<-.45?1:z<0?2:z<.45?3:4}
+if(p.type=='careless'&&r()<.6)v=1+Math.floor(r()*(x.ty=='L'?5:4));ans[x.id]=v;lat[x.id]=(900+x.len*55)*p.sp*(.75+.9*Math.exp(-1.5*Math.abs(t)))*Math.exp(gauss(r)*.3)*(p.type=='careless'?.2:1)})}
+function simRun(p,key){const ans={},lat={};respond(p,key,ans,lat);const rr=rng(hs(key+'v')),elim=p.vr.map((v,j)=>[v,9-j+gauss(rr)*1.2]).sort((x,y)=>x[1]-y[1]).map(x=>x[0]),rp={name:'sim'+key,ans,lat,elim,sym:[]};
+const rs=rng(hs(key+'s'));rp.sym=analyze(rp).fits.slice(0,4).map(o=>[o.ph.id,fitPh(o.ph,p.t)+gauss(rs)*3]).sort((x,y)=>y[1]-x[1]).slice(0,2).map(x=>x[0]);return {rp,R:analyze(rp)}}
+function runSim(seed){const r=rng(seed),P=[];for(let i=0;i<100;i++)P.push(persona(r,i));return {seed,P,O:P.map((p,i)=>[0,1,2].map(k=>simRun(p,seed+'-'+i+'-'+k)))}}
+function metrics(P,O){const prs=[[0,1],[0,2],[1,2]];const rec=avg(AK.map((k,j)=>avg([0,1,2].map(t=>pear(P.map(p=>p.t[j]),O.map(o=>o[t].R.U[j])))))),rt=avg(AK.map((k,j)=>avg(prs.map(([a,b])=>pear(O.map(o=>o[a].R.U[j]),O.map(o=>o[b].R.U[j]))))));
+let acc=0,acc1=0,aN=0,st=0,sn=0,sN=0,fa=0,fN=0;P.forEach((p,i)=>{const tr=PH.map(ph=>[ph.id,fitPh(ph,p.t)]).sort((x,y)=>y[1]-x[1]).map(x=>x[0]);O[i].forEach(e=>{const t1=e.R.top.ph.id;if(p.type!='careless'){aN++;if(tr.slice(0,3).includes(t1))acc++;if(tr[0]==t1)acc1++}if(p.type=='careless'){sN++;if(e.R.rel<60)sn++}else if(p.type=='normal'){fN++;if(e.R.rel<60)fa++}});
+prs.forEach(([a,b])=>{if(O[i][b].R.fits.slice(0,3).some(o=>o.ph.id==O[i][a].R.top.ph.id))st++})});return {rec,rt,acc:acc/(aN||1),acc1:acc1/(aN||1),st:st/300,sens:sN?sn/sN:0,fa:fN?fa/fN:0}}
 </script>
-<script>
-window.TYPES = window.TYPES || {};
-Object.assign(window.TYPES, {
-INTJ:{breed:"시바견", en:"Shiba Inu", size:"중형견", energy:3, nick:"혼자서도 완벽한 전략가",
- dog:{len:11,h:5,leg:4,hs:6,sn:2,ear:"prick",tail:"curl",c1:"#d9823a",c2:"#fff1d6",c3:"#b8692a",pat:["belly","mask"],fluffy:false},
- desc:"애정은 내가 원할 때, 내가 정한 만큼만 받아요. 혼자서도 잘 놀고 자기 계획대로 움직이는 독립파예요. 다만 싫은 건 끝까지 싫어서 '시바 스크림'으로 거부 의사를 확실히 밝혀요.",
- traits:["철저한 독립심","자기만의 기준","단호한 거절"],
- walk:[{c:"ISTJ",why:"진돗개와는 서로 간섭하지 않아서 오히려 편안한 산책 메이트예요."},{c:"INTP",why:"보더 콜리와 나란히 각자의 생각에 잠겨 걷는 조용한 산책을 즐겨요."}],
- growl:[{c:"ENFJ",why:"반갑다고 들이대는 골든에게 시바는 거리 두기를 요구하며 으르렁대요."},{c:"ESFP",why:"시끄럽게 짖으며 다가오는 비글은 시바가 가장 피하고 싶은 상대예요."}],
- good:{c:"ISTP",t:"적당한 거리를 존중하는 쿨한 주인",why:"억지로 안지 않고 시바가 다가올 때까지 기다려 주는 주인을 시바는 몰래 좋아해요."},
- bad:{c:"ESFJ",t:"끊임없이 스킨십하고 옷을 입히는 주인",why:"원치 않는 포옹과 옷 입히기가 계속되면 시바는 마음의 문을 닫아요.",tip:"쓰다듬기는 시바가 먼저 몸을 기댈 때만. 그게 시바의 신뢰를 얻는 법이에요."}},
-
-INTP:{breed:"보더 콜리", en:"Border Collie", size:"중형견", energy:5, nick:"생각이 멈추지 않는 천재",
- dog:{len:12,h:5,leg:4,hs:6,sn:3,ear:"fold",tail:"plume",c1:"#3b3646",c2:"#fbf6ec",c3:"#3b3646",pat:["blaze","belly","socks","tailTip"],fluffy:true},
- desc:"한 번 본 건 기억하고, 처음 보는 문제도 금세 풀어내는 머리 좋은 강아지예요. 늘 다음 일을 궁리하느라 눈빛이 바빠요. 다만 머리 쓸 일이 없으면 스스로 '일'을 만들어 내요.",
- traits:["뛰어난 문제 해결력","관찰력과 집중력","심심함 = 사고"],
- walk:[{c:"INTJ",why:"시바와는 서로 귀찮게 하지 않고 각자 할 일에 몰두하는 사이예요."},{c:"ENTJ",why:"도베르만과 함께라면 산책이 고급 훈련 코스가 돼요."}],
- growl:[{c:"ESFP",why:"정신없이 뛰어다니는 비글을 보면 보더 콜리는 몰이 본능이 발동해 신경이 곤두서요."},{c:"ENFP",why:"제멋대로 움직이는 코기를 줄 세우려다 결국 투닥거려요."}],
- good:{c:"INTJ",t:"노즈워크와 퍼즐을 설계하는 연구형 주인",why:"매일 새로운 문제를 내 주는 주인이면 보더 콜리는 행복한 천재가 돼요."},
- bad:{c:"ESFJ",t:"모임엔 데려가지만 머리 쓸 일은 없는 주인",why:"사람은 많아도 할 일이 없으면 보더 콜리는 소파를 분해하며 시간을 보내요.",tip:"간식을 수건에 말아 주기만 해도 훌륭한 두뇌 운동이 돼요."}},
-
-INFJ:{breed:"버니즈 마운틴 독", en:"Bernese Mountain Dog", size:"초대형견", energy:3, nick:"말없이 마음을 읽는 거인",
- dog:{len:14,h:7,leg:5,hs:7,sn:3,ear:"flop",tail:"plume",c1:"#3b3646",c2:"#fbf6ec",c3:"#b8652e",ec:"#3b3646",pcol:"#b8652e",pat:["blaze","belly","points","tailTip"],fluffy:true},
- desc:"큰 덩치와 달리 마음은 섬세해서, 가족의 기분이 가라앉으면 조용히 곁에 와서 기대요. 겉으로 드러내지 않아도 깊이 정을 주는 타입이에요. 다만 혼자 오래 남겨지면 마음이 쉽게 상해요.",
- traits:["깊은 공감 능력","온화한 인내심","한결같은 애정"],
- walk:[{c:"INFP",why:"예민한 말티즈도 버니즈 옆에서는 마음을 놓고 천천히 걸어요."},{c:"ISFJ",why:"시츄와 함께 느긋한 속도로 걷는 힐링 산책을 즐겨요."}],
- growl:[{c:"ESTP",why:"예의 없이 덤비는 잭 러셀에게 순한 버니즈도 낮게 경고해요."},{c:"ENTP",why:"쉴 새 없이 하울링하는 허스키는 버니즈의 평화를 깨요."}],
- good:{c:"ENFJ",t:"가족 중심으로 교감을 중시하는 주인",why:"늘 함께하고 마음을 나누는 주인 곁에서 버니즈는 가장 편안해요."},
- bad:{c:"ESTP",t:"바쁘게 밖으로 도는 주인",why:"함께 있는 시간이 적고 거친 놀이 위주면 버니즈는 시무룩해져요.",tip:"집에 있을 때는 바닥에 같이 앉아 쓰다듬는 시간을 꼭 가져 주세요."}},
-
-INFP:{breed:"말티즈", en:"Maltese", size:"소형견", energy:3, nick:"참지 않는 순정파",
- dog:{len:9,h:5,leg:3,hs:5,sn:1,ear:"longflop",tail:"curlplume",c1:"#fbf8f2",c2:"#fbf8f2",c3:"#e9e2d6",pat:[],fluffy:true,bigEye:true},
- desc:"주인 한 사람에게 온 마음을 다 주는 순정파예요. 감정이 풍부해서 기쁠 땐 세상을 다 가진 듯하고, 서운할 땐 온몸으로 티를 내요. 그래서 '말티즈는 참지 않아'라는 말이 생겼어요.",
- traits:["풍부한 감정","주인 바라기","확실한 자기표현"],
- walk:[{c:"ENFJ",why:"다정한 골든은 말티즈의 예민함까지 받아 줘요."},{c:"INFJ",why:"버니즈의 큰 덩치 옆에서 말티즈는 이상하게 안심해요."}],
- growl:[{c:"ESTP",why:"불쑥 덤비는 잭 러셀에게 말티즈는 절대 물러서지 않아요."},{c:"ENTJ",why:"덩치로 압박하는 도베르만에게도 말티즈는 '참지 않아'를 보여 줘요."}],
- good:{c:"ISFJ",t:"섬세하게 마음을 챙기는 주인",why:"작은 표정 변화까지 알아봐 주는 주인이면 말티즈는 세상에서 제일 순한 강아지가 돼요."},
- bad:{c:"ENTJ",t:"무뚝뚝하고 효율만 따지는 주인",why:"감정을 몰라주면 말티즈는 짖고 토라지며 서운함을 표현해요.",tip:"외출 전 '금방 올게' 한마디가 말티즈의 분리불안을 줄여 줘요."}}
-});
-Object.assign(window.TYPES, {
-ISFJ:{breed:"시츄", en:"Shih Tzu", size:"소형견", energy:2, nick:"집을 지키는 다정한 수호천사",
- dog:{len:9,h:5,leg:2,hs:6,sn:1,ear:"longflop",tail:"curlplume",c1:"#fbf6ec",c2:"#fbf6ec",c3:"#b98a5c",ec:"#b98a5c",pat:["patch"],fluffy:true,bigEye:true},
- desc:"익숙한 집, 익숙한 가족 곁이 제일 좋아요. 순하고 참을성이 많아 누구와도 큰 다툼 없이 지내고, 가족의 일상을 묵묵히 지켜요. 다만 갑작스러운 변화엔 마음이 철렁해요.",
- traits:["순한 성품","가족을 향한 헌신","익숙함이 좋아요"],
- walk:[{c:"ESFJ",why:"래브라도가 시츄 속도에 맞춰 걸어 주니 둘 다 편안해요."},{c:"ENFJ",why:"골든과 함께라면 낯선 길도 겁나지 않아요."}],
- growl:[{c:"ESFP",why:"갑자기 짖으며 달려드는 비글에게 순한 시츄도 깜짝 놀라 으르렁대요."},{c:"ENTP",why:"정신없는 허스키의 장난은 시츄에게 너무 버거워요."}],
- good:{c:"ESFJ",t:"따뜻하고 규칙적인 살림꾼 주인",why:"매일 비슷한 시간에 밥과 산책을 챙겨 주는 주인 곁에서 시츄는 안정감을 느껴요."},
- bad:{c:"ENTP",t:"계획이 자주 바뀌고 집을 자주 비우는 주인",why:"일상이 매번 달라지면 시츄는 불안해서 구석에 숨어요.",tip:"밥과 산책 시간만이라도 고정해 주면 시츄는 금방 안정을 찾아요."}},
-
-ISFP:{breed:"비숑 프리제", en:"Bichon Frise", size:"소형견", energy:3, nick:"솜사탕 같은 자유 영혼",
- dog:{len:9,h:6,leg:3,hs:6,sn:1,ear:"hidden",tail:"curlplume",c1:"#fffdf8",c2:"#fffdf8",c3:"#ece6da",pat:[],fluffy:true,round:true},
- desc:"기분이 좋으면 갑자기 온 집 안을 질주하는 '비숑 타임'이 찾아와요. 지금 이 순간의 기분과 감각에 솔직한 자유로운 영혼이에요. 다만 혼나거나 억지로 시키면 금방 시무룩해져요.",
- traits:["솔직한 감정 표현","순간을 즐기는 감각","다정한 애교"],
- walk:[{c:"ENFP",why:"코기와 함께라면 산책 중에도 비숑 타임이 터져요."},{c:"INFP",why:"말티즈와는 말 안 해도 통하는 감성 단짝이에요."}],
- growl:[{c:"ESTJ",why:"줄 맞춰 걸으라는 셰퍼드의 눈치에 비숑은 털을 바짝 세워요."},{c:"ENTJ",why:"위압적인 도베르만 앞에서는 솜사탕도 으르렁대요."}],
- good:{c:"ENFP",t:"자유롭고 다정한 주인",why:"그날 기분에 따라 놀이를 바꿔 주는 주인이면 비숑은 매일 웃어요."},
- bad:{c:"ESTJ",t:"엄격한 스케줄과 칭찬 없는 훈련을 하는 주인",why:"재미없는 반복 훈련만 계속되면 비숑은 고집을 부리며 버텨요.",tip:"훈련은 짧게, 끝은 늘 칭찬과 놀이로 마무리해 주세요."}},
-
-ISTJ:{breed:"진돗개", en:"Jindo", size:"중형견", energy:4, nick:"한 주인만 바라보는 충신",
- dog:{len:12,h:6,leg:5,hs:6,sn:3,ear:"prick",tail:"curl",c1:"#efe2c4",c2:"#fbf4e2",c3:"#d9c49a",pat:["belly"],fluffy:false},
- desc:"한번 주인으로 정한 사람은 끝까지 따라요. 정해진 규칙과 영역을 철저히 지키고, 낯선 이에게는 쉽게 곁을 내주지 않아요. 다만 변화와 낯선 손님을 반기지 않아요.",
- traits:["변치 않는 충성","원칙과 책임감","강한 영역 의식"],
- walk:[{c:"ESTJ",why:"셰퍼드와는 군더더기 없이 정해진 코스를 완주하는 환상의 짝이에요."},{c:"INTJ",why:"시바와는 서로 간섭하지 않는 편안한 사이예요."}],
- growl:[{c:"ENFP",why:"장난스럽게 들이대는 코기는 진돗개에게 버릇없는 후배로 보여요."},{c:"ENTP",why:"제멋대로 구는 허스키에게 진돗개는 서열을 분명히 하려 해요."}],
- good:{c:"ISTJ",t:"매일 같은 시간에 약속을 지키는 주인",why:"변함없는 루틴과 신뢰를 주는 주인에게 진돗개는 평생 충성해요."},
- bad:{c:"ENFP",t:"이사와 여행이 잦고 손님을 자주 부르는 주인",why:"낯선 환경과 사람이 계속 바뀌면 진돗개는 경계 태세를 풀지 못해요.",tip:"손님이 오면 진돗개만의 조용한 공간을 따로 마련해 주세요."}},
-
-ISTP:{breed:"닥스훈트", en:"Dachshund", size:"소형견", energy:3, nick:"고집 센 짧은다리 탐험가",
- dog:{len:14,h:4,leg:2,hs:5,sn:4,ear:"flop",tail:"out",c1:"#9a4a22",c2:"#b8622f",c3:"#7a3a18",pat:[],fluffy:false},
- desc:"굴 파고 냄새 쫓는 일엔 누구보다 진지한 실전파 사냥꾼이에요. 말보다 행동, 남의 지시보다 내 판단을 믿어요. 다만 고집이 세서 하기 싫은 일은 못 들은 척해요.",
- traits:["실전형 사냥 본능","독립적인 판단","타고난 고집"],
- walk:[{c:"INTJ",why:"시바와는 각자 냄새 맡는 데 집중하며 쿨하게 걸어요."},{c:"ESTP",why:"잭 러셀과는 사냥 본능이 통해서 굴 파기 시합을 벌여요."}],
- growl:[{c:"ESFJ",why:"자꾸 챙겨 주려는 래브라도에게 닥스훈트는 '내가 알아서 해'라며 으르렁대요."},{c:"ENFJ",why:"반갑다고 덮치는 골든은 짧은 다리의 닥스훈트에게 부담스러워요."}],
- good:{c:"ISTP",t:"간섭 없이 탐험을 허락하는 주인",why:"냄새 맡을 시간을 충분히 주고 기다려 주는 주인이면 닥스훈트는 최고의 동반자예요."},
- bad:{c:"ENFJ",t:"끊임없이 교감과 훈련을 요구하는 주인",why:"계속 무언가를 시키면 닥스훈트의 고집 스위치가 켜져요.",tip:"허리를 위해 계단·소파 점프는 줄이고, 평지 산책을 길게 해 주세요."}}
-});
-
+<script id='ui'>
+const $=s=>document.querySelector(s),app=$('#app'),Q1=String.fromCharCode(39);
+const esc=s=>String(s).split('&').join('&amp;').split('<').join('&lt;').split('>').join('&gt;').split(Q1).join('&#39;');
+const jo=(w,a,b)=>{w=String(w);const c=w.charCodeAt(w.length-1);return w+((c>=44032&&c<=55203&&(c-44032)%28)?a:b)};
+const jb=(w,a,b)=>`<b>${w}</b>`+jo(w,a,b).slice(String(w).length);
+const LK=['전혀 아니다','아니다','보통이다','그렇다','매우 그렇다'],L4=['확실히 A','A 쪽','B 쪽','확실히 B'];
+const PLACE={1:['서재','ti-books','var(--p1)','어떻게 아는가'],2:['광장','ti-building-arch','var(--p2)','어떻게 함께 살 것인가'],3:['정원','ti-plant','var(--p3)','어떻게 살 것인가']};
+const GUIDE={1:['옳아 보이는 답 말고, 평소 실제로 생각하는 방식에 가까운 쪽을 고르세요. 사고실험은 정답이 없는 문제라 오래 고민해도 괜찮아요.','앎의 원천(이성↔경험), 진리 앞의 태도(확신↔회의), 판단의 엔진(머리↔가슴) 세 축을 축마다 5문항으로 잽니다. 공감 문항은 절반을 반대 방향으로 써서 ‘무조건 그렇다’ 습관을 보정하고, 사고실험과 철학자 문장 고르기로 같은 축을 다른 각도에서 한 번 더 묻습니다.'],
+2:['광장은 남들과 함께 사는 곳이에요. 남이 볼 때의 나 말고, 혼자 결정할 때의 나로 답하세요.','옳음의 기준(원칙↔결과), 삶의 단위(개인↔공동체), 세상을 대하는 법(질서↔변혁) 세 축을 잽니다. 공감 문항의 답과 사고실험의 선택이 엇갈리는지도 함께 봐요. 엇갈림은 틀림이 아니라 흥미로운 신호예요.'],
+3:['마지막 정원이에요. 삶과 죽음, 자유와 운명처럼 무거운 질문도 있지만, 떠오르는 대로 답할수록 정확해요.','의미의 자리(초월↔자연), 삶의 자세(관조↔참여), 인간의 조건(수용↔자유), 세계의 온도(희망↔직시) 네 축을 20문항으로 잽니다. 끝나면 심포지엄 초대 게임이 이어져요.']};
+const TYPEL={normal:'성실 응답',mid:'중간값 선호',careless:'불성실 응답'};
+const OWLSAY=['부엉, 간지러워요','미네르바의 부엉이는 황혼에 날아요. 천천히 생각해도 괜찮아요','정답은 없어요. 당신의 답만 있을 뿐','소크라테스도 처음엔 모른다는 것부터 알았대요'];
+let S,SIM=null,MID=0,TAP=[],EGGMEM=[];
+const LS={get:k=>{try{return localStorage.getItem(k)}catch(e){return null}},set:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}},del:k=>{try{localStorage.removeItem(k)}catch(e){}}};
+function fresh(){S={name:'',i:0,ans:{},lat:{},chg:0,chgItems:[],shown:0,seen:{},elim:[],elimLat:[],sym:null,lock:0,mode:'intro',preview:null,prev:null,creator:false,ms:{}}}
+const rpOf=()=>({name:S.name,ans:S.ans,lat:S.lat,elim:S.elim,sym:S.sym||[]});
+function copyRaw(t,done){const fb=()=>{const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done&&done()}catch(e){}ta.remove()};if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(t).then(()=>done&&done(),fb);else fb()}
+if(typeof window.sendPrompt!=='function')window.sendPrompt=t=>copyRaw(t,()=>toast('질문을 복사했어요. Claude 대화창에 붙여넣어 주세요','joy'));
+const today=()=>new Date().toISOString().slice(0,10);
+function encCode(R){const o={d:today(),n:S.name,u:R.U.map(x=>R0(x*100)),v:S.elim.length==9?S.elim.map(v=>VK.indexOf(v)).join(''):'',t:R.top.ph.id};return 'PH1.'+btoa(unescape(encodeURIComponent(JSON.stringify(o))))}
+function decCode(s){try{s=String(s).trim();if(s.indexOf('PH1.'))return null;const o=JSON.parse(decodeURIComponent(escape(atob(s.slice(4)))));return o&&o.u&&o.u.length==10?o:null}catch(e){return null}}
+const LAUREL=(()=>{let s='';for(let i=0;i<7;i++){const d=120+i*19,a=d*Math.PI/180,x=50+44*Math.cos(a),y=50+44*Math.sin(a);[[x,y,d+90],[100-x,y,90-d]].forEach(([X,Y,r])=>s+=`<ellipse cx='${X.toFixed(1)}' cy='${Y.toFixed(1)}' rx='6.5' ry='2.6' transform='rotate(${r} ${X.toFixed(1)} ${Y.toFixed(1)})' fill='#d6ad55'/>`)}return `<svg class='laurel' viewBox='0 0 100 100' aria-hidden='true'>${s}</svg>`})();
+const medal=(p,s,lau)=>`<span class='medal' style='--mc:${p.col};width:${s}px;height:${s}px'>${lau?LAUREL:''}<i class='ti ${p.ic}' style='font-size:${R0(s*.46)}px'></i></span>`;
+function owl(m,size){const O=x=>`<g class='blink'><circle cx='${x}' cy='86' r='${m=='wow'?11:9}' fill='#2a1d10'/><circle cx='${x-3}' cy='82' r='3.2' fill='#fff'/><circle cx='${x+3}' cy='90' r='1.4' fill='#fff'/></g>`,C=x=>`<path d='M${x-8} 88 Q${x} 78 ${x+8} 88' stroke='#2a1d10' stroke-width='3.6' fill='none' stroke-linecap='round'/>`,u='w'+(MID++);
+const eyes=m=='joy'?C(78)+C(122):m=='wink'?O(78)+C(122):O(78)+O(122),beak=m=='wow'?`<path d='M92 103 L100 98 L108 103 L100 107Z' fill='#e8a33a'/><path d='M94 109 L100 119 L106 109Z' fill='#c97a20'/>`:`<path d='M100 100 L92 108 L100 119 L108 108Z' fill='#e8a33a'/>`;
+return `<svg width='${size}' height='${R0(size*1.05)}' viewBox='0 0 200 210' class='owl' data-owl='1' role='img' aria-label='부엉이 미네'><defs><radialGradient id='b${u}' cx='45%' cy='35%' r='70%'><stop offset='0' stop-color='#b98552'/><stop offset='1' stop-color='#7a4e2a'/></radialGradient></defs><ellipse cx='100' cy='202' rx='50' ry='6' fill='#000' opacity='.18'/><rect x='44' y='182' width='112' height='16' rx='3' fill='#7a2f2f'/><rect x='48' y='177' width='104' height='7' rx='2' fill='#f4ead2'/><rect x='44' y='190' width='112' height='3' fill='#d6ad55'/><path d='M60 60 L48 22 L84 48Z' fill='#7a4e2a'/><path d='M140 60 L152 22 L116 48Z' fill='#7a4e2a'/><path d='M100 40 C152 40 162 92 158 132 C154 170 130 184 100 184 C70 184 46 170 42 132 C38 92 48 40 100 40Z' fill='url(#b${u})'/><ellipse cx='100' cy='142' rx='38' ry='38' fill='#f1dcb4'/>${[[86,128],[100,124],[114,128],[80,146],[94,142],[108,142],[120,146],[90,160],[104,158],[116,162]].map(([x,y])=>`<path d='M${x-4} ${y} Q${x} ${y+5} ${x+4} ${y}' stroke='#c79a62' stroke-width='2' fill='none' stroke-linecap='round'/>`).join('')}<circle cx='78' cy='86' r='23' fill='#fbeed3'/><circle cx='122' cy='86' r='23' fill='#fbeed3'/>${eyes}<circle cx='78' cy='86' r='19' fill='none' stroke='#c99335' stroke-width='3.2'/><circle cx='122' cy='86' r='19' fill='none' stroke='#c99335' stroke-width='3.2'/><path d='M97 84 Q100 79 103 84' stroke='#c99335' stroke-width='3' fill='none'/><ellipse cx='62' cy='110' rx='7' ry='3.6' fill='#ff9f8a' opacity='.55'/><ellipse cx='138' cy='110' rx='7' ry='3.6' fill='#ff9f8a' opacity='.55'/>${beak}<g class='wing'><path d='M46 104 C26 124 30 160 56 170 C60 142 58 120 46 104Z' fill='#6a4222'/></g><path d='M154 104 C174 124 170 160 144 170 C140 142 142 120 154 104Z' fill='#6a4222'/><path d='M84 178 l-4 6 M90 178 l0 7 M96 178 l4 6 M106 178 l-4 6 M112 178 l0 7 M118 178 l4 6' stroke='#e8a33a' stroke-width='3' stroke-linecap='round'/><path d='M86 37 Q100 26 114 37' stroke='#4d7a35' stroke-width='3' fill='none'/><ellipse cx='91' cy='32' rx='5' ry='2.4' fill='#6b9b3a' transform='rotate(-30 91 32)'/><ellipse cx='109' cy='32' rx='5' ry='2.4' fill='#6b9b3a' transform='rotate(30 109 32)'/><ellipse cx='100' cy='28' rx='5' ry='2.4' fill='#6b9b3a'/></svg>`}
+const COLUMN=`<svg width='70' height='220' viewBox='0 0 70 220'><rect x='4' y='6' width='62' height='10' rx='2' fill='currentColor'/><circle cx='10' cy='22' r='7' fill='none' stroke='currentColor' stroke-width='3'/><circle cx='60' cy='22' r='7' fill='none' stroke='currentColor' stroke-width='3'/><rect x='8' y='16' width='54' height='8' fill='currentColor'/><rect x='14' y='28' width='42' height='170' fill='currentColor'/>${[20,28,35,42,50].map(x=>`<line x1='${x}' y1='32' x2='${x}' y2='194' stroke='rgba(0,0,0,.18)' stroke-width='2'/>`).join('')}<rect x='8' y='198' width='54' height='8' fill='currentColor'/><rect x='2' y='206' width='66' height='10' rx='2' fill='currentColor'/></svg>`;
+const SCROLL=`<svg width='90' height='60' viewBox='0 0 90 60'><rect x='14' y='10' width='62' height='40' fill='#f4ead2' stroke='#c9a66b'/><circle cx='14' cy='30' r='8' fill='#e6d2a8' stroke='#c9a66b'/><circle cx='76' cy='30' r='8' fill='#e6d2a8' stroke='#c9a66b'/>${[20,27,34,41].map(y=>`<line x1='26' y1='${y}' x2='${y==41?52:66}' y2='${y}' stroke='#b89a6a' stroke-width='1.6'/>`).join('')}</svg>`;
+const SHIP=`<svg width='180' height='112' viewBox='0 0 180 112' aria-hidden='true'><path d='M88 10 L88 72' stroke='var(--ink2)' stroke-width='3'/><path d='M90 14 Q128 42 90 68 Z' fill='var(--card)' stroke='var(--gold)' stroke-width='2'/><path d='M86 20 Q58 46 86 66 Z' fill='var(--goldbg)' stroke='var(--gold)' stroke-width='2'/><path d='M32 72 L146 72 L130 94 L48 94 Z' fill='#8a5a2e'/><path d='M42 78 L136 78' stroke='rgba(255,255,255,.3)' stroke-width='2'/><g style='animation:wavey 3s ease-in-out infinite'><path d='M0 98 Q20 90 40 98 T80 98 T120 98 T160 98 T200 98 L200 112 L0 112 Z' fill='var(--acc)' opacity='.35'/></g></svg>`;
+const star=(x,y,r)=>{let d='';for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?r*.45:r;d+=(i?'L':'M')+(x+q*Math.cos(a)).toFixed(1)+' '+(y+q*Math.sin(a)).toFixed(1)}return d+'Z'};
+function toast(msg,mood){const t=$('#toast');t.innerHTML=`<span style='flex:none;display:flex'>${owl(mood||'wink',40)}</span><span>${msg}</span>`;t.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove('show'),3400)}
+function burst(x,y,n){for(let i=0;i<n;i++){const s=document.createElement('div'),a=Math.random()*6.283,d=70+Math.random()*220,c=['#e9c46f','#d6ad55','#b25a35','#9fadff','#fff4dc'][i%5],z=4+Math.random()*6;s.style.cssText=`position:fixed;left:${x}px;top:${y}px;width:${z}px;height:${z}px;border-radius:50%;background:${c};box-shadow:0 0 8px ${c};z-index:70;pointer-events:none`;document.body.appendChild(s);const an=s.animate([{transform:'translate(-50%,-50%) scale(1)',opacity:1},{transform:`translate(${R0(Math.cos(a)*d)}px,${R0(Math.sin(a)*d)}px) scale(.2)`,opacity:0}],{duration:900+Math.random()*600,easing:'cubic-bezier(.2,.8,.2,1)'});an.onfinish=()=>s.remove()}}
+function eggs(){const v=LS.get('ph_eggs');try{return v?JSON.parse(v):EGGMEM}catch(e){return EGGMEM}}
+function eggFind(id){const e=eggs().slice();if(e.includes(id))return;e.push(id);EGGMEM=e;LS.set('ph_eggs',JSON.stringify(e));const b=$('#eggB');if(b)b.innerHTML=`<i class='ti ti-sparkles'></i> 정원을 가꾼 사람 찾기 ${e.length}/3`;setTimeout(()=>{if(e.length>=3){toast('단서 세 개를 모두 찾았어요! 이 철학의 정원은 진우주가 한 땀 한 땀 가꿨답니다. 찾아 줘서 고마워요','joy');burst(innerWidth/2,innerHeight/2,70)}else toast(`숨은 정원사의 단서 발견! ${e.length}/3`,'wow')},3500)}
+function featherEgg(){eggFind('feather');const ov=document.createElement('div');ov.id='egg';ov.innerHTML=`<canvas id='cst' style='position:absolute;inset:0'></canvas><p class='disp' style='position:absolute;bottom:15%;width:100%;text-align:center;font-size:22px;color:#e9c46f;margin:0'>황혼의 깃털 · 이 정원을 가꾼 사람</p><p class='sm' style='position:absolute;bottom:10%;width:100%;text-align:center;margin:0;color:#c8bca6'>아무 곳이나 누르면 닫혀요</p>`;document.body.appendChild(ov);
+const c=ov.querySelector('#cst'),W2=innerWidth,H2=innerHeight,d=devicePixelRatio||1;c.width=W2*d;c.height=H2*d;c.style.width=W2+'px';c.style.height=H2+'px';const g=c.getContext('2d');g.setTransform(d,0,0,d,0,0);const off=document.createElement('canvas');off.width=W2;off.height=H2;const o=off.getContext('2d'),fs=Math.min(W2/3.3,200);o.fillStyle='#fff';o.font=`700 ${fs}px Hahmlet, serif`;o.textAlign='center';o.textBaseline='middle';o.fillText('진우주',W2/2,H2*.44);
+const data=o.getImageData(0,0,W2,H2).data,pts=[],step=Math.max(5,R0(fs/24));for(let y=0;y<H2;y+=step)for(let x=0;x<W2;x+=step){if(data[(y*W2+x)*4+3]>128)pts.push({tx:x,ty:y,x:Math.random()*W2,y:Math.random()*H2,r:Math.random()*1.5+.8,p:Math.random()*6.28})}
+const t0=performance.now(),draw=t=>{if(!document.body.contains(ov))return;const k=Math.min(1,(t-t0)/1800),e=1-Math.pow(1-k,3);g.clearRect(0,0,W2,H2);g.shadowColor='#e9c46f';g.shadowBlur=9;pts.forEach(s=>{g.globalAlpha=.55+.45*Math.sin(t/320+s.p);g.fillStyle='#fff0c2';g.beginPath();g.arc(s.x+(s.tx-s.x)*e,s.y+(s.ty-s.y)*e,s.r,0,6.283);g.fill()});g.globalAlpha=1;requestAnimationFrame(draw)};requestAnimationFrame(draw);ov.onclick=()=>ov.remove()}
+document.addEventListener('click',e=>{const m=e.target.closest&&e.target.closest('[data-owl]');if(!m)return;const now=Date.now();TAP=TAP.filter(t=>now-t<2000);TAP.push(now);if(TAP.length==1)toast(OWLSAY[Math.floor(Math.random()*OWLSAY.length)],'joy');
+if(TAP.length>=5){TAP=[];const h=m.parentElement;if(h){h.classList.add('spin');setTimeout(()=>h.classList.remove('spin'),950)}const r=m.getBoundingClientRect();burst(r.left+r.width/2,r.top+r.height/2,34);toast('쉿, 비밀인데… 저를 그린 사람은 진우주예요. 이 정원을 통째로 혼자 가꿨대요!','wink');eggFind('tap')}});
+function setTheme(t){document.documentElement.dataset.theme=t;LS.set('ph_theme',t);$('#themeB').innerHTML=t=='dusk'?`<i class='ti ti-sun'></i> 낮`:`<i class='ti ti-moon'></i> 황혼`}
+function initSky(){const c=$('#sky'),g=c.getContext('2d'),red=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;let W,H,P=[];
+const rs=()=>{const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*d;c.height=H*d;g.setTransform(d,0,0,d,0,0);P=Array.from({length:Math.min(150,R0(W*H/8000))},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.4,vx:(Math.random()-.5)*.15,vy:-Math.random()*.25-.05,p:Math.random()*6.28,f:Math.random()<.12}))};
+const fr=t=>{g.clearRect(0,0,W,H);const dk=document.documentElement.dataset.theme=='dusk';P.forEach(s=>{s.x+=s.vx+(s.f?Math.sin(t/900+s.p)*.3:0);if(!dk||s.f)s.y+=s.vy;if(s.y<-5){s.y=H+5;s.x=Math.random()*W}if(s.x<-5)s.x=W+5;if(s.x>W+5)s.x=-5;const a=.35+.35*Math.sin(t/800+s.p);g.globalAlpha=dk?(s.f?Math.min(1,a+.3):a):a*.7;g.fillStyle=dk?(s.f?'#ffd27a':'#fff4dc'):'#c99a45';g.shadowBlur=s.f?10:0;g.shadowColor='#ffd27a';g.beginPath();g.arc(s.x,s.y,s.f?s.r+1:s.r,0,6.283);g.fill()});g.globalAlpha=1;g.shadowBlur=0;if(!red)requestAnimationFrame(fr)};
+rs();addEventListener('resize',rs);requestAnimationFrame(fr);addEventListener('pointermove',e=>{const mx=e.clientX/W-.5,my=e.clientY/H-.5;document.querySelectorAll('#deco .fl').forEach(el=>{const z=+el.dataset.z||.5;el.style.transform=`translate(${R0(-mx*z*36)}px,${R0(-my*z*36)}px)`})})}
+function buildDeco(){$('#deco').innerHTML=`<div class='fl' data-z='.5' style='left:-8px;bottom:-20px;color:var(--ink3);opacity:.16'>${COLUMN}</div><div class='fl' data-z='.35' style='right:-10px;top:100px;color:var(--ink3);opacity:.11'>${COLUMN}</div><div class='fl' data-z='.9' style='right:7%;bottom:7%;opacity:.5'><div class='float' style='animation-duration:9s'>${SCROLL}</div></div><div class='fl' data-z='1.3' style='left:7%;top:18%'><svg class='feather' id='gfe' width='26' height='40' viewBox='0 0 26 40' role='button' aria-label='반짝이는 깃털'><path d='M13 2 C24 10 22 26 13 34 C4 26 2 10 13 2Z' fill='#e9c46f'/><path d='M13 6 L13 39' stroke='#a87b26' stroke-width='1.6'/>${[10,15,20,25].map(y=>`<path d='M13 ${y} L7 ${y-4} M13 ${y} L19 ${y-4}' stroke='#a87b26' stroke-width='1'/>`).join('')}</svg></div>`;$('#gfe').addEventListener('click',featherEgg)}
+function saveProg(){if(S.preview!=null||!S.name)return;LS.set('ph_prog',JSON.stringify({v:1,name:S.name,i:S.i,ans:S.ans,lat:S.lat,chg:S.chg,chgItems:S.chgItems,elim:S.elim,elimLat:S.elimLat,sym:S.sym,ms:S.ms,prev:S.prev,creator:S.creator}))}
+function loadProg(){try{const o=JSON.parse(LS.get('ph_prog')||'null');return o&&o.v==1&&o.name?o:null}catch(e){return null}}
+function resume(o){fresh();Object.assign(S,o);S.i=Math.min(o.i||0,NQ);S.seen={};toast(`다시 오셨군요, ${esc(S.name)}님! 멈췄던 곳부터 이어 걸어요`,'joy');next()}
+function pathBar(){const pct=S.i/NQ,pos=v=>`calc(16px + (100% - 32px) * ${v.toFixed(4)})`,st=[[0,'ti-books','var(--p1)'],[.3,'ti-building-arch','var(--p2)'],[.6,'ti-plant','var(--p3)'],[1,'ti-award','var(--gold2)']];return `<div class='path' aria-hidden='true'><div class='trk'></div><div class='done' style='width:calc((100% - 32px) * ${pct.toFixed(4)})'></div>${st.map(([v,ic,c])=>`<div class='pl' style='left:${pos(v)};border-color:${c};color:${c}'><i class='ti ${ic}'></i></div>`).join('')}<div class='ow' style='left:${pos(pct)}'>${owl(pct>=1?'joy':'base',30)}</div></div>`}
+function remain(){const ls=Object.values(S.lat).map(v=>Math.min(v,20000)),a=ls.length>4?avg(ls):7000,m=Math.ceil((NQ-S.i)*(a+400)/60000+(S.elim.length<9?1:0)+(S.sym?0:1));return m<=1?'곧 도착':`약 ${m}분 남음`}
+function intro(){fresh();const saved=LS.get('ph_last')||'',pg=loadProg(),ec=eggs().length,cn=(clubLoad()||[]).length,mq=PH.map(p=>`<span style='display:inline-flex;flex-direction:column;align-items:center;gap:6px;width:72px'>${medal(p,50)}<span class='sm' style='font-size:11.5px;white-space:nowrap'>${p.n.split(' ').pop()}</span></span>`).join('');
+app.innerHTML=`<div class='w rise' style='text-align:center'><div class='float' style='display:inline-block;cursor:pointer' title='쓰다듬어 보세요'>${owl('base',160)}</div><div class='owlsay' id='mbub'><span class='bubble'>어서 와요, 생각하는 사람!</span></div><p class='kicker'>미네르바의 부엉이 ‘미네’가 안내하는</p><p class='title'>진우주 철학 검사</p><p class='mut' style='margin:0 0 1rem'>서재 · 광장 · 정원을 거닐며 50개의 질문에 답하면<br>철학자 30인 중 당신과 가장 닮은 사람을 찾아 드려요</p><div style='display:flex;justify-content:center;flex-wrap:wrap'><span class='chip'><i class='ti ti-clock'></i> 약 12분</span><span class='chip'><i class='ti ti-list-check'></i> 50문항 · 미니게임 2개</span><span class='chip'><i class='ti ti-users'></i> 철학자 30인 · 사유의 10축</span><span class='chip'><i class='ti ti-device-floppy'></i> 자동 저장</span></div></div>
+<div class='marq' aria-hidden='true'><div class='track'>${mq}${mq}</div></div>
+${pg?`<div class='card rise' style='display:flex;align-items:center;gap:12px;flex-wrap:wrap'><i class='ti ti-bookmark' style='font-size:26px;color:var(--gold)'></i><div style='flex:1;min-width:160px'><p class='disp' style='margin:0;font-size:17px'>${esc(pg.name)}님의 산책이 진행 중이에요</p><p class='sm' style='margin:0'>${pg.i} / ${NQ} 문항 완료 · 멈춘 곳부터 이어갈 수 있어요</p></div><button class='btn-main' id='resB' style='min-height:44px;font-size:16px'>이어 걷기</button><button id='newB'>새로 시작</button></div>`:''}
+<div class='card rise' style='animation-delay:.08s'><label class='sm' for='nm'>이름 또는 닉네임</label><input id='nm' style='width:100%;margin:4px 0 2px' placeholder='당신을 뭐라고 부를까요?' autocomplete='off'><div id='nmE' style='font-size:13px;color:var(--bad);min-height:20px'></div>
+<details ${saved?'open':''} style='margin:0 0 14px'><summary><i class='ti ti-history'></i> 예전에 검사한 적이 있나요? 결과 코드로 생각의 변화 비교하기</summary><textarea id='pc' rows='2' style='width:100%;margin:8px 0 2px' placeholder='PH1.로 시작하는 결과 코드'>${esc(saved)}</textarea><div id='pcE' style='font-size:13px;color:var(--bad);min-height:18px'></div></details>
+<button class='btn-main' id='go' style='width:100%'>산책 시작 <i class='ti ti-door-enter'></i></button></div>
+<p class='sm' style='text-align:center;margin:.2rem 0 1rem'>정답은 없어요. 떠오르는 대로 답할수록 정확해요. 답하는 속도도 분석에 쓰여요.</p>
+<div class='card' style='display:flex;align-items:center;gap:12px;flex-wrap:wrap'><i class='ti ti-users-group' style='font-size:28px;color:var(--gold)'></i><div style='flex:1;min-width:170px'><p class='disp' style='margin:0;font-size:17px'>토론 클럽 · 친구들과 사유 궁합 보기</p><p class='sm' style='margin:0'>검사를 마친 친구들의 결과 코드를 모으면 역할 · 궁합 · 뜨거운 주제가 나와요${cn?` · 현재 ${cn}명`:''}</p></div><button id='clubB'>클럽 열기 <i class='ti ti-arrow-right'></i></button></div>
+<div style='display:flex;gap:8px;flex-wrap:wrap;justify-content:center'><button id='simB'><i class='ti ti-flask'></i> 검증 시뮬레이션</button><button id='prevB'><i class='ti ti-eye'></i> 가상 인물 결과 미리보기</button><button id='eggB'><i class='ti ti-sparkles'></i> 정원을 가꾼 사람 찾기 ${ec}/3</button></div>
+<div id='eggH' style='display:none;margin-top:12px' class='card'></div>`;
+$('#nm').oninput=e=>{$('#nmE').textContent='';if(e.target.value.split(' ').join('')==='진우주'){$('#mbub').innerHTML=`<span class='bubble'>앗, 이 정원을 가꾼 분이시군요!</span>`;eggFind('name')}};
+$('#nm').onkeydown=e=>{if(e.key==='Enter')start()};const pc=$('#pc');if(pc)pc.oninput=()=>$('#pcE').textContent='';$('#go').onclick=start;
+$('#simB').onclick=()=>SIM?simReport():simScreen(20261027);$('#prevB').onclick=()=>{if(!SIM)runSimSync(20261027);loadPersona(Math.floor(Math.random()*100))};$('#clubB').onclick=()=>clubScreen(intro,1);
+if(pg){$('#resB').onclick=()=>resume(pg);$('#newB').onclick=()=>{LS.del('ph_prog');intro()}}
+$('#eggB').onclick=()=>{const h=$('#eggH'),e=eggs(),H3=[['tap','미네는 간지럼을 아주 많이 타요. 여러 번 연속으로 쓰다듬으면?'],['feather','화면 어딘가에 금빛 깃털이 떠다녀요'],['name','이 정원을 가꾼 사람의 이름으로 입장해 보세요']];h.style.display=h.style.display=='none'?'block':'none';h.innerHTML=`<p class='disp' style='margin:0 0 6px;font-size:17px'>숨은 정원사 찾기</p>`+H3.map(([k,t],i)=>`<p class='sm' style='margin:0 0 4px'><i class='ti ${e.includes(k)?'ti-circle-check':'ti-circle-dashed'}' style='color:${e.includes(k)?'var(--good)':'var(--ink3)'}'></i> 단서 ${i+1} · ${e.includes(k)?'발견 완료':t}</p>`).join('')}}
+function start(){const n=$('#nm').value.trim();if(!n){$('#nmE').textContent='이름을 알려 주세요';$('#nm').focus();return}const pcv=$('#pc')?$('#pc').value.trim():'';let prev=null;if(pcv){prev=decCode(pcv);if(!prev){$('#pcE').textContent='코드 형식이 맞지 않아요. 비우거나 PH1.로 시작하는 코드를 넣어 주세요';return}}
+S.name=n;S.creator=n.split(' ').join('')==='진우주';S.prev=prev;LS.del('ph_prog');if(S.creator)toast('정원사님 입장 확인! 직접 가꾼 정원을 거니시는군요','joy');next()}
+function next(){if(S.i<NQ){const it=ITEMS[S.i];if(it.p==3&&S.elim.length<9)return theseus();if(!S.seen[it.p]){S.seen[it.p]=1;return partIntro(it.p)}return q()}if(!S.sym)return symposium();finish()}
+function finish(){const R=analyze(rpOf(),true);LS.set('ph_last',encCode(R));LS.del('ph_prog');renderResult(R);setTimeout(()=>burst(innerWidth/2,200,46),350)}
+function partIntro(p){S.mode='pi';const P=PLACE[p],G=GUIDE[p],n=ITEMS.filter(x=>x.p==p).length;app.innerHTML=`<div class='w rise' style='text-align:center'>${S.i>0?pathBar():''}<div class='float' style='display:inline-block;margin:22px 0 14px'><span class='medal' style='--mc:${P[2]};width:132px;height:132px'>${LAUREL}<i class='ti ${P[1]}' style='font-size:60px'></i></span></div><div><span class='chip'>${p}번째 장소 · ${p} / 3 · ${n}문항</span></div><p class='title' style='font-size:40px;margin:.2rem 0 0'>${P[0]}</p><p class='kicker' style='margin:0 0 1rem'>${P[3]}</p><div class='card' style='text-align:left'><p class='mut' style='margin:0 0 .7rem'>${G[0]}</p><details><summary><i class='ti ti-info-circle'></i> 왜 이렇게 묻나요?</summary><p class='sm' style='margin:.5rem 0 0'>${G[1]}</p></details></div><button class='btn-main' id='pg'>들어가기 <i class='ti ti-arrow-right'></i></button></div>`;$('#pg').onclick=q;$('#pg').focus();saveProg()}
+function q(){S.mode='q';const it=ITEMS[S.i],cur=S.ans[it.id],P=PLACE[it.p],typ=it.ty=='L'?['공감 문항','ti-message']:it.ty=='D'?['사고실험','ti-bulb']:['철학자의 문장','ti-quote'];let body;
+if(it.ty=='L'){const sz=[46,38,30,38,46],DC=['var(--acc)','var(--acc)','var(--ink3)','var(--gold)','var(--gold)'];body=`<p class='qtext'>${it.t}</p><div class='dots' role='radiogroup' aria-label='응답 선택'>${sz.map((s,k)=>`<button class='dot${cur==k+1?' on':''}' data-v='${k+1}' role='radio' aria-checked='${cur==k+1}' aria-label='${k+1}번 ${LK[k]}' title='${k+1} · ${LK[k]}' style='width:${s}px;height:${s}px;border-color:${DC[k]};background:${cur==k+1?DC[k]:'transparent'}'></button>`).join('')}</div><div class='dl'><span>${LK[0]}</span><span class='dlab' id='dlab'>${cur?LK[cur-1]:''}</span><span>${LK[4]}</span></div>`}
+else{const M=it.ty=='M';body=`<p class='qtext' style='min-height:0'>${M?'두 문장 중 더 마음에 와닿는 쪽은?':it.t}</p><div class='opts'>${['A','B'].map((o,j)=>{const on=cur&&(j?cur>=3:cur<=2),st=cur==(j?4:1);return `<button class='opt${on?(st?' sel':' half'):''}' data-v='${j?4:1}' style='--oc:var(--${j?'pr':'pl'})'><span class='olab'>${o}</span>${M?`“${it[o]}”`:it[o]}</button>`}).join('')}</div><div class='scale4'>${L4.map((l,k)=>`<button class='${cur==k+1?'on':''}' data-v='${k+1}'>${l}</button>`).join('')}</div><p class='sm' style='margin:0;text-align:center'>카드를 누르면 ‘확실히’, 아래 버튼으로 ‘조금’도 고를 수 있어요</p>`}
+app.innerHTML=`<div class='w'>${pathBar()}<div class='sm topline'><span>${P[0]} · ${S.i+1} / ${NQ}</span><span>${remain()}</span></div><div class='card qcard in' id='qc'><div class='qhead'><span class='qtype'><i class='ti ${typ[1]}'></i> ${typ[0]}</span>${it.ty=='D'?`<span class='qti'>「${it.ti}」</span>`:''}${it.ty=='M'?`<span class='sm'>누가 한 말인지는 결과에서 공개돼요</span>`:''}</div>${body}</div><div class='qnav'><button id='bk' style='${S.i==0?'visibility:hidden':''}'><i class='ti ti-arrow-left'></i> 이전</button><span class='sm' style='text-align:right'>키보드 ${it.ty=='L'?'1–5':'1–4 · A/B'}로 답하고 ←로 돌아가요</span></div></div>`;
+S.shown=performance.now();app.querySelectorAll('#qc [data-v]').forEach(b=>b.onclick=()=>answer(+b.dataset.v));
+if(it.ty=='L')app.querySelectorAll('.dot').forEach(b=>{b.onmouseenter=()=>{$('#dlab').textContent=LK[+b.dataset.v-1]};b.onmouseleave=()=>{const c=S.ans[it.id];$('#dlab').textContent=c?LK[c-1]:''}});$('#bk').onclick=back}
+function back(){if(S.lock||S.i<=0)return;S.i--;q()}
+function milestone(){const f=S.i/NQ;[[.25,'4분의 1 지점! 생각의 근육이 풀리고 있어요'],[.5,'절반 왔어요. 소크라테스라면 여기서 물 한 잔 마셨을 거예요'],[.75,'거의 다 왔어요. 정원 끝이 보여요']].forEach(([p,m])=>{if(f>=p&&!S.ms[p]){S.ms[p]=1;toast(m,'joy')}})}
+function answer(v){if(S.lock||S.mode!='q')return;S.lock=1;const it=ITEMS[S.i],t=performance.now()-S.shown;if(S.ans[it.id]==null)S.lat[it.id]=t;else if(S.ans[it.id]!==v){S.chg++;S.chgItems.push(it.id)}S.ans[it.id]=v;
+app.querySelectorAll('#qc .dot,#qc .scale4 button').forEach(b=>{const on=+b.dataset.v==v;b.classList.toggle('on',on);if(b.classList.contains('dot'))b.style.background=on?b.style.borderColor:'transparent'});
+app.querySelectorAll('#qc .opt').forEach(b=>{const on=+b.dataset.v==4?v>=3:v<=2;b.classList.toggle('sel',on&&(v==1||v==4));b.classList.toggle('half',on&&(v==2||v==3))});
+try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}
+setTimeout(()=>{const c=$('#qc');if(c){c.classList.remove('in');c.classList.add('out')}},150);setTimeout(()=>{S.lock=0;S.i++;milestone();saveProg();next()},360)}
+document.addEventListener('keydown',e=>{if(!S||S.mode!=='q')return;const tg=e.target&&e.target.tagName;if(tg==='INPUT'||tg==='TEXTAREA')return;const it=ITEMS[S.i],mx=it.ty=='L'?5:4,k=e.key.toLowerCase();if(/^[1-5]$/.test(k)&&+k<=mx)answer(+k);else if(it.ty!='L'&&k=='a')answer(1);else if(it.ty!='L'&&k=='b')answer(4);else if(e.key==='ArrowLeft'||e.key==='Backspace'){e.preventDefault();back()}});
+function theseus(){S.mode='g';const rem=VK.slice(),el=[],lt=[];let t0=performance.now();const MSG=['폭풍이 몰려와요! 배가 가라앉지 않게 짐을 하나씩 바다에 던져야 해요','배가 아직 무거워요','파도가 더 거세져요','하나 더 던져야 해요','점점 어려워지죠?','이제 정말 소중한 것만 남았어요','두 개만 더!','마지막 결단이에요'];
+const draw=()=>{if(rem.length==1){const k=rem[0];app.innerHTML=`<div class='w rise' style='text-align:center'>${pathBar()}<span class='chip'>미니게임 1 · 테세우스의 배</span><p class='mut' style='margin:.4rem 0'>폭풍이 지나가고, 배에 마지막까지 남은 것</p><div class='card holo' style='display:inline-block;padding:1.6rem 2.8rem;margin:.4rem 0 1rem'><i class='ti ${VAL[k][0]}' style='font-size:48px;color:var(--gold)'></i><p class='disp' style='font-size:34px;margin:.2rem 0 0'>${k}</p><p class='sm' style='margin:0'>${VAL[k][1]}</p></div><p class='mut' style='margin:0 auto .4rem;max-width:520px'>테세우스의 배는 판자를 모두 갈아 끼워도 같은 배일까요? 다 버리고도 남은 이것이, 변해 가는 당신을 여전히 당신으로 만드는 닻이에요.</p><p class='sm'>던진 순서 · ${el.join(' → ')}</p><button class='btn-main' id='tg'>정원으로 가기 <i class='ti ti-plant'></i></button></div>`;$('#tg').onclick=()=>{S.elim=[...el,k];S.elimLat=lt.slice();saveProg();next()};return}
+app.innerHTML=`<div class='w rise'>${pathBar()}<span class='chip'>미니게임 1 · 테세우스의 배 · ${el.length+1} / 8</span><p class='disp' style='font-size:23px;margin:.3rem 0'>${MSG[el.length]}</p><p class='mut' style='margin:0'>삶에서 가장 먼저 내려놓을 수 있는 가치부터 바다로 던지세요. 마지막까지 남는 것이 당신의 닻이에요.</p><div class='ship'>${SHIP}</div><div class='vgrid'>${rem.map(k=>`<button class='card vcard' data-k='${k}'><i class='ti ${VAL[k][0]}'></i><span class='disp'>${k}</span><span class='vs'>${VAL[k][1]}</span></button>`).join('')}</div>${el.length?`<p class='sm' style='margin-top:12px'>바다에 던진 것 · ${el.join(' → ')}</p>`:''}</div>`;
+app.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>{if(S.lock)return;S.lock=1;const k=b.dataset.k;lt.push(performance.now()-t0);b.classList.add('tossed');setTimeout(()=>{S.lock=0;el.push(k);rem.splice(rem.indexOf(k),1);t0=performance.now();draw()},430)})};draw()}
+function symposium(){S.mode='g';const pre=analyze(rpOf()).fits.slice(0,4),G=['Α','Β','Γ','Δ'],pick=[];
+const reveal=()=>{app.innerHTML=`<div class='w rise' style='text-align:center'><span class='chip'>미니게임 2 · 심포지엄 초대장</span><p class='disp' style='font-size:25px;margin:.3rem 0 1rem'>가면을 벗은 손님들</p><div class='g2' style='text-align:left'>${pre.map((o,j)=>{const n=pick.indexOf(o.ph.id);return `<div class='card' style='margin:0;display:flex;gap:12px;align-items:center;animation:flip .6s ${(j*.18).toFixed(2)}s both;${n>=0?'box-shadow:inset 0 0 0 2px var(--gold2),var(--shadow)':''}'>${medal(o.ph,54)}<div><p class='sm' style='margin:0'>손님 ${G[j]}${n>=0?` · <b style='color:var(--gold)'>${n+1}번째 초대</b>`:''}</p><p class='disp' style='font-size:18px;margin:0'>${o.ph.n}</p><p class='sm' style='margin:0'>${o.ph.nick}</p></div></div>`}).join('')}</div><p class='mut' style='margin:1rem auto;max-width:520px'>초대한 손님은 결과에 조금 더 가깝게 반영돼요. 이제 보고서를 펼쳐 볼까요?</p><button class='btn-main' id='sf'>보고서 받기 <i class='ti ti-file-text'></i></button></div>`;burst(innerWidth/2,innerHeight/3,30);$('#sf').onclick=()=>{S.sym=pick.slice();saveProg();finish()}};
+const draw=()=>{app.innerHTML=`<div class='w rise'>${pathBar()}<span class='chip'>미니게임 2 · 심포지엄 초대장</span><p class='disp' style='font-size:24px;margin:.3rem 0'>오늘 밤 향연에 초대할 손님 두 명</p><p class='mut' style='margin:0 0 1rem'>지금까지의 답으로 뽑힌 네 명의 후보예요. 이름은 가려져 있어요. 이야기만 보고, 밤새 대화하고 싶은 손님을 순서대로 두 명 고르세요.</p><div style='display:grid;gap:10px'>${pre.map((o,j)=>{const n=pick.indexOf(o.ph.id);return `<button class='card gcard${n>=0?' sel':''}' data-id='${o.ph.id}'><span class='medal' style='--mc:var(--ink3);width:54px;height:54px'><span class='disp' style='font-size:22px;color:#fff;position:relative'>${G[j]}</span></span><span style='flex:1'><span class='disp' style='font-size:16px'>손님 ${G[j]}</span><br><span style='font-size:14.5px;line-height:1.6'>${o.ph.blind}</span><br><span class='sm'>${o.ph.core}</span></span>${n>=0?`<span class='badge'>${n+1}</span>`:''}</button>`}).join('')}</div><div id='se' style='font-size:13px;color:var(--bad);min-height:20px;margin-top:8px'></div><button class='btn-main' id='sg' style='width:100%;${pick.length<2?'opacity:.6':''}'>${pick.length<2?`${2-pick.length}명 더 골라 주세요`:'초대장 보내기'}</button></div>`;
+app.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{const id=b.dataset.id,n=pick.indexOf(id);if(n>=0)pick.splice(n,1);else if(pick.length<2)pick.push(id);draw()});$('#sg').onclick=()=>{if(pick.length<2){$('#se').textContent='손님 두 명을 순서대로 골라 주세요';return}reveal()}};draw()}
+const bar=(v,c)=>`<div class='bar'><i style='width:${cl(v,2,100)}%;background:${c}'></i></div>`;
+const row=(l,v,c,t,w)=>`<div class='row' style='grid-template-columns:${w||92}px minmax(0,1fr) 40px'><span class='sm'>${l}</span>${bar(v,c)}<span class='sm' style='text-align:right'>${t!=null?t:R0(v)}</span></div>`;
+const sec=(t,s,id)=>`<div class='sec'${id?` id='${id}'`:''}>${t}</div>${s?`<p class='sm' style='margin:0 0 .8rem'>${s}</p>`:''}`;
+const mcard=(lab,ttl,body,c)=>`<div class='card' style='margin:0'><p class='sm' style='margin:0;color:var(--${c||'gold'})'>${lab}</p>${ttl?`<p class='disp' style='font-size:17px;margin:4px 0'>${ttl}</p>`:''}<p style='font-size:14.5px;line-height:1.7;margin:4px 0 0'>${body}</p></div>`;
+const pole=(i,u)=>POLE[AK[i]+(u>=0?1:0)],side=(i,u)=>u>.12?AX[i].R:u<-.12?AX[i].L:'균형',pct=F=>Math.max(1,Math.min(99,R0(F)));
+const NAVB=[['s-me','나의 철학자'],['s-ax','사유의 10축'],['s-map','철학 지도'],['s-val','닻'],['s-life','삶의 처방'],['s-talk','토론'],['s-thk','사고실험 해설'],['s-par','평행 시대'],['s-pat','응답 패턴'],['s-club','토론 클럽'],['s-code','결과 코드']],DOMK=Object.keys(DOM);
+const mX=u=>avg([u[5],u[7],u[8]]),mY=u=>avg([u[0],u[6]]);
+function phMap(U,hl){const c=180,r=140,px=v=>c+cl(v,-1,1)*r,Q=[['관조하는 이상가',c-r+10,c-r+18,'start'],['행동하는 이상가',c+r-10,c-r+18,'end'],['조용한 관찰자',c-r+10,c+r-10,'start'],['현실의 개혁가',c+r-10,c+r-10,'end']];
+let g=`<rect x='${c-r}' y='${c-r}' width='${2*r}' height='${2*r}' rx='16' fill='var(--card2)' stroke='var(--line2)'/><line x1='${c}' y1='${c-r}' x2='${c}' y2='${c+r}' stroke='var(--line2)' stroke-dasharray='3 5'/><line x1='${c-r}' y1='${c}' x2='${c+r}' y2='${c}' stroke='var(--line2)' stroke-dasharray='3 5'/>`+Q.map(([t,x,y,a])=>`<text x='${x}' y='${y}' text-anchor='${a}' style='font-size:10px;fill:var(--ink3)'>${t}</text>`).join('')+`<text x='${c}' y='${c-r-10}' text-anchor='middle' style='font-size:11px;fill:var(--ink2)'>이성 · 초월</text><text x='${c}' y='${c+r+20}' text-anchor='middle' style='font-size:11px;fill:var(--ink2)'>경험 · 자연</text><text x='${c-r-10}' y='${c}' text-anchor='middle' transform='rotate(-90 ${c-r-10} ${c})' style='font-size:11px;fill:var(--ink2)'>지키고 바라보기</text><text x='${c+r+10}' y='${c}' text-anchor='middle' transform='rotate(90 ${c+r+10} ${c})' style='font-size:11px;fill:var(--ink2)'>바꾸고 뛰어들기</text>`;
+PH.forEach(p=>{const u=p.p.map(v=>v/2),j=hs(p.id),x=px(mX(u))+(j%11-5),y=px(mY(u))+((j>>5)%11-5),on=p.id==hl;g+=`<circle cx='${x.toFixed(1)}' cy='${y.toFixed(1)}' r='${on?6.5:4.2}' fill='${p.col}' ${on?`stroke='var(--gold2)' stroke-width='2.5'`:`opacity='.85'`}/><text x='${x.toFixed(1)}' y='${(y-8).toFixed(1)}' text-anchor='middle' style='font-size:${on?11:9}px;fill:var(--ink${on?'':'2'})${on?';font-weight:700':''}'>${p.n.split(' ').pop()}</text>`});
+const ux=px(mX(U)),uy=px(mY(U));g+=`<circle cx='${ux.toFixed(1)}' cy='${uy.toFixed(1)}' r='15' fill='var(--gold2)' opacity='.22'/><path d='${star(ux,uy,9)}' fill='var(--gold2)' stroke='var(--card)' stroke-width='1.5'/><text x='${ux.toFixed(1)}' y='${(uy+23).toFixed(1)}' text-anchor='middle' style='font-size:11.5px;font-weight:700;fill:var(--gold)'>나</text>`;
+return `<svg viewBox='0 0 360 360' width='100%' style='max-width:430px;display:block;margin:0 auto' role='img' class='tl'><title>철학 지도</title>${g}</svg>`}
+function renderResult(R){S.mode='res';const U=R.U,sc=U.map(u=>(u+1)*50),T=R.top,ph=T.ph,nm=esc(S.name),fs=R.fits,f2=fs[1],f3=fs[2],far=fs[fs.length-1],A=S.ans,idx=AK.map((k,i)=>i);
+const ord=idx.slice().sort((a,b)=>Math.abs(U[b])-Math.abs(U[a])),a1=ord[0],a2=ord[1],P1=pole(a1,U[a1]),P2=pole(a2,U[a2]),title=`${P2.adj} ${P1.noun}`,sent=`저는 ${P1.mid}, ${P2.mid.slice(0,-1)}는 사람입니다.`;
+const relL=R.rel>=80?['높음','good']:R.rel>=60?['보통','warn']:['주의','bad'],sv=S.elim&&S.elim.length==9?S.elim[8]:null,NAV=(S.prev?[['s-cmp','지난 검사 비교'],...NAVB]:NAVB).filter(x=>S.preview==null||x[0]!='s-club');
+const avgOf=ids=>avg(ids.map(id=>fs.find(o=>o.ph.id==id).base)),sch=SCH.map(([n,ids,d])=>({n,ids,d,m:avgOf(ids)})).sort((a,b)=>b.m-a.m)[0],era=ERA.map(([n,ids,d])=>({n,ids,d,m:avgOf(ids)})).sort((a,b)=>b.m-a.m)[0];
+let h=`<div class='w'>`;
+if(S.preview!=null&&SIM){const p=SIM.P[S.preview],tr=PH.map(q=>[q,fitPh(q,p.t)]).sort((x,y)=>y[1]-x[1]).slice(0,3);h+=`<div class='noprint' style='background:var(--warnbg);color:var(--warn);border-radius:14px;padding:.75rem 1rem;margin:0 0 1rem;font-size:13px;line-height:1.7'>가상 인물 미리보기 · ${TYPEL[p.type]} · 출발점이 된 철학자 ${PH[p.b].n}<br>설정된 실제 사유 성향에 가장 가까운 철학자 → ${tr.map(x=>x[0].n).join(' · ')}<br>아래 결과가 이 설정을 얼마나 맞히는지 비교해 보세요.<div style='margin-top:6px;display:flex;gap:6px'><button id='toSim' style='min-height:28px;font-size:12px'>시뮬레이션으로</button><button id='nextP' style='min-height:28px;font-size:12px'>다른 인물</button></div></div>`}
+if(R.rel<60)h+=`<div style='background:var(--badbg);color:var(--bad);border-radius:14px;padding:.75rem 1rem;margin:0 0 1rem;font-size:14px;line-height:1.7'>응답 신뢰도가 ${R0(R.rel)}점으로 낮아요. 아래 결과는 참고로만 보시고, 여유 있을 때 다시 해 보길 권해요.${R.notes[0]?' 가장 큰 이유: '+R.notes[0]:''}</div>`;
+h+=`<div style='text-align:center'><span class='chip'>${nm}님의 사유 지문</span><span class='chip' style='background:var(--${relL[1]}bg);color:var(--${relL[1]})'>응답 신뢰도 ${R0(R.rel)} · ${relL[0]}</span>${R.cert!=null?`<span class='chip'>결과 확신도 ${R0(R.cert*100)}%</span>`:''}</div>`;
+h+=`<div class='card holo' style='text-align:center;padding:1.5rem 1.25rem 1.3rem'><p class='kicker' style='margin:0'>당신과 가장 닮은 철학자</p><div style='margin:20px 0 12px'>${medal(ph,104,1)}</div><p class='disp' style='font-size:36px;margin:0;line-height:1.2'>${ph.n}</p><p class='sm' style='margin:2px 0 6px'>${ph.nick} · ${ph.y}</p><p class='disp' style='font-size:46px;line-height:1.1;margin:.2rem 0 0;color:var(--gold)'>${pct(T.F)}<span style='font-size:22px'>%</span></p><p class='sm' style='margin:0 0 .8rem'>사유 일치도</p><p class='mut' style='margin:0 auto;max-width:520px'>${ph.core}</p><p class='quote' style='text-align:left;max-width:520px;margin:.9rem auto'>“${ph.say}”</p><span class='tag'>${ph.bio}</span></div>`;
+if(R.cert!=null){if(R.cert<.6&&R.alt){const ap=PH[PHI[R.alt.id]];h+=`<div style='background:var(--accbg);color:var(--acc);border-radius:14px;padding:10px 12px;margin:0 0 1rem;font-size:13.5px;line-height:1.65'>접전이에요. 문항을 무작위로 다시 뽑아 200번 재계산하면 ${jo(ph.n,'이','가')} ${R0(R.cert*100)}%, ${jo(ap.n,'이','가')} ${R0(R.alt.f*100)}%의 확률로 1위였어요. 두 사람의 사상을 함께 읽어 보세요.</div>`}else h+=`<p class='sm' style='text-align:center;margin:-.3rem 0 1rem'>문항을 무작위로 다시 뽑아 200번 재계산해도 ${R0(R.cert*100)}%는 ${jo(ph.n,'이','가')} 1위였어요.</p>`}
+h+=`<div class='card' style='background:var(--card2)'><p class='sm' style='margin:0'>당신의 사유 유형</p><p class='disp' style='font-size:26px;margin:2px 0 8px'>${title}</p><p class='sm' style='margin:0 0 2px'>자기소개에 쓸 수 있는 한 문장</p><p class='hand' style='font-size:21px;line-height:1.5;margin:0'>“${sent} ${ph.n}처럼요.”</p></div>`;
+h+=`<div class='noprint' style='display:flex;flex-wrap:wrap;gap:6px;margin:.4rem 0 0'>${NAV.map(([id,l])=>`<button data-go='${id}' style='font-size:13px;min-height:30px;padding:0 11px'>${l}</button>`).join('')}</div>`;
+if(S.prev){const pv=S.prev,rows=AX.map((a,i)=>[a,(pv.u[i]/100+1)*50,sc[i]]).filter(r=>Math.abs(r[2]-r[1])>=15).sort((x,y)=>Math.abs(y[2]-y[1])-Math.abs(x[2]-x[1])),pp=PH[PHI[pv.t]];
+h+=sec('지난 검사와 비교',`${esc(pv.d||'')} 결과와 비교했어요. 같은 사람도 다시 하면 축마다 10점 안팎은 흔들리므로, 15점 이상 움직인 축만 의미 있는 변화로 봐요. 닮은 철학자: ${pp?pp.n:'?'} → ${ph.n}`,'s-cmp')+`<div class='card'>${rows.length?rows.map(([a,p0,p1])=>{const d=R0(p1-p0);return `<div style='display:grid;grid-template-columns:110px 1fr 84px;gap:8px;padding:6px 0;border-bottom:.5px solid var(--line);font-size:14px'><span class='sm'>${a.n}</span><span>${d>0?`${a.L} → <b>${a.R}</b> 쪽으로`:`${a.R} → <b>${a.L}</b> 쪽으로`}</span><span style='text-align:right;color:var(--acc)'>${Math.abs(d)}점 이동</span></div>`}).join('')+`<p class='sm' style='margin:8px 0 0'>생각이 움직인 축에는 대개 그사이의 경험(새 책, 이별, 이직, 상실)이 있어요. 무엇이 당신을 움직였는지 떠올려 보세요.</p>`:`<p style='margin:0'>15점 이상 움직인 축이 없어요. 당신의 사유 지문이 안정적이라는 뜻이고, 이번 결과를 더 믿어도 좋아요.</p>`}</div>`}
+const same=idx.map(i=>({i,e:Math.abs(U[i]-ph.p[i]/2)})).filter(o=>Math.abs(ph.p[o.i])>=1&&Math.abs(U[o.i])>.12&&U[o.i]*ph.p[o.i]>0).sort((a,b)=>a.e-b.e).slice(0,3),dif=idx.map(i=>({i,e:Math.abs(U[i]-ph.p[i]/2)})).sort((a,b)=>b.e-a.e)[0];
+h+=sec(`나의 철학자 · ${ph.n}`,'10개 축 사이의 거리에, 당신이 지킨 가치 · 고른 철학자의 문장 · 초대한 손님을 더해 계산했어요.','s-me');
+h+=`<div class='card'><p class='b' style='margin:0 0 6px'>닮은 점</p>${same.length?same.map(o=>`<p class='sm' style='margin:0 0 4px'><i class='ti ti-check' style='color:var(--good)'></i> ${AX[o.i].n} · 둘 다 <b>${side(o.i,U[o.i])}</b> 쪽이에요. ${U[o.i]>0?AX[o.i].Rd:AX[o.i].Ld}</p>`).join(''):`<p class='sm' style='margin:0'>한두 축이 아니라 전체적인 균형이 닮았어요.</p>`}<p class='b' style='margin:12px 0 6px'>갈라지는 점</p><p class='sm' style='margin:0'>${AX[dif.i].n} · ${jo(ph.n,'은','는')} ${side(dif.i,ph.p[dif.i]/2)}, 당신은 ${side(dif.i,U[dif.i])}. 그의 책을 읽다가 고개를 젓게 된다면 아마 이 대목일 거예요.</p><p class='b' style='margin:12px 0 6px'>첫 책</p><p class='sm' style='margin:0'>${ph.bk}</p></div>`;
+h+=`<div class='g2'>${[f2,f3].map((o,j)=>`<div class='card' style='margin:0;display:flex;gap:12px;align-items:center'>${medal(o.ph,54)}<div><p class='sm' style='margin:0'>${j+2}위 · ${pct(o.F)}%</p><p class='disp' style='font-size:18px;margin:0'>${o.ph.n}</p><p class='sm' style='margin:0'>${o.ph.nick} · ${o.ph.bk}</p></div></div>`).join('')}</div>`;
+h+=`<div class='g2' style='margin-top:10px'>${mcard('당신의 학파',sch.n,`${sch.d}. 함께하는 철학자 · ${sch.ids.map(id=>PH[PHI[id]].n).join(', ')}`,'acc')}${mcard('가장 먼 철학자 · 최고의 토론 상대',`${far.ph.n} (${pct(far.F)}%)`,`${far.ph.nick}. 생각이 가장 먼 사람의 책이 가장 많은 것을 가르쳐 줘요. “${far.ph.say}”`,'bad')}</div>`;
+h+=`<details style='margin-top:12px'><summary><i class='ti ti-list'></i> 철학자 30인 전체 순위 보기</summary><div class='card' style='margin-top:8px'>${fs.map((o,j)=>row(`${j+1}. ${o.ph.n.split(' ').pop()}`,o.F,o.ph.col,pct(o.F),132)).join('')}</div></details>`;
+h+=sec('사유의 10축',`● 나 · ◆ ${ph.n}. 옅은 띠는 당신 응답의 흔들림으로 계산한 오차 범위예요. 띠가 가운데 선에 걸치면 한쪽으로 단정하지 않았어요.`,'s-ax');
+h+=`<div class='card'>${AX.map((a,i)=>{const m=sc[i],e=R.SE[i]*64,lo=cl(m-e,0,100),hi=cl(m+e,0,100),L=R.lab[i];return `<div class='axrow'><div class='axlab'><span style='color:var(--pl)'>${a.L}</span><span class='sm b'>${a.n}</span><span style='color:var(--pr)'>${a.R}</span></div><div class='axbar'><div class='ln'></div><div class='mid'></div><div class='bd' style='left:${lo}%;width:${hi-lo}%'></div><div class='ph' style='left:${(ph.p[i]/2+1)*50}%'></div><div class='me' style='left:${m}%'></div></div><p class='sm' style='margin:2px 0 0'><b>${L[1]}</b> · ${L[0]==2?'양쪽을 오가며 상황에 맞게 판단해요.':L[0]?a.Rd:a.Ld}</p></div>`}).join('')}</div>`;
+h+=`<p class='b' style='margin:1.2rem 0 .5rem'>가장 뚜렷한 세 축</p>`+ord.slice(0,3).map(i=>`<div style='border-left:3px solid var(--gold2);padding:2px 0 2px 12px;margin:0 0 12px'><p class='sm' style='margin:0;color:var(--gold)'>${AX[i].n} · ${side(i,U[i])}</p><p style='font-size:15px;margin:2px 0 0;line-height:1.7'>${pole(i,U[i]).s}</p></div>`).join('');
+const near=PH.map(p=>{const u=p.p.map(v=>v/2);return [p,Math.hypot(mX(u)-mX(U),mY(u)-mY(U))]}).sort((a,b)=>a[1]-b[1]).slice(0,3).map(x=>x[0].n),quad=mY(U)<0?(mX(U)<0?'관조하는 이상가':'행동하는 이상가'):(mX(U)<0?'조용한 관찰자':'현실의 개혁가');
+h+=sec('철학 지도','열 개 축 중 다섯 개를 두 방향으로 접은 단면이에요. 가로는 세상을 대하는 법(질서·관조·수용 ↔ 변혁·참여·자유), 세로는 무엇을 믿는가(이성·초월 ↔ 경험·자연)예요.','s-map')+`<div class='card'>${phMap(U,ph.id)}<p class='sm' style='margin:8px 0 0;text-align:center'>당신의 자리 · <b>${quad}</b> · 지도 위 가장 가까운 이웃 · ${near.join(', ')}</p><p class='sm' style='margin:4px 0 0;text-align:center;opacity:.8'>지도는 단면이라, 10축 전체로 계산한 순위와 다를 수 있어요.</p></div>`;
+h+=sec('닻 · 테세우스의 배에서 남긴 것','폭풍 속에서 가치를 하나씩 버린 순서예요. 결정의 순간 당신을 실제로 붙잡는 것이 무엇인지 보여 줘요.','s-val');
+if(sv){const hi=S.elimLat&&S.elimLat.length?S.elimLat.indexOf(Math.max(...S.elimLat)):-1,mates=PH.filter(p=>p.v.includes(sv));h+=`<div class='card' style='display:flex;gap:16px;align-items:center;flex-wrap:wrap'><div style='text-align:center;min-width:110px'><i class='ti ${VAL[sv][0]}' style='font-size:44px;color:var(--gold)'></i><p class='disp' style='font-size:28px;margin:0'>${sv}</p><p class='sm' style='margin:0'>${VAL[sv][1]}</p></div><div style='flex:1;min-width:200px'><p class='sm' style='margin:0 0 6px'>버린 순서 · ${S.elim.slice(0,8).join(' → ')} → <b>${sv}</b></p>${hi>=0?`<p class='sm' style='margin:0 0 6px'>가장 오래 고민한 선택은 ${jb(S.elim[hi],'을','를')} 버릴 때였어요(${(S.elimLat[hi]/1000).toFixed(1)}초). 순위는 낮게 매겼지만 여전히 마음이 쓰이는 가치예요.</p>`:''}<p class='sm' style='margin:0 0 6px'>같은 닻을 내린 철학자 · ${mates.map(p=>p.n).join(', ')}</p><p class='sm' style='margin:0'>양보 카드 · 가장 먼저 버린 ${jb(S.elim[0],'은','는')} 갈등이나 협상에서 비교적 쉽게 내줘도 괜찮은 것이에요. 대신 ${jb(sv,'만은','만은')} 지키세요.</p></div></div>`}
+else h+=`<div class='card'><p class='sm' style='margin:0'>이 결과에는 가치 게임 기록이 없어요.</p></div>`;
+const D7=[[ph.n+'의 처방',ph.pr[0]],[ph.n+'의 처방',ph.pr[1]],['당신의 축 · '+AX[a1].n,P1.x],[f2.ph.n+'의 처방',f2.ph.pr[0]],['반대편에서 빌려 오기 · '+far.ph.n,far.ph.pr[0]],['당신의 축 · '+AX[a2].n,P2.x],['정리의 날',`${ph.bk}의 첫 스무 쪽을 읽고, 이번 주 실험 중 가장 오래 남은 하나를 한 문장으로 적어 보세요.`]];
+h+=sec('삶의 처방','강점은 그림자를 함께 데려와요. 가장 뚜렷한 두 축의 그림자와, 닮은 철학자들이 남긴 습관이에요.','s-life')+`<div class='g2'>${[a1,a2].map(i=>{const P=pole(i,U[i]);return `<div class='card' style='margin:0'><p class='sm' style='margin:0;color:var(--gold)'>${AX[i].n} · ${side(i,U[i])}</p><p class='sm' style='margin:6px 0 0'><span style='color:var(--bad)'>그림자</span> ${P.b}</p><p class='sm' style='margin:6px 0 0'><span style='color:var(--acc)'>처방</span> ${P.x}</p></div>`}).join('')}</div>`;
+h+=`<p class='b' style='margin:1.4rem 0 .5rem'>7일 사유 실험</p><div class='card'>${D7.map(([t,b],j)=>`<div style='display:grid;grid-template-columns:44px minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:.5px solid var(--line)'><span class='disp' style='color:var(--gold)'>${j+1}일</span><span><span class='sm'>${t}</span><br><span style='font-size:14.5px;line-height:1.65'>${b}</span></span></div>`).join('')}<button id='cp7' style='margin-top:10px'><i class='ti ti-copy'></i> 7일 실험 복사</button></div>`;
+h+=`<p class='b' style='margin:1.4rem 0 .5rem'>고민 상담소</p><p class='sm' style='margin:0 0 .6rem'>지금 머릿속을 차지한 고민을 골라 보세요. 당신의 축에 맞춘 답과, 그 축의 철학자가 건네는 한마디예요.</p><div class='tabs'>${DOMK.map((k,j)=>`<button data-dom='${k}' class='${j?'':'on'}'>${DOM[k][0]}</button>`).join('')}</div><div id='domO' class='card'></div>`;
+const domOut=k=>{const d=DOM[k],i=AXI[d[1]],u=U[i],ix=u<-.15?0:u>.15?1:2,ch=AX[i].ch,rk=id=>fs.findIndex(o=>o.ph.id==id),cp=PH[PHI[ix==2?(rk(ch[0])<rk(ch[1])?ch[0]:ch[1]):ch[ix]]];return `<p class='sm' style='margin:0;color:var(--gold)'>${AX[i].n} · ${side(i,u)}</p><p style='font-size:15px;line-height:1.75;margin:4px 0 12px'>${d[2][ix]}</p><div style='display:flex;gap:12px;align-items:center'>${medal(cp,42)}<p class='sm' style='margin:0'>${cp.n}의 한마디<br><span class='disp' style='font-size:15px;color:var(--ink)'>“${cp.say}”</span></p></div>`};
+const s1=U[a1]>=0?1:0,ally=PH[PHI[AX[a1].ch[s1]]],riv=PH[PHI[AX[a1].ch[1-s1]]],dx=idx.slice().sort((a,b)=>Math.abs(far.ph.p[b]-ph.p[b])-Math.abs(far.ph.p[a]-ph.p[a]))[0],bal=idx.slice().sort((a,b)=>Math.abs(U[a])-Math.abs(U[b])).slice(0,3);
+h+=sec('토론','철학은 결국 대화예요. 당신이 가장 뜨거워질 논쟁과, 아직 답을 정하지 않은 질문이에요.','s-talk');
+h+=`<div class='card'><p class='sm' style='margin:0;color:var(--gold)'>당신이 가장 열을 올릴 논쟁</p><p class='disp' style='font-size:20px;margin:4px 0 12px'>${AX[a1].topic}</p><div style='display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center'><div>${medal(ally,52)}<p class='sm' style='margin:6px 0 0'><b>${ally.n}</b><br>당신 편 · ${s1?AX[a1].R:AX[a1].L}</p></div><span class='disp' style='font-size:22px;color:var(--ink3)'>vs</span><div>${medal(riv,52)}<p class='sm' style='margin:6px 0 0'><b>${riv.n}</b><br>반대 편 · ${s1?AX[a1].L:AX[a1].R}</p></div></div></div>`;
+h+=`<div class='card'><p class='sm' style='margin:0;color:var(--gold)'>만약 오늘 밤 한 식탁에 앉는다면</p><p class='disp' style='font-size:18px;margin:4px 0 8px'>${ph.n} × ${far.ph.n} · ${AX[dx].topic}</p><p class='quote' style='border-color:${ph.col}'>${ph.n} · “${ph.say}”</p><p class='quote' style='border-color:${far.ph.col}'>${far.ph.n} · “${far.ph.say}”</p><p class='sm' style='margin:6px 0 0'>두 사람은 ${AX[dx].n}에서 가장 멀어요. 당신이 사회자라면, 두 사람에게 어떤 질문을 던지겠어요?</p></div>`;
+h+=`<p class='b' style='margin:1.2rem 0 .5rem'>아직 답을 정하지 않은 질문</p><p class='sm' style='margin:0 0 .5rem'>점수가 가운데에 가까운 축이에요. 흔들린다는 건 아직 생각할 여지가 있다는 뜻이고, 철학이 가장 재미있어지는 자리예요.</p>${bal.map(i=>`<p style='font-size:15px;margin:0 0 6px'><i class='ti ti-help-circle' style='color:var(--acc)'></i> ${AX[i].topic} <span class='sm'>(${AX[i].n})</span></p>`).join('')}`;
+const DI=ITEMS.filter(x=>x.ty=='D'),MI=ITEMS.filter(x=>x.ty=='M'),chs=v=>v<=2?'A':'B',stg=v=>v==1||v==4?'확실히':'조금',dCard=x=>{const v=A[x.id];return `<div style='padding:8px 0 10px;border-bottom:.5px solid var(--line)'><p class='disp' style='font-size:16px;margin:0;color:var(--gold)'>「${x.ti}」</p><p class='sm' style='margin:2px 0'>${x.t}</p><p style='font-size:14.5px;margin:4px 0'>나의 선택 · <b>${v?x[chs(v)]:'응답 없음'}</b>${v?` <span class='tag'>${stg(v)}</span>`:''}</p><p class='sm' style='margin:0'>${x.ex}</p></div>`};
+h+=sec('사고실험 해설','당신이 고른 답과, 그 질문을 두고 철학자들이 벌여 온 논쟁이에요.','s-thk')+`<div class='card'>${DI.slice(0,3).map(dCard).join('')}<details><summary style='margin-top:10px'>사고실험 ${DI.length-3}개 더 보기</summary>${DI.slice(3).map(dCard).join('')}</details></div>`;
+h+=`<p class='b' style='margin:1.2rem 0 .5rem'>철학자의 문장 · 정답 공개</p><div class='card'>${MI.map(x=>{const v=A[x.id],c=v?chs(v):null;return `<div style='padding:6px 0;border-bottom:.5px solid var(--line);font-size:14px;line-height:1.6'>${['A','B'].map(o=>`<p style='margin:0 0 3px;${c==o?'':'opacity:.6'}'>${c==o?`<i class='ti ti-check' style='color:var(--gold)'></i> `:''}“${x[o]}” <span class='sm'>— ${PH[PHI[o=='A'?x.wa:x.wb]].n}</span></p>`).join('')}</div>`}).join('')}<p class='sm' style='margin:8px 0 0'>체크 표시가 당신이 고른 문장이에요. 고른 문장의 주인은 매칭 점수에 조금 더 가깝게 반영됐어요.</p></div>`;
+h+=sec('평행 시대의 당신','같은 사유 지문이 다른 시대와 장소에 태어났다면.','s-par')+`<div class='g2'>${mcard('기원전 4세기 아테네','',P1.ath)}${mcard('18세기 조선','',P2.jos)}${mcard('2150년 화성 기지','',MARS[sv||ph.v[0]])}${mcard('당신의 시대',era.n,`${era.d} 이 시대 철학자들과의 평균 일치도가 가장 높아요. (${era.ids.map(id=>PH[PHI[id]].n).join(', ')})`)}</div>`;
+const mc=(l,v)=>`<div class='met'><p class='sm' style='margin:0'>${l}</p><p class='disp' style='font-size:24px;margin:0'>${v}</p></div>`;
+h+=sec('응답 패턴','무엇을 답했는지뿐 아니라 어떻게 답했는지도 당신에 대한 정보예요.','s-pat')+`<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(118px,1fr));gap:10px;margin-bottom:1rem'>${mc('응답 신뢰도',R0(R.rel))}${mc('엇갈린 축',R.inc.length+' / 10')}${mc('망설인 문항',R.slow.length)}${mc('답을 바꾼 횟수',S.chg)}${mc('‘보통’ 비율',R0(R.mid*100)+'%')}</div>`;
+h+=`<p class='sm' style='margin:0 0 .8rem'>엇갈린 축은 같은 축을 공감 문항과 사고실험·문장 고르기로 물었을 때 방향이 반대로 나온 축이에요. 원칙으로는 A라고 믿지만 구체적인 장면에선 B를 고르는 것, 그 간격이 바로 당신이 아직 생각 중인 자리예요.${R.inc.length?' 해당 축 · '+R.inc.map(a=>AX[AXI[a]].n).join(', '):''}</p>`;
+if(R.slow.length)h+=`<p class='b' style='margin:0 0 .3rem'>망설임 지도</p><p class='sm' style='margin:0 0 .7rem'>문항 길이를 감안해도 평소보다 유독 오래 머문 문항이에요. 답이 없어서가 아니라 답이 둘 이상이어서인 경우가 많아요.</p>${R.slow.map(o=>`<div style='border-left:2px solid var(--line2);padding:2px 0 2px 12px;margin:0 0 10px'><p style='font-size:14px;margin:0'>${o.x.ty=='L'?`“${o.x.t}”`:o.x.ty=='D'?`사고실험 「${o.x.ti}」`:'철학자의 문장 고르기'}</p><p class='sm' style='margin:0'>${(o.ms/1000).toFixed(0)}초 · 평소의 ${o.rel.toFixed(1)}배 · ${AX[o.x.ai].n}</p></div>`).join('')}`;
+const plA=Object.keys(R.pl).map(k=>[k,avg(R.pl[k])]).sort((a,b)=>b[1]-a[1]);if(plA.length>1)h+=`<p class='sm' style='margin:.4rem 0'>가장 오래 머문 곳 · <b>${PLACE[plA[0][0]][0]}</b> · 가장 빠르게 지나간 곳 · <b>${PLACE[plA[plA.length-1][0]][0]}</b>. 빨리 지나간 곳은 이미 생각이 정리된 영역이고, 오래 머문 곳은 요즘 당신이 씨름하는 영역이에요.</p>`;
+h+=R.notes.length?R.notes.map(n=>`<p class='sm' style='margin:0 0 4px'><i class='ti ti-alert-circle' style='color:var(--warn)'></i> ${n}</p>`).join(''):`<p class='sm'><i class='ti ti-check' style='color:var(--good)'></i> 속도, 일관성, 응답 습관 모두 양호해요.</p>`;
+const myc=encCode(R);
+if(S.preview==null)h+=sec('토론 클럽','친구나 동료도 검사를 마치면 결과 코드로 토론 클럽을 꾸릴 수 있어요. 각자의 역할, 짝꿍 궁합, 클럽이 가장 뜨거워질 논쟁까지 분석해 드려요.','s-club')+`<div class='card holo' style='display:flex;align-items:center;gap:14px;flex-wrap:wrap'><i class='ti ti-users-group' style='font-size:34px;color:var(--gold)'></i><div style='flex:1;min-width:180px'><p class='disp' style='font-size:18px;margin:0'>심포지엄 식탁에는 자리가 8개 있어요</p><p class='sm' style='margin:0'>초대 메시지를 보내고, 받은 코드를 클럽 화면에 붙여넣으세요.</p></div><button class='btn-main' id='toClub' style='min-height:44px;font-size:16px'>클럽 열기</button><button id='invC'><i class='ti ti-send'></i> 초대 메시지 복사</button></div>`;
+h+=sec('결과 코드','저장해 두었다가 몇 달 뒤 다시 검사할 때 첫 화면에 붙여넣으면, 생각이 어떻게 움직였는지 비교해 드려요. 이 브라우저에도 자동 저장돼요.','s-code')+`<div class='card'><textarea id='rc' readonly rows='3' style='width:100%;font-size:12px'>${myc}</textarea><button id='copyC' style='margin-top:8px'><i class='ti ti-copy'></i> 코드 복사</button></div>`;
+h+=`<p class='sm' style='margin:1.6rem 0 1rem'>이 검사는 철학 입문을 돕는 자기 탐색 도구예요. 철학자의 위치는 대표 사상을 단순화한 것이고, 실제 철학자는 이 축들보다 훨씬 복잡해요. 결과는 정답이 아니라 읽을거리의 출발점으로 써 주세요.</p><div class='noprint' style='display:flex;gap:8px;flex-wrap:wrap'><button id='share'><i class='ti ti-copy'></i> 요약 카드 복사</button><button id='prt'><i class='ti ti-printer'></i> 인쇄 · PDF</button><button id='again'><i class='ti ti-refresh'></i> 처음부터</button><button id='ask'>철학자와 더 이야기하기 ↗</button></div></div>`;
+app.innerHTML=h;window.scrollTo(0,0);
+app.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>{const el=document.getElementById(b.dataset.go);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})});
+const dO=$('#domO');dO.innerHTML=domOut(DOMK[0]);app.querySelectorAll('[data-dom]').forEach(b=>b.onclick=()=>{app.querySelectorAll('[data-dom]').forEach(x=>x.classList.toggle('on',x==b));dO.innerHTML=domOut(b.dataset.dom)});
+$('#again').onclick=intro;$('#prt').onclick=()=>window.print();
+const summ=[`[${S.name}의 철학 검사]`,`닮은 철학자: ${ph.n} (${pct(T.F)}%) · ${ph.nick}`,`사유 유형: ${title}`,`2·3위: ${f2.ph.n}, ${f3.ph.n} · 가장 먼 철학자: ${far.ph.n}`,`닻: ${sv||'-'} · 학파: ${sch.n}`,`“${ph.say}”`].join(NL);
+$('#share').onclick=e=>{const b=e.currentTarget;copyRaw(summ,()=>{b.textContent='복사됨'})};
+$('#cp7').onclick=e=>{const b=e.currentTarget;copyRaw(`[${S.name}의 7일 사유 실험]`+NL+D7.map(([t,x],j)=>`${j+1}일 · ${t}`+NL+x).join(NL+NL),()=>{b.textContent='복사됨'})};
+$('#copyC').onclick=e=>{const b=e.currentTarget;copyRaw(myc,()=>{b.textContent='복사됨'})};
+$('#ask').onclick=()=>sendPrompt(`[진우주 철학 검사 결과] 이름: ${S.name} / 닮은 철학자: ${ph.n} ${pct(T.F)}%, 2위 ${f2.ph.n}, 3위 ${f3.ph.n}, 가장 먼 철학자 ${far.ph.n} / 사유 유형: ${title} / 10축: ${AX.map((a,i)=>`${a.n} ${side(i,U[i])}(${R0(sc[i])})`).join(', ')} / 닻(가치): ${sv||'-'} / 응답 신뢰도 ${R0(R.rel)}. 이 결과를 바탕으로 ${ph.n}의 사상을 내 삶에 적용하는 법과, 입문용 읽기 순서를 구체적으로 알려줘.`);
+if(S.preview==null){$('#toClub').onclick=()=>clubScreen(()=>renderResult(R),1);$('#invC').onclick=e=>{const b=e.currentTarget;copyRaw(inviteMsg(S.name,myc),()=>{b.textContent='복사됨'})}}
+else{$('#toSim').onclick=simReport;$('#nextP').onclick=()=>loadPersona(Math.floor(Math.random()*100))}
+decorate()}
+function decorate(){const w=app.querySelector('.w');if(!w)return;const hero=document.createElement('div');hero.className='rise';hero.style.cssText='text-align:center;margin:0 0 .6rem';hero.innerHTML=`<div class='float' style='display:inline-block;cursor:pointer'>${owl('joy',124)}</div><p class='kicker' style='margin:.1rem 0 .5rem'>탐구 완료 · ${esc(S.name)}님의 철학 보고서</p>${S.creator?`<span class='chip'><i class='ti ti-crown'></i> 제작자 인증 · 이 정원의 주인</span>`:''}`;w.prepend(hero);const f=document.createElement('div');f.style.cssText='text-align:center;margin-top:2.4rem';f.innerHTML=`${owl('wink',56)}<p class='sm' style='margin:.2rem 0 0;opacity:.8'>이 정원 어딘가에 가꾼 사람의 흔적이 숨어 있어요 · ${eggs().length}/3</p><p class='sm' style='margin:0;opacity:.55'>진우주 철학 검사 v1</p>`;w.appendChild(f)}
+const CCOL=['#3d4c8c','#b25a35','#4d7a35','#a87b26','#8a5a9a','#3a8a8f','#a8456b','#5a5a6e'];
+const CROLE=[['산파','ti-message-question','질문으로 모두의 생각을 끌어내는 사람',u=>avg([u[1],u[7]])],['체계가','ti-building-arch','흩어진 논의를 하나의 구조로 세우는 사람',u=>avg([-u[0],-u[1]])],['현실주의자','ti-scale','그래서 실제로는 어떤지를 묻는 사람',u=>avg([u[3],u[6]])],['중재자','ti-users','대립을 다시 대화로 되돌리는 사람',u=>avg([u[4],u[2]])],['등에','ti-bolt','당연한 것을 쏘아 흔드는 사람',u=>avg([u[5],u[1]])],['기록자','ti-feather','한 걸음 물러서 논의를 정리하는 사람',u=>avg([-u[7],-u[2]])],['몽상가','ti-moon-stars','보이지 않는 가능성을 꺼내는 사람',u=>avg([-u[6],-u[9]])],['행동가','ti-run','결론을 실천으로 옮기는 사람',u=>avg([u[7],u[8]])]];
+function memOf(o){const u=o.u.map(x=>cl(x/100,-1,1)),ord=AK.map((k,i)=>i).sort((a,b)=>Math.abs(u[b])-Math.abs(u[a]));return {n:String(o.n||'회원'),d:o.d||'',u,ph:PH[PHI[o.t]]||null,vr:o.v&&o.v.length==9?o.v.split('').map(c=>VK[+c]).reverse():null,title:`${pole(ord[1],u[ord[1]]).adj} ${pole(ord[0],u[ord[0]]).noun}`}}
+function assignRoles(M){const sc=M.map(m=>CROLE.map(r=>r[3](m.u))),used=CROLE.map(()=>0),cur=[];let best=-1e9,bA=[];const dfs=(i,s)=>{if(i==M.length){if(s>best){best=s;bA=cur.slice()}return}for(let j=0;j<CROLE.length;j++){if(used[j])continue;used[j]=1;cur.push(j);dfs(i+1,s+sc[i][j]);cur.pop();used[j]=0}};dfs(0,0);return bA.map((j,i)=>({j,s:R0((sc[i][j]+1)*50)}))}
+function pairOf(a,b){const d=Math.sqrt(avg(a.u.map((x,i)=>(x-b.u[i])**2))),close=R0(cl(100*(1-d/1.3),0,100)),vc=a.vr&&b.vr?pear(VK.map(v=>a.vr.indexOf(v)),VK.map(v=>b.vr.indexOf(v))):0,dis=AK.map((k,i)=>i).filter(i=>a.u[i]*b.u[i]<0&&Math.abs(a.u[i]-b.u[i])>.6),hot=AK.map((k,i)=>i).sort((x,y)=>Math.abs(a.u[y]-b.u[y])-Math.abs(a.u[x]-b.u[x]))[0];
+const lab=close>=78?['사상의 쌍둥이','같은 문장에 밑줄을 긋는 사이예요. 대신 같은 맹점을 공유해요.']:dis.length>=2&&vc>.2?['최고의 토론 파트너','생각은 다르지만 지키는 가치가 같아서, 싸워도 남는 대화를 해요.']:close<50&&vc<0?['평행선 주의','관점도 가치도 달라요. 규칙 없이 붙여 두면 대화가 평행선을 달려요.']:['든든한 동지','큰 충돌 없이 생각을 주고받으며 서로를 단단하게 해요.'];
+return {d,close,vc,dis,hot,lab,T:R0(.6*close+.4*(vc+1)*50)}}
+function clubAnalysis(M){const n=M.length,P=[];for(let i=0;i<n;i++)for(let j=i+1;j<n;j++)P.push({i,j,...pairOf(M[i],M[j])});
+const nm=i=>`<b style='color:${CCOL[i]}'>${esc(M[i].n)}</b>`,pn=i=>M[i].n,idx=AK.map((k,x)=>x),mean=idx.map(x=>avg(M.map(m=>m.u[x]))),vr=idx.map(x=>avg(M.map(m=>(m.u[x]-mean[x])**2)));
+const ax0=idx.slice().sort((a,b)=>Math.abs(mean[b])-Math.abs(mean[a]))[0],hot=idx.slice().sort((a,b)=>vr[b]-vr[a])[0];
+const div=cl(avg(P.map(p=>p.d))/.9*100,0,100),bal=idx.filter(x=>M.some(m=>m.u[x]>.2)&&M.some(m=>m.u[x]<-.2)).length*10,coh=avg(P.map(p=>(p.vc+1)*50)),stab=cl(100-35*P.filter(p=>p.lab[0]=='평행선 주의').length/P.length-(mean[1]<-.3?15:0),0,100);
+const SYN=R0(.3*div+.25*bal+.25*coh+.2*stab),cname=`${div>=55?'다채로운':'단단한'} ${pole(ax0,mean[ax0]).club}`;
+const V=SYN>=75?['전설의 아카데메이아','밤새 토론해도 남는 게 있는 조합이에요.']:SYN>=62?['유망한 토론 클럽','규칙 몇 개만 정하면 깊은 대화가 열려요.']:SYN>=50?['조율이 필요한 클럽','다양하지만 대화의 그릇이 필요해요.']:['평행선 클럽','서로 다른 언어를 쓰고 있어요. 아래 규칙이 꼭 필요해요.'];
+const asg=assignRoles(M),PS=P.slice().sort((a,b)=>b.T-a.T),bp=PS[0],wp=PS[PS.length-1],blind=idx.filter(x=>M.every(m=>m.u[x]>.15)||M.every(m=>m.u[x]<-.15)),book=PH.map(p=>[p,fitPh(p,mean)]).sort((a,b)=>b[1]-a[1])[0][0];
+const Ls=M.map((m,i)=>i).filter(i=>M[i].u[hot]<-.12),Rs=M.map((m,i)=>i).filter(i=>M[i].u[hot]>.12),RX=[];
+if(blind.length){const b=blind[0],s=mean[b]>0?1:0,ch=PH[PHI[AX[b].ch[1-s]]];RX.push(`${AX[b].n}에서 모두 ${s?AX[b].R:AX[b].L} 쪽이에요. 모임마다 한 명씩 돌아가며 반대편 철학자 ${ch.n}의 입장을 대변하는 ‘악마의 변호인’을 맡으세요.`)}
+if(wp.T<62)RX.push(`${nm(wp.i)} × ${nm(wp.j)} 두 사람은 ${AX[wp.hot].n}에서 가장 멀어요. 반박하기 전에 상대의 말을 한 문장으로 요약하고 ‘맞아?’라고 확인하세요.`);
+RX.push(mean[1]<-.3?'모두 확신이 강한 편이라 토론이 승부가 되기 쉬워요. 시작할 때 ‘내가 틀릴 수 있는 지점’을 한 가지씩 말하세요.':mean[7]<-.2?'모두 관조형이라 이야기는 깊어도 실천이 없어요. 모임 끝에 다음까지 해 볼 일 하나를 정하세요.':'모임 끝에 ‘오늘 생각이 바뀐 것’을 하나씩 말하세요. 철학 모임의 가장 좋은 성과예요.');
+const pc=p=>{const c=p.T>=75?'var(--good)':p.T>=60?'var(--acc)':p.T>=48?'var(--warn)':'var(--bad)';return `<div style='padding:10px 0;border-bottom:.5px solid var(--line)'><div style='display:flex;justify-content:space-between;gap:8px;align-items:baseline'><span style='font-size:15px'>${nm(p.i)} × ${nm(p.j)}</span><span class='disp' style='font-size:22px;color:${c}'>${p.T}</span></div><p class='sm' style='margin:2px 0 0'><b>${p.lab[0]}</b> · ${p.lab[1]}</p><p class='sm' style='margin:2px 0 0'>가장 뜨거운 주제 · ${AX[p.hot].topic}</p></div>`};
+let hm='';if(n>=3){const ini=i=>esc(M[i].n.slice(0,3));hm=`<div class='card' style='overflow-x:auto'><table style='border-collapse:separate;border-spacing:4px;margin:0 auto;font-size:12px'><tr><td></td>${M.map((m,i)=>`<td style='text-align:center;color:${CCOL[i]}'>${ini(i)}</td>`).join('')}</tr>${M.map((a,i)=>`<tr><td style='color:${CCOL[i]};padding-right:4px;white-space:nowrap'>${ini(i)}</td>${M.map((b,j)=>{if(i==j)return `<td style='width:40px;height:34px;border-radius:8px;background:var(--line)'></td>`;const p=P.find(q=>(q.i==i&&q.j==j)||(q.i==j&&q.j==i)),c=p.T>=75?'60,122,76':p.T>=60?'61,76,140':p.T>=48?'214,160,40':'164,61,54';return `<td title='${p.lab[0]}' style='width:40px;height:34px;text-align:center;border-radius:8px;background:rgba(${c},.35);font-family:var(--disp);font-size:14px'>${p.T}</td>`}).join('')}</tr>`).join('')}</table></div>`}
+const shown=PS.length<=4?PS:[...PS.slice(0,3),PS[PS.length-1]],rest=PS.length<=4?[]:PS.slice(3,-1);
+let h=`<div class='card holo' style='text-align:center;margin-top:1.5rem'><p class='sm' style='margin:0'>클럽 이름</p><p class='disp' style='font-size:28px;margin:0'>${cname}</p><p class='disp' style='font-size:56px;line-height:1.1;margin:.3rem 0 0;color:var(--gold)'>${SYN}</p><p class='sm' style='margin:0 0 .6rem'>토론 시너지 지수</p><p style='margin:0 0 .8rem'><span class='disp' style='font-size:18px'>${V[0]}</span> · ${V[1]}</p><div style='text-align:left'>${row('관점 다양성',div,'var(--p2)',null,96)}${row('토론 균형',bal,'var(--p1)',null,96)}${row('가치 결속',coh,'var(--p3)',null,96)}${row('대화 안정성',stab,'var(--gold2)',null,96)}</div><details style='text-align:left;margin-top:8px'><summary><i class='ti ti-info-circle'></i> 시너지 지수는 이렇게 계산해요</summary><p class='sm' style='margin:.5rem 0 0'>관점 다양성 30%(10축 위에서 회원들 사이의 평균 거리) · 토론 균형 25%(양쪽 의견이 모두 있는 축의 비율) · 가치 결속 25%(테세우스의 배에서 고른 가치 순서가 닮은 정도) · 대화 안정성 20%(관점도 가치도 먼 짝이 적을수록 높아요).</p></details></div>`;
+h+=sec('각자의 역할','8개 자리마다 적합도를 계산하고, 클럽 전체 적합도의 합이 가장 커지도록 배치했어요.')+`<div class='g2'>${asg.map((a,i)=>{const m=M[i],r=CROLE[a.j];return `<div class='card' style='margin:0;border-left:3px solid ${CCOL[i]}'><div style='display:flex;align-items:center;gap:10px'><i class='ti ${r[1]}' style='font-size:28px;color:${CCOL[i]}'></i><div><p class='sm' style='margin:0'>${esc(m.n)} · ${m.title}</p><p class='disp' style='font-size:19px;margin:0'>${r[0]} <span class='sm'>적합 ${a.s}</span></p></div></div><p class='sm' style='margin:6px 0 0'>${r[2]}${m.ph?' · 닮은 철학자 '+m.ph.n:''}</p></div>`}).join('')}</div>`;
+h+=sec('클럽이 가장 뜨거워질 논쟁','회원들 사이에서 의견이 가장 크게 갈리는 축이에요.')+`<div class='card'><p class='disp' style='font-size:20px;margin:0 0 8px'>${AX[hot].topic}</p><div style='display:grid;grid-template-columns:1fr 1fr;gap:10px'><div class='met'><p class='sm' style='margin:0;color:var(--pl)'>${AX[hot].L} 쪽</p><p style='margin:4px 0 0;font-size:14px'>${Ls.map(nm).join(', ')||'없음'}</p></div><div class='met'><p class='sm' style='margin:0;color:var(--pr)'>${AX[hot].R} 쪽</p><p style='margin:4px 0 0;font-size:14px'>${Rs.map(nm).join(', ')||'없음'}</p></div></div><p class='sm' style='margin:8px 0 0'>첫 모임 주제로 추천해요. 양쪽 대표 철학자 · ${PH[PHI[AX[hot].ch[0]]].n} vs ${PH[PHI[AX[hot].ch[1]]].n}</p></div>`;
+h+=sec('짝꿍 궁합','10축의 가까움 60%, 가치 순서의 닮음 40%로 계산했어요.')+hm+`<div class='card'>${shown.map(pc).join('')}${rest.length?`<details><summary style='margin-top:10px'>나머지 조합 ${rest.length}개 보기</summary>${rest.map(pc).join('')}</details>`:''}</div>`;
+if(blind.length)h+=`<div class='card' style='border-color:var(--warn)'><p class='sm' style='margin:0;color:var(--warn)'>클럽의 맹점</p><p style='font-size:15px;margin:4px 0 0;line-height:1.7'>${blind.map(x=>`${AX[x].n}에서 모두 ${mean[x]>0?AX[x].R:AX[x].L} 쪽`).join(', ')}이에요. 같은 쪽만 모이면 반대편의 가장 좋은 논리를 아무도 말해 주지 않아요.</p></div>`;
+h+=sec('클럽 규칙','')+`<div class='card'>${RX.map((r,i)=>`<p style='font-size:14.5px;line-height:1.65;margin:0 0 8px'><span class='disp' style='color:var(--gold)'>규칙 ${i+1}</span> · ${r}</p>`).join('')}</div>`;
+h+=`<div class='card' style='display:flex;gap:12px;align-items:center'>${medal(book,54)}<div><p class='sm' style='margin:0;color:var(--gold)'>클럽의 첫 책 · 회원 평균에 가장 가까운 철학자</p><p class='disp' style='font-size:18px;margin:2px 0'>${book.n} · ${book.bk}</p></div></div>`;
+h+=`<div style='display:flex;gap:8px;flex-wrap:wrap;margin-top:1rem'><button id='crCopy'><i class='ti ti-copy'></i> 클럽 보고서 복사</button><button id='crAsk'>클럽 운영법 더 묻기 ↗</button></div>`;
+const rep=[`[${cname} · 시너지 ${SYN} · ${V[0]}]`,...asg.map((a,i)=>`${pn(i)}: ${CROLE[a.j][0]} (${M[i].title}${M[i].ph?', '+M[i].ph.n:''})`),`최고 궁합: ${pn(bp.i)} × ${pn(bp.j)} ${bp.T}`,...(n>2?[`주의 조합: ${pn(wp.i)} × ${pn(wp.j)} ${wp.T}`]:[]),`가장 뜨거운 논쟁: ${AX[hot].topic}`,`첫 책: ${book.n}, ${book.bk}`].join(NL);
+const ask=`[진우주 철학 검사 · 토론 클럽] 클럽 ${cname}, 시너지 ${SYN}. 회원: ${M.map((m,i)=>`${m.n}(닮은 철학자 ${m.ph?m.ph.n:'-'}, 역할 ${CROLE[asg[i].j][0]})`).join(', ')}. 가장 뜨거운 논쟁: ${AX[hot].topic}. 첫 책: ${book.n}. 이 클럽이 6주 동안 진행할 철학 독서 토론 커리큘럼과 진행 규칙을 구체적으로 짜줘.`;
+return {html:h,rep,ask}}
+function clubLoad(){try{const a=JSON.parse(LS.get('ph_club')||'null');return Array.isArray(a)?a:null}catch(e){return null}}
+function clubSave(a){LS.set('ph_club',JSON.stringify(a))}
+const inviteMsg=(n,c)=>['[진우주 철학 검사 · 토론 클럽 초대]',`${n}님이 당신을 토론 클럽에 초대했어요.`,'검사를 마친 뒤 결과 화면의 토론 클럽에 아래 코드를 붙여넣으면 우리의 사유 궁합이 나와요.','',c].join(NL);
+function clubAdd(codes,list){const r={add:0,upd:0,bad:0,dup:0,full:0};list.forEach(c=>{const o=decCode(c);if(!o){r.bad++;return}if(codes.includes(c)){r.dup++;return}const k=codes.findIndex(x=>{const p=decCode(x);return p&&p.n===o.n});if(k>=0){const p=decCode(codes[k]);if((o.d||'')>=(p.d||'')){codes[k]=c;r.upd++}else r.dup++;return}if(codes.length>=8){r.full++;return}codes.push(c);r.add++});return r}
+let CLUB_RET=null;
+function clubScreen(ret,top){if(ret)CLUB_RET=ret;S.mode='club';const m0=LS.get('ph_last'),mine=m0&&decCode(m0)?m0:null;let codes=clubLoad();if(codes==null)codes=mine?[mine]:[];codes=codes.filter(c=>decCode(c));clubSave(codes);
+const M=codes.map(c=>memOf(decCode(c))),meIn=!!mine&&codes.includes(mine),A=M.length>=2?clubAnalysis(M):null;
+const list=M.length?M.map((m,i)=>`<div style='display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:.5px solid var(--line)'>${m.ph?medal(m.ph,36):`<span class='medal' style='--mc:${CCOL[i]};width:36px;height:36px'></span>`}<div style='flex:1;min-width:0'><p style='margin:0;font-size:15px;color:${CCOL[i]};overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>${esc(m.n)}${codes[i]===mine?` <span class='sm'>(나)</span>`:''}</p><p class='sm' style='margin:0'>${m.title}${m.ph?' · '+m.ph.n:''}${m.d?' · '+esc(m.d):''}</p></div><button data-rm='${i}' aria-label='내보내기' title='내보내기' style='min-height:32px;padding:0 10px'><i class='ti ti-x'></i></button></div>`).join(''):`<p class='sm' style='margin:6px 0'>아직 자리에 앉은 회원이 없어요.</p>`;
+app.innerHTML=`<div class='w rise'><div style='text-align:center'><div class='float' style='display:inline-block'>${owl('wow',110)}</div><p class='title' style='font-size:36px'>토론 클럽</p><p class='mut' style='margin:0 0 1rem'>검사를 마친 친구들의 결과 코드를 모으면<br>각자의 역할, 짝꿍 궁합, 클럽이 가장 뜨거워질 논쟁이 보여요</p></div><div class='card'><div style='display:flex;justify-content:space-between;align-items:baseline'><p class='disp' style='font-size:19px;margin:0'>심포지엄 식탁</p><span class='sm'>${M.length} / 8석</span></div><div style='display:flex;gap:4px;margin:8px 0 6px'>${CCOL.map((c,i)=>`<span style='flex:1;height:6px;border-radius:3px;background:${i<M.length?c:'var(--line)'}'></span>`).join('')}</div>${list}<textarea id='cc' rows='3' style='width:100%;margin:12px 0 2px' placeholder='친구의 결과 코드(PH1.…)나 초대 메시지를 통째로 붙여넣으세요. 여러 명을 한 번에 넣어도 돼요'></textarea><div id='ccE' style='font-size:13px;color:var(--bad);min-height:18px'></div><div style='display:flex;gap:8px;flex-wrap:wrap'><button class='btn-main' id='ccAdd' style='min-height:44px;font-size:16px'>자리에 앉히기</button>${mine&&!meIn?`<button id='ccMe'><i class='ti ti-user-plus'></i> 내 결과 앉히기</button>`:''}<button id='ccInv'><i class='ti ti-send'></i> 내 초대 메시지 복사</button><button id='ccBack'><i class='ti ti-arrow-left'></i> 돌아가기</button></div><p class='sm' style='margin:10px 0 0;opacity:.8'>결과 코드에는 이름과 점수가 담겨 있어요. 믿을 수 있는 사람과만 주고받으세요.</p></div>${A?A.html:`<div class='card' style='text-align:center'>${owl('wink',80)}<p class='mut' style='margin:.4rem 0 0'>${M.length?'한 명만 더 앉으면 분석이 시작돼요.':'첫 회원을 앉혀 주세요.'} 친구에게 초대 메시지를 보내 보세요.</p></div>`}</div>`;
+app.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{codes.splice(+b.dataset.rm,1);clubSave(codes);clubScreen()});
+$('#cc').oninput=()=>{$('#ccE').textContent=''};
+$('#ccAdd').onclick=()=>{const f=$('#cc').value.match(new RegExp('PH1[.][A-Za-z0-9+/=]+','g'))||[];if(!f.length){$('#ccE').textContent='PH1.로 시작하는 결과 코드를 찾지 못했어요';return}const r=clubAdd(codes,f);if(!r.add&&!r.upd){$('#ccE').textContent=r.full?'자리가 꽉 찼어요. 최대 8명까지 앉을 수 있어요':r.dup?'이미 앉아 있는 회원이에요':'코드가 손상됐어요. 끝까지 복사됐는지 확인해 주세요';return}clubSave(codes);clubScreen();toast([r.add?`${r.add}명 입장!`:'',r.upd?`${r.upd}명은 최신 결과로 바꿨어요`:'',r.full?`자리가 없어 ${r.full}명은 못 앉았어요`:''].filter(Boolean).join(' · '),'joy');if(codes.length>=2)burst(innerWidth/2,innerHeight/3,40)};
+const me=$('#ccMe');if(me)me.onclick=()=>{clubAdd(codes,[mine]);clubSave(codes);clubScreen()};
+$('#ccInv').onclick=e=>{if(!mine){toast('검사를 먼저 마쳐야 내 초대 코드가 생겨요','wow');return}const b=e.currentTarget;copyRaw(inviteMsg(decCode(mine).n,mine),()=>{b.textContent='복사됨'})};
+$('#ccBack').onclick=()=>(CLUB_RET||intro)();
+if(A){$('#crCopy').onclick=e=>{const b=e.currentTarget;copyRaw(A.rep,()=>{b.textContent='복사됨'})};$('#crAsk').onclick=()=>sendPrompt(A.ask)}
+if(top)window.scrollTo(0,0)}
+const SROWS=[['축 측정 정확도 (설정값과의 상관)','rec','r',.8,1],['축 재검사 안정성 (3회 반복 간 상관)','rt','r',.8,1],['1위 철학자가 실제 상위 3인 안 (성실 응답)','acc','%',.8,1],['1위 철학자가 실제 1위와 일치 (성실 응답)','acc1','%',null,0],['다시 해도 1위가 상위 3인 안','st','%',.75,1],['불성실 응답 탐지율','sens','%',.85,1],['성실 응답 오탐률','fa','%',.05,-1]];
+const fmt=(v,t)=>t=='r'?v.toFixed(2):(v*100).toFixed(1)+'%';
+function runSimSync(seed){const t0=performance.now();SIM=runSim(seed);SIM.m=metrics(SIM.P,SIM.O);SIM.ms=performance.now()-t0}
+function simScreen(seed){S.mode='sim';app.innerHTML=`<div class='w' style='text-align:center'>${owl('wow',110)}<p class='sm'>가상 인물 100명이 각각 3번씩 정원을 거니는 중이에요…</p></div>`;setTimeout(()=>{runSimSync(seed);simReport()},50)}
+function simReport(){S.mode='sim';const m=SIM.m,P=SIM.P,cnt=t=>P.filter(p=>p.type==t).length;let pass=0,tot=0;const weak=[];
+const rows=SROWS.map(([l,k,t,tg,dir])=>{const v=m[k];let st='–';if(tg!=null){tot++;const ok=dir>0?v>=tg:v<=tg;if(ok)pass++;else weak.push(l);st=ok?`<span style='color:var(--good)'>충족</span>`:`<span style='color:var(--warn)'>미달</span>`}return `<div style='display:grid;grid-template-columns:minmax(0,1fr) 64px 64px 44px;gap:6px;padding:8px 0;border-bottom:.5px solid var(--line);font-size:13.5px;align-items:center'><span>${l}</span><span style='text-align:right;font-weight:700'>${fmt(v,t)}</span><span style='text-align:right;color:var(--ink3)'>${tg==null?'–':(dir<0?'≤':'≥')+fmt(tg,t)}</span><span style='text-align:right'>${st}</span></div>`}).join('');
+const mc=(l,v)=>`<div class='met'><p class='sm' style='margin:0'>${l}</p><p class='disp' style='font-size:22px;margin:0'>${v}</p></div>`;
+app.innerHTML=`<div class='w rise'><span class='chip'>검증 시뮬레이션 · 시드 ${SIM.seed}</span><span class='chip'>${R0(SIM.ms)}ms · 300회 응답</span><p class='disp' style='font-size:24px;margin:.4rem 0'>가상 인물 100명 × 3회 반복 검사</p><p class='mut' style='margin:0 0 1rem'>실제 사유 성향을 미리 정해 둔 가상 인물들이 검사를 받으면, 채점 엔진이 그 성향을 얼마나 되찾는지 확인해요. 같은 인물이 세 번 응답해 결과가 얼마나 흔들리는지도 봅니다.</p><p class='sm'>구성: 성실 응답 ${cnt('normal')}명 · 중간값 선호 ${cnt('mid')}명 · 불성실 응답 ${cnt('careless')}명</p><div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:1rem 0'>${mc('목표 충족',`${pass} / ${tot}`)}${mc('1위가 실제 상위 3인',fmt(m.acc,'%'))}${mc('축 측정 정확도',fmt(m.rec,'r'))}${mc('불성실 탐지',fmt(m.sens,'%'))}</div><div class='card'><div style='display:grid;grid-template-columns:minmax(0,1fr) 64px 64px 44px;gap:6px;padding:0 0 6px;border-bottom:.5px solid var(--line2);font-size:12px;color:var(--ink2)'><span>지표</span><span style='text-align:right'>결과</span><span style='text-align:right'>목표</span><span style='text-align:right'>판정</span></div>${rows}<p class='sm' style='margin:10px 0 0'>${weak.length?`이번 시드에서 기준 미달: ${weak.join(', ')}. 100명 표본은 시드마다 몇 %p씩 흔들려요.`:'이번 시드에서 모든 목표 지표를 충족했어요.'} 철학자 30인 중 실제 1위를 정확히 맞히기는 어려운 과제라, 상위 3인 적중을 핵심 목표로 삼았어요.</p></div><p class='sm'>이 시뮬레이션은 채점 논리의 안정성을 검증해요. 문항이 실제 사람의 생각을 잘 재는지는 실제 응답 데이터로만 확인할 수 있어요.</p><p class='b' style='margin:1.5rem 0 .5rem'>가상 인물의 결과지 열어 보기</p><select id='pp' style='width:100%;margin-bottom:8px'>${P.map((p,i)=>`<option value='${i}'>#${i+1} · 출발점 ${PH[p.b].n} · ${TYPEL[p.type]}</option>`).join('')}</select><div style='display:flex;gap:8px;flex-wrap:wrap'><button id='po'><i class='ti ti-file-text'></i> 결과지 보기</button><button id='rs'><i class='ti ti-refresh'></i> 새 시드로 다시 실행</button><button id='bk2'><i class='ti ti-arrow-left'></i> 처음으로</button><button id='sendS'>수치를 Claude에게 보내기 ↗</button></div></div>`;
+window.scrollTo(0,0);$('#po').onclick=()=>loadPersona(+$('#pp').value);$('#rs').onclick=()=>simScreen(Math.floor(Math.random()*1e6));$('#bk2').onclick=intro;$('#sendS').onclick=()=>sendPrompt(`[진우주 철학 검사 · 브라우저 검증 시뮬레이션 · 시드 ${SIM.seed}] `+SROWS.map(([l,k,t])=>`${l}: ${fmt(m[k],t)}`).join(' / ')+` / 미달: ${weak.join(', ')||'없음'}. 이 결과를 해석하고 채점 로직을 개선할 방법을 제안해줘.`)}
+function loadPersona(i){const rp=SIM.O[i][0].rp;fresh();Object.assign(S,{name:`가상 인물 #${i+1}`,ans:rp.ans,lat:rp.lat,elim:rp.elim,sym:rp.sym,preview:i});renderResult(analyze(rp,true))}
+setTheme(LS.get('ph_theme')||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dusk':'day'));
+$('#themeB').onclick=()=>setTheme(document.documentElement.dataset.theme=='dusk'?'day':'dusk');
+console.log('%c진우주 철학 검사','font:24px Hahmlet,serif;color:#a87b26');console.log('%c소스를 들여다보는 당신은 이미 철학자예요. 이 정원은 진우주가 가꿨어요. 단서 하나 더: 화면 어딘가의 금빛 깃털을 눌러 보세요.','color:#3d4c8c');
+buildDeco();initSky();fresh();intro();
 </script>
-<script>
-// 픽셀 강아지·주인·공원 배경
-(function(){
-const G = window.G = {};
-G.W=160; G.H=120; G.GL=34; G.GR=126; G.FEET=111;
-const OUT="#16131f";
-function hex(h){h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.slice(i,i+2),16));}
-G.shade=(h,a)=>'rgb('+hex(h).map(v=>a<0?Math.round(v*(1+a)):Math.round(v+(255-v)*a)).join(',')+')';
-
-// 강아지 픽셀 지도 (오른쪽을 봄, y는 발바닥 기준 음수)
-G.dogMap=function(d,frame,wag){
-  const m=new Map(), set=(x,y,c)=>m.set(x+','+y,c), has=(x,y)=>m.has(x+','+y);
-  const P=d.pat||[], c1=d.c1, c2=d.c2, c3=d.c3, dark=G.shade(c1,-0.25);
-  const T=5, bx0=T, bx1=T+d.len-1, yb0=-(d.leg+d.h), yb1=-(d.leg+1);
-  const hx0=bx1-2, hx1=hx0+d.hs-1, hy1=yb0+2, hy0=hy1-d.hs+1, sn=d.sn;
-  // 다리
-  const st=[[0,0],[-1,1],[1,-1]][frame||0];
-  const leg=(x,c,sock)=>{for(let y=-d.leg;y<=-1;y++){const cc=(sock&&y>=-2)||(P.includes('points')&&y===-1)?(P.includes('points')?(d.pcol||c2):c2):c;set(x,y,cc);set(x+1,y,cc);}};
-  leg(bx0+2-st[0],dark,false); leg(bx1-2-st[1],dark,false);
-  leg(bx0+1+st[0],c1,P.includes('socks')); leg(bx1-3+st[1],c1,P.includes('socks'));
-  // 몸통
-  for(let y=yb0;y<=yb1;y++)for(let x=bx0;x<=bx1;x++){
-    if((x===bx0&&(y===yb0||y===yb1))) continue;
-    let c=c1;
-    if((P.includes('saddle')||P.includes('tri')) && x<=bx1-3 && y<=(P.includes('tri')?yb1-1:yb0+(d.h>=6?2:1))) c=c3;
-    if(P.includes('belly') && (y===yb1 && x>=bx0+2)) c=c2;
-    if((P.includes('belly')||P.includes('blaze')) && x>=bx1-1 && y>=yb0+1) c=c2;
-    if(P.includes('blaze') && x>=bx1-2 && y>=yb0+1 && y<=yb0+2) c=c2;
-    set(x,y,c);
-  }
-  if(P.includes('patch')){ for(let x=bx0+2;x<=bx0+4;x++)for(let y=yb0;y<=yb0+1;y++) set(x,y,c3); }
-  if(d.round){ for(let x=bx0+1;x<bx1;x++) set(x,yb0-1,c1); }
-  // 꼬리
-  const ty=yb0; let tl=[];
-  switch(d.tail){
-    case 'up': tl=[[-1,0],[-2,-1],[-2,-2],[-3,-3]]; break;
-    case 'curl': tl=[[-1,0],[-1,-1],[-2,-2],[-1,-3],[0,-3],[1,-2]]; break;
-    case 'curlplume': tl=[[-1,0],[-1,-1],[-2,-1],[-2,-2],[-3,-2],[-2,-3],[-1,-3],[0,-3],[-1,-4],[0,-4],[1,-3],[1,-2]]; break;
-    case 'plume': tl=[[-1,1],[-2,1],[-2,2],[-3,2],[-3,3],[-2,3],[-4,4],[-3,4]]; break;
-    case 'otter': tl=[[-1,1],[-2,1],[-2,2],[-3,2],[-4,3]]; break;
-    case 'stub': tl=[[-1,0],[-1,1]]; break;
-    case 'out': tl=[[-1,1],[-2,1],[-3,0],[-4,-1]]; break;
-  }
-  tl.forEach(([dx,dy],i)=>{ const x=bx0+dx-(wag&&i>=2?1:0), y=ty+dy;
-    set(x,y, P.includes('tailTip')&&i===tl.length-1?c2:c1); });
-  // 머리
-  const hc=d.hc||c1;
-  for(let y=hy0;y<=hy1;y++)for(let x=hx0;x<=hx1;x++){
-    if((x===hx0||x===hx1)&&(y===hy0)) continue;
-    let c=hc;
-    if((P.includes('mask')) && y>=hy1-1 && x>=hx0+2) c=c2;
-    if(P.includes('blaze') && x===hx1 ) c=c2;
-    set(x,y,c);
-  }
-  if(P.includes('patch')){ for(let y=hy0;y<=hy0+2;y++)for(let x=hx0;x<=hx0+3;x++) set(x,y,c3); }
-  // 주둥이
-  const snc = P.includes('darkmask')?c3 : (P.includes('mask')||P.includes('blaze')||P.includes('points'))?(P.includes('points')&&!P.includes('blaze')?(d.pcol||c2):c2) : hc;
-  for(let x=hx1+1;x<=hx1+sn;x++){ set(x,hy1-1,snc); set(x,hy1,snc); }
-  set(hx1+sn,hy1-1,"#1a1626");
-  if(sn<=1){ set(hx1+sn,hy1-1,"#1a1626"); }
-  // 눈
-  // 귀
-  const ec=d.ec||G.shade(c1,-0.18), pink="#f2a3a3";
-  switch(d.ear){
-    case 'prick': [[1,-1],[3,-1],[1,-2],[2,-2],[1,-3]].forEach(([a,b])=>set(hx0+a,hy0+b,ec)); set(hx0+2,hy0-1,pink); break;
-    case 'bigprick': [[0,-1],[1,-1],[3,-1],[0,-2],[1,-2],[2,-2],[0,-3],[1,-3],[0,-4]].forEach(([a,b])=>set(hx0+a,hy0+b,ec)); set(hx0+2,hy0-1,pink); break;
-    case 'tallprick': for(let b=-1;b>=-4;b--){set(hx0+1,hy0+b,ec);set(hx0+2,hy0+b,ec);} set(hx0+1,hy0-5,ec); break;
-    case 'fold': [[1,-1],[2,-1],[3,-1],[4,0]].forEach(([a,b])=>set(hx0+a,hy0+b,ec)); break;
-    case 'flop': for(let y=hy0;y<=hy0+d.hs-2;y++){set(hx0+1,y,ec);set(hx0+2,y,ec);} set(hx0+1,hy0-1,ec); break;
-    case 'longflop': for(let y=hy0;y<=hy1+2;y++){set(hx0,y,ec);set(hx0+1,y,ec);set(hx0+2,y,y>hy0?ec:hc);} break;
-  }
-  // 털 뭉치
-  if(d.fluffy){ const fc=c1;
-    for(let x=bx0+1;x<bx1-2;x+=3) if(!has(x,yb0-1-(d.round?1:0))) set(x,yb0-1-(d.round?1:0), (P.includes('saddle')||P.includes('tri'))?c3:fc);
-    for(let x=bx0+1;x<bx1-2;x+=2){ const y=yb1+1; if(!has(x,y)) set(x,y,P.includes('belly')?c2:fc); }
-    if(d.round||d.ear==='hidden'){ for(let x=hx0;x<=hx1;x++) set(x,hy0-1,hc); set(hx0+1,hy0-2,hc); set(hx0+2,hy0-2,hc); }
-  }
-  const ex=hx1-(sn<=1?2:1), ey=hy0+2;
-  set(ex,ey,d.eye||"#1a1626"); if(d.bigEye||d.round) set(ex,ey+1,"#1a1626");
-  if(P.includes('points')) set(ex,ey-1,d.pcol||c2);
-  let minx=1e9,maxx=-1e9,miny=1e9; m.forEach((c,k)=>{const [x,y]=k.split(',').map(Number); if(x<minx)minx=x; if(x>maxx)maxx=x; if(y<miny)miny=y;});
-  return {m,minx,maxx,miny,w:maxx-minx+1,h:-miny};
-};
-G.dogSize=d=>{const r=G.dogMap(d,0,0);return {w:r.w,h:r.h};};
-// cx: 가운데 x, feet: 발바닥 y
-G.drawDog=function(ctx,cx,feet,d,frame,face,alpha,wag,scale){
-  const r=G.dogMap(d,frame,wag), s=scale||1;
-  const ox=Math.round(cx - r.w*s/2), oy=Math.round(feet);
-  ctx.save(); ctx.globalAlpha=alpha==null?1:alpha;
-  const px=(x,y,c)=>{ const lx = face<0 ? (r.maxx - x) : (x - r.minx); ctx.fillStyle=c; ctx.fillRect(ox+lx*s, oy+y*s, s, s); };
-  r.m.forEach((c,k)=>{const [x,y]=k.split(',').map(Number); [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{ if(!r.m.has((x+a)+','+(y+b))) px(x+a,y+b,OUT); });});
-  r.m.forEach((c,k)=>{const [x,y]=k.split(',').map(Number); px(x,y,c);});
-  ctx.restore();
-};
-
-// 주인 픽셀
-const HUMAN=["...hhhh...","..hhhhhh..","..hSSSSh..","..SESSES..","..SSSSSS..","...SSSS...","..TTTTTT..",".TTTTTTTT.",".STTTTTTS.",".STTTTTTS.","..TTTTTT..","..PPPPPP..","..PP..PP..","..PP..PP..","..PP..PP..","..bb..bb.."];
-G.ownerColor=code=>{const nt=code[1]==='N'&&code[2]==='T', nf=code[1]==='N'&&code[2]==='F', sj=code[1]==='S'&&code[3]==='J';
-  return nt?"#7c5cd6":nf?"#2fa77a":sj?"#3c7fd8":"#ff7a59";};
-G.drawOwner=function(ctx,x,y,code){
-  const hair=["#3a2a22","#1d1a24","#7a4b2e","#c98a3a"][(code.charCodeAt(0)+code.charCodeAt(3))%4];
-  const pal={h:hair,S:"#f6cfae",E:"#1a1626",T:G.ownerColor(code),P:"#4a4f6b",b:"#2d2a3a"};
-  HUMAN.forEach((row,r)=>[...row].forEach((k,c)=>{ if(k==='.')return;
-    [[1,0],[-1,0],[0,1],[0,-1]].forEach(([a,b])=>{ const rr=HUMAN[r+b], ch=rr&&rr[c+a]; if(!ch||ch==='.'){ctx.fillStyle=OUT;ctx.fillRect(x+c+a,y+r+b,1,1);} }); }));
-  HUMAN.forEach((row,r)=>[...row].forEach((k,c)=>{ if(k==='.')return; ctx.fillStyle=pal[k]; ctx.fillRect(x+c,y+r,1,1); }));
-};
-
-G.disc=(ctx,cx,cy,r,c)=>{ctx.fillStyle=c;for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++)if(x*x+y*y<=r*r+r*0.6)ctx.fillRect(cx+x,cy+y,1,1);};
-
-// 공원 배경
-G.buildBG=function(){
-  const W=G.W,H=G.H,c=document.createElement('canvas'); c.width=W;c.height=H; const g=c.getContext('2d');
-  const a=[143,214,245], b=[226,245,255];
-  for(let y=0;y<62;y++){const t=y/61; g.fillStyle='rgb('+a.map((v,i)=>Math.round(v+(b[i]-v)*t)).join(',')+')'; g.fillRect(0,y,W,1);}
-  for(let r=20;r>=10;r-=3){g.fillStyle='rgba(255,214,90,0.16)';g.beginPath();g.arc(80,15,r,0,7);g.fill();}
-  G.disc(g,80,15,8,"#ffd65a"); G.disc(g,78,13,3,"#ffe89a");
-  // 언덕
-  for(let x=0;x<W;x++){const h=Math.round(50+5*Math.sin(x*0.045+0.5)+3*Math.sin(x*0.12)); g.fillStyle="#b5e3a6"; g.fillRect(x,h,1,64-h);}
-  // 나무
-  [[6,54,7],[20,52,8],[58,55,6],[70,53,7],[90,53,7],[102,55,6],[140,52,8],[154,54,7]].forEach(([x,y,r])=>{
-    g.fillStyle="#8a5a3c"; g.fillRect(x-1,y,2,10);
-    G.disc(g,x,y,r,"#4c9a5b"); G.disc(g,x-2,y-2,Math.max(2,r-4),"#6dbb6a"); });
-  // 울타리
-  g.fillStyle="#d8c9ae"; g.fillRect(0,67,W,2); g.fillRect(0,73,W,2);
-  g.fillStyle="#f6eedd"; g.fillRect(0,66,W,1); g.fillRect(0,72,W,1);
-  for(let x=1;x<W;x+=6){ g.fillStyle="#fffaf0"; g.fillRect(x,63,3,15); g.fillRect(x+1,62,1,1); g.fillStyle="#d8c9ae"; g.fillRect(x+2,64,1,14); }
-  // 잔디
-  g.fillStyle="#86cf6e"; g.fillRect(0,78,W,42);
-  g.fillStyle="#93d87a"; for(let y=80;y<H;y+=8) g.fillRect(0,y,W,3);
-  g.fillStyle="#6bb85a"; for(let i=0;i<60;i++){const x=(i*37)%W, y=80+((i*23)%38); g.fillRect(x,y,1,2); g.fillRect(x+2,y+1,1,1);}
-  // 산책로
-  g.fillStyle="#f0d9a8"; g.fillRect(0,100,W,16); g.fillStyle="#d9bb84"; g.fillRect(0,100,W,1); g.fillRect(0,115,W,1);
-  g.fillStyle="#e2c48f"; for(let i=0;i<34;i++) g.fillRect((i*29)%W,102+((i*7)%12),2,1);
-  // 꽃
-  [[50,84,"#ff7aa8"],[110,86,"#ffd65a"],[8,90,"#ffd65a"],[152,92,"#ff7aa8"],[64,94,"#ffffff"],[96,82,"#ff7aa8"],[76,90,"#ffd65a"]].forEach(([x,y,c])=>{
-    g.fillStyle=c; g.fillRect(x-1,y,3,1); g.fillRect(x,y-1,1,3); g.fillStyle="#c9781f"; g.fillRect(x,y,1,1); });
-  house(g,G.GL,"#ff7a59","#d65a3c"); house(g,G.GR,"#4a86e0","#2f62b0");
-  return c;
-};
-function house(g,cx,roof,roofD){
-  g.fillStyle="rgba(40,80,40,0.25)"; g.fillRect(cx-14,97,29,3);
-  g.fillStyle="#e8b77a"; g.fillRect(cx-11,78,23,20);
-  g.fillStyle="#cf9a5c"; for(let y=81;y<98;y+=4) g.fillRect(cx-11,y,23,1);
-  for(let i=0;i<13;i++){ const y=66+i, hw=Math.round(i*1.15)+2; g.fillStyle=i>10?roofD:roof; g.fillRect(cx-hw,y,hw*2+1,1); }
-  g.fillStyle=roofD; for(let i=2;i<11;i+=3){const hw=Math.round(i*1.15)+2; g.fillRect(cx-hw,66+i,hw*2+1,1);}
-  g.fillStyle="#fffaf0"; g.fillRect(cx-1,64,3,2);
-  // 문
-  g.fillStyle="#3a2a2a"; g.fillRect(cx-5,87,11,11); g.fillRect(cx-4,85,9,2); g.fillRect(cx-2,84,5,1);
-  // 뼈다귀 간판
-  g.fillStyle="#fffaf0"; g.fillRect(cx-3,80,7,2); g.fillRect(cx-4,79,2,4); g.fillRect(cx+3,79,2,4);
-}
-G.parts=[];
-G.puff=(x,y,n,cols)=>{for(let i=0;i<n;i++){const a=Math.random()*6.28,s=10+Math.random()*30; G.parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-10,life:0.5+Math.random()*0.4,c:cols[i%cols.length]});}};
-G.updParts=dt=>{G.parts=G.parts.filter(p=>{p.life-=dt;p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=40*dt;return p.life>0;});};
-G.drawParts=ctx=>{G.parts.forEach(p=>{ctx.globalAlpha=Math.min(1,p.life*2);ctx.fillStyle=p.c;ctx.fillRect(Math.round(p.x),Math.round(p.y),1,1);});ctx.globalAlpha=1;};
-G.drawSky=function(ctx,t){
-  [[20,10,0.9],[110,22,0.6],[60,32,0.75],[140,8,0.5]].forEach(([x0,y,s],i)=>{ const x=Math.round(((x0+t*3*s)%200)-20);
-    ctx.fillStyle="#ffffff"; ctx.fillRect(x,y,14,3); ctx.fillRect(x+3,y-2,7,2); ctx.fillRect(x+8,y-3,4,1); ctx.fillStyle="#e3f2fb"; ctx.fillRect(x+1,y+3,12,1); });
-};
-// 걷는 강아지(플레이어)
-G.PUP={len:10,h:5,leg:3,hs:6,sn:2,ear:"flop",tail:"up",c1:"#fff4e0",c2:"#fff4e0",c3:"#c98a4a",ec:"#c98a4a",pat:["patch"],fluffy:false};
-})();
-
-</script>
-<script>
-// 쉬어가는 놀이 세 가지 (결과에 영향 없음)
-(function(){
-const G=window.G;
-function walk(pc,inp,dt,sp){ const d=(inp.r?1:0)-(inp.l?1:0); pc.x=Math.max(10,Math.min(150,pc.x+d*sp*dt));
-  if(d){pc.face=d;pc.ft+=dt;pc.frame=[0,1,0,2][Math.floor(pc.ft*10)%4];}else pc.frame=0; }
-function drawPup(ctx,pc,t,blink){ if(blink&&Math.floor(performance.now()/80)%2)return;
-  ctx.fillStyle="rgba(40,80,40,0.25)"; ctx.fillRect(Math.round(pc.x)-7,G.FEET,15,2);
-  G.drawDog(ctx,pc.x,pc.y,G.PUP,pc.frame,pc.face,1,Math.floor(t*8)%2); }
-const label=(ctx,txt,x,y,c)=>{ctx.font="bold 8px sans-serif";ctx.textAlign="center";ctx.fillStyle="#fff";ctx.fillText(txt,x+1,y+1);ctx.fillStyle=c;ctx.fillText(txt,x,y);};
-
-G.MINI=[
-{ title:"간식 받아먹기", icon:"🦴",
-  desc:"하늘에서 간식이 쏟아져요! 좌우로 움직여 뼈다귀와 고기를 받아먹어요. 초콜릿과 포도는 강아지에게 위험한 음식이니 꼭 피하세요. 20초 동안 이어져요.",
-  label:null, move:true,
-  init(){ this.s={t:20,items:[],sp:0,score:0,stun:0,msg:"",mt:0}; this.pc={x:80,y:G.FEET,face:1,frame:0,ft:0}; this.done=false; },
-  update(dt,inp){ const s=this.s; s.t-=dt; s.mt-=dt; if(s.t<=0){s.t=0;this.done=true;return;}
-    s.stun-=dt; if(s.stun<=0) walk(this.pc,inp,dt,90); else this.pc.frame=0;
-    s.sp-=dt; if(s.sp<=0){ s.sp=0.5-0.22*(1-s.t/20); const r=Math.random();
-      s.items.push({x:10+Math.random()*140,y:-6,vy:36+Math.random()*24+(20-s.t)*1.8,k:r<0.1?"meat":r<0.22?"choco":r<0.34?"grape":"bone"}); }
-    const pc=this.pc;
-    s.items=s.items.filter(it=>{ it.y+=it.vy*dt;
-      if(Math.abs(it.x-pc.x)<10 && it.y>pc.y-16 && it.y<pc.y-1){
-        if(it.k==="bone"){s.score+=1;G.puff(it.x,it.y,5,["#fff","#ffd65a"]);}
-        else if(it.k==="meat"){s.score+=3;G.puff(it.x,it.y,10,["#ff7a59","#ffd65a"]);}
-        else if(s.stun<=0){s.score=Math.max(0,s.score-2);s.stun=0.7;s.msg=it.k==="choco"?"초콜릿은 위험해요!":"포도는 위험해요!";s.mt=1;G.puff(it.x,it.y,10,["#7c5cd6","#5a3a2a"]);}
-        return false; }
-      return it.y<124; }); },
-  draw(ctx,t){ const s=this.s;
-    s.items.forEach(it=>{ const x=Math.round(it.x),y=Math.round(it.y);
-      if(it.k==="bone"){ ctx.fillStyle="#16131f"; ctx.fillRect(x-4,y-2,9,5); ctx.fillStyle="#fffaf0"; ctx.fillRect(x-2,y-1,5,3); ctx.fillRect(x-3,y-1,1,1); ctx.fillRect(x-3,y+1,1,1); ctx.fillRect(x+3,y-1,1,1); ctx.fillRect(x+3,y+1,1,1); }
-      else if(it.k==="meat"){ G.disc(ctx,x,y,3,"#c9523a"); G.disc(ctx,x-1,y-1,1,"#ff8a6a"); ctx.fillStyle="#fffaf0"; ctx.fillRect(x+3,y+2,3,2); }
-      else if(it.k==="choco"){ ctx.fillStyle="#16131f"; ctx.fillRect(x-4,y-3,9,7); ctx.fillStyle="#6b3d22"; ctx.fillRect(x-3,y-2,7,5); ctx.fillStyle="#8a5232"; ctx.fillRect(x-3,y-2,3,2); ctx.fillRect(x+1,y+1,3,2); }
-      else { ["#7c5cd6","#9b7cf0"].forEach((c,i)=>{ctx.fillStyle=c;}); [[0,-2],[-2,0],[2,0],[0,0],[-1,2],[1,2]].forEach(([a,b])=>G.disc(ctx,x+a,y+b,1,"#7c5cd6")); ctx.fillStyle="#4c9a5b"; ctx.fillRect(x,y-5,1,2); } });
-    drawPup(ctx,this.pc,t,s.stun>0);
-    if(s.mt>0) label(ctx,s.msg,80,60,"#c9523a"); },
-  hud(){ return ["간식 "+this.s.score+"개","남은 시간 "+Math.ceil(this.s.t)]; },
-  end(){ const n=this.s.score; return {score:"간식 "+n+"개", line:n>=40?"간식 먹방 챔피언이에요!":n>=20?"배부르게 잘 먹었어요.":"간식이 입을 피해 다녔어요."}; }
-},
-{ title:"기다려! 먹어!", icon:"🥣",
-  desc:"주인이 '기다려'라고 하면 꾹 참고, '먹어!'라고 하면 재빨리 '먹기' 버튼(또는 스페이스)을 눌러요. 다른 말에 속지 마세요! 6번 도전해요.",
-  label:"먹기!", move:false,
-  init(){ this.s={round:0,score:0,phase:"wait",t:0,dur:2,word:"기다려…",fake:false,best:null,msg:"",mt:0,dash:0}; this.done=false; this.next(); },
-  next(){ const s=this.s; s.phase="wait"; s.t=0; s.dur=1.2+Math.random()*2; s.word="기다려…"; s.fake=Math.random()<0.35; s.fakeAt=0.5+Math.random()*(s.dur-0.6); },
-  act(){ const s=this.s;
-    if(s.phase==="wait"){ s.msg="참을성 부족!"; s.mt=1; s.phase="res"; s.t=0; }
-    else if(s.phase==="go"){ const ms=Math.round(s.t*1000); s.score++; s.best=s.best==null?ms:Math.min(s.best,ms); s.msg=ms+"ms 성공!"; s.mt=1; s.phase="res"; s.t=0; s.dash=0.5; G.puff(70,104,10,["#ffd65a","#ff7a59"]); } },
-  update(dt){ const s=this.s; s.t+=dt; s.mt-=dt; s.dash=Math.max(0,s.dash-dt);
-    if(s.phase==="wait"){ s.word = (s.fake && s.t>s.fakeAt && s.t<s.fakeAt+0.6) ? ["앉아!","손!","엎드려!"][s.round%3] : "기다려…"; if(s.t>=s.dur){ s.phase="go"; s.t=0; s.word="먹어!"; } }
-    else if(s.phase==="go"){ if(s.t>1.1){ s.msg="너무 늦었어요"; s.mt=1; s.phase="res"; s.t=0; } }
-    else if(s.phase==="res"){ if(s.t>1.1){ s.round++; if(s.round>=6) this.done=true; else this.next(); } } },
-  draw(ctx,t){ const s=this.s;
-    G.drawOwner(ctx,26,G.FEET-16,"ESFJ");
-    // 그릇
-    ctx.fillStyle="#16131f"; ctx.fillRect(63,104,15,6); ctx.fillStyle="#4a86e0"; ctx.fillRect(64,105,13,4); ctx.fillStyle="#c98a4a"; ctx.fillRect(65,104,11,1);
-    const dx = s.dash>0 ? 84 : 98;
-    ctx.fillStyle="rgba(40,80,40,0.25)"; ctx.fillRect(dx-7,G.FEET,15,2);
-    G.drawDog(ctx,dx,G.FEET,G.PUP,s.dash>0?1:0,-1,1,s.phase==="go"?Math.floor(t*12)%2:0);
-    // 말풍선
-    if(s.phase!=="res"){ const go=s.phase==="go", w=go?34:44; ctx.fillStyle="#16131f"; ctx.fillRect(18,58,w+2,16); ctx.fillStyle=go?"#ffd65a":"#fffaf0"; ctx.fillRect(19,59,w,14); ctx.fillRect(28,73,4,3);
-      ctx.font="bold 9px sans-serif"; ctx.textAlign="center"; ctx.fillStyle=go?"#c9523a":"#2d2a3a"; ctx.fillText(s.word,19+w/2,69); }
-    if(s.mt>0) label(ctx,s.msg,100,72,s.msg.includes("성공")?"#2fa77a":"#c9523a"); },
-  hud(){ return ["도전 "+Math.min(this.s.round+1,6)+" / 6","성공 "+this.s.score]; },
-  end(){ const n=this.s.score, b=this.s.best; return {score:n+" / 6 성공", line:(b!=null?"최고 반응 속도 "+b+"ms. ":"")+(n>=5?"훈련소 수석 졸업감이에요!":n>=3?"제법 의젓한 강아지예요.":"간식 앞에선 참을 수가 없어요.")}; }
-},
-{ title:"원반 점프", icon:"🥏",
-  desc:"공원 위로 원반이 날아가요! 좌우로 움직이고 '점프' 버튼(또는 스페이스)으로 뛰어올라 원반을 물어요. 20초 동안 이어져요.",
-  label:"점프", move:true,
-  init(){ this.s={t:20,discs:[],sp:0.4,score:0,vy:0,air:false}; this.pc={x:80,y:G.FEET,face:1,frame:0,ft:0}; this.done=false; },
-  act(){ const s=this.s; if(s.air)return; s.air=true; s.vy=-125; },
-  update(dt,inp){ const s=this.s, pc=this.pc; s.t-=dt; if(s.t<=0){s.t=0;this.done=true;return;}
-    walk(pc,inp,dt,80);
-    if(s.air){ s.vy+=340*dt; pc.y+=s.vy*dt; pc.frame=1; if(pc.y>=G.FEET){pc.y=G.FEET;s.air=false;} }
-    s.sp-=dt; if(s.sp<=0){ s.sp=1.1-0.45*(1-s.t/20); const L=Math.random()<0.5;
-      s.discs.push({x:L?-6:166,vx:(L?1:-1)*(38+Math.random()*26+(20-s.t)*1.2),y0:76+Math.random()*16,ph:Math.random()*6,c:["#ff7a59","#4a86e0","#ffd65a"][Math.floor(Math.random()*3)]}); }
-    const hx=pc.x+pc.face*6, hy=pc.y-9;
-    s.discs=s.discs.filter(d=>{ d.x+=d.vx*dt; d.ph+=dt*4; d.y=d.y0+Math.sin(d.ph)*3;
-      if(Math.abs(d.x-hx)<8&&Math.abs(d.y-hy)<6){ s.score++; G.puff(d.x,d.y,12,[d.c,"#fff"]); return false; }
-      return d.x>-10&&d.x<170; }); },
-  draw(ctx,t){ const s=this.s;
-    s.discs.forEach(d=>{ const x=Math.round(d.x),y=Math.round(d.y); ctx.fillStyle="#16131f"; ctx.fillRect(x-4,y-2,9,4); ctx.fillStyle=d.c; ctx.fillRect(x-3,y-1,7,2); ctx.fillStyle="#fff"; ctx.fillRect(x-1,y-1,2,1); });
-    const pc=this.pc; ctx.fillStyle="rgba(40,80,40,0.25)"; ctx.fillRect(Math.round(pc.x)-7,G.FEET,15,2);
-    G.drawDog(ctx,pc.x,pc.y,G.PUP,pc.frame,pc.face,1,Math.floor(t*8)%2); },
-  hud(){ return ["물어 온 원반 "+this.s.score,"남은 시간 "+Math.ceil(this.s.t)]; },
-  end(){ const n=this.s.score; return {score:"원반 "+n+"개", line:n>=12?"원반 대회 금메달감이에요!":n>=6?"공원의 인기 스타예요.":"원반이 머리 위로 휙휙 지나갔어요."}; }
-}
-];
-})();
-
-</script>
-<script>
-(function(){
-const G=window.G, Q=window.QUESTIONS, T=window.TYPES;
-const SHARE_URL="";
-const $=id=>document.getElementById(id);
-const cv=$('cv'), ctx=cv.getContext('2d');
-const BG=G.buildBG();
-let mode="intro", idx=0, ans=[], mini=null, miniN=0, enterT=0, enterSide=null;
-const pc={x:80,y:G.FEET,face:1,frame:0,ft:0,alpha:1,target:null};
-const inp={l:false,r:false};
-
-const pips=$('pips'); for(let i=0;i<30;i++){const e=document.createElement('i'); if(i%10===9)e.className='gate'; pips.appendChild(e);}
-const setPips=()=>[...pips.children].forEach((e,i)=>e.classList.toggle('done',i<idx));
-
-// 인트로
-const cast=$('cast'), cc=cast.getContext('2d');
-const CAST=["ENFJ","ENFP","INTJ","INFP","ISTJ"];
-function drawCast(t){
-  cc.fillStyle="#bfe6f8"; cc.fillRect(0,0,160,48); cc.fillStyle="#86cf6e"; cc.fillRect(0,34,160,14);
-  cc.fillStyle="#f0d9a8"; cc.fillRect(0,38,160,8); cc.fillStyle="#d9bb84"; cc.fillRect(0,38,160,1);
-  CAST.forEach((k,i)=>{ const x=16+i*32, hop=Math.round(Math.max(0,Math.sin(t*4+i*1.3))*2);
-    G.drawDog(cc,x,44-hop,T[k].dog,0,i%2?-1:1,1,Math.floor(t*6+i)%2); });
-}
-
-function setBubble(el,tag,txt){ el.innerHTML=''; const s=document.createElement('span'); s.className='tag'; s.textContent=tag; el.appendChild(s); el.appendChild(document.createElement('br')); el.appendChild(document.createTextNode(txt)); }
-function showQ(){
-  mode="quiz"; const q=Q[idx];
-  $('qno').innerHTML='Q'+(idx+1)+'<small>/ 30</small>'; $('qpaw').textContent='Q'+(idx+1);
-  $('qtext').textContent=q.q;
-  setBubble($('optL'),"빨간 집",q.a[0]); setBubble($('optR'),"파란 집",q.b[0]);
-  $('optL').hidden=$('optR').hidden=false; $('optL').disabled=$('optR').disabled=false;
-  Object.assign(pc,{x:80,y:G.FEET,alpha:1,target:null,frame:0});
-  G.puff(80,G.FEET-8,12,["#ffffff","#ffd65a","#ff7a59"]);
-  $('btnAct').hidden=true; $('btnL').hidden=$('btnR').hidden=false;
-  $('hint').textContent="◀ ▶ 버튼이나 방향키로 강아지를 움직여 고른 답의 개집에 쏙 들여보내요. 말풍선을 눌러도 달려가요.";
-  setPips();
-}
-function choose(c){ if(mode!=="quiz")return; ans[idx]=c; mode="enter"; enterT=0; enterSide=c; pc.target=null; inp.l=inp.r=false; $('optL').disabled=$('optR').disabled=true; }
-function nextQ(){ idx++; setPips(); if(idx%10===0) startMini(idx/10-1); else showQ(); }
-
-// 놀이
-const box=$('minibox');
-function startMini(n){
-  miniN=n; mini=G.MINI[n]; mode="miniIntro";
-  $('optL').hidden=$('optR').hidden=true; $('mhud').hidden=true;
-  $('qno').innerHTML='쉬는 시간<small>'+(n+1)+' / 3</small>'; $('qpaw').textContent='★';
-  $('qtext').textContent=(n===2?"30문항 완주! 결과를 보기 전에 ":"10문항 통과! ")+"잠깐 놀다 가요. 놀이 점수는 결과에 들어가지 않아요.";
-  box.innerHTML='<h2>'+mini.title+'</h2><p>'+mini.desc+'</p><p class="note">결과와 상관없는 놀이예요</p><div class="pad"><button class="btn" id="mgo">놀이 시작</button><button class="btn ghost" id="mskip">건너뛰기</button></div>';
-  box.hidden=false;
-  $('mgo').onclick=()=>{ mini.init(); box.hidden=true; $('mhud').hidden=false; mode="mini";
-    $('btnAct').hidden=!mini.label; $('btnAct').textContent=mini.label||""; $('btnL').hidden=$('btnR').hidden=!mini.move;
-    $('hint').textContent=mini.move?(mini.label?"◀ ▶로 움직이고 '"+mini.label+"' 버튼이나 스페이스를 눌러요.":"◀ ▶ 버튼이나 방향키로 움직여요."):"'"+mini.label+"' 버튼이나 스페이스를 눌러요.";
-    $('mgo').blur(); };
-  $('mskip').onclick=afterMini; $('mgo').focus({preventScroll:true});
-}
-function endMini(){ mode="miniEnd"; const r=mini.end(); $('mhud').hidden=true;
-  box.innerHTML='<h2>'+r.score+'</h2><p>'+r.line+'</p><p class="note">이 점수는 결과에 들어가지 않아요</p><button class="btn" id="mnext">'+(miniN===2?"결과 보러 가기":"다음 질문으로")+'</button>';
-  box.hidden=false; $('mnext').onclick=afterMini; $('mnext').focus({preventScroll:true}); }
-function afterMini(){ box.hidden=true; $('mhud').hidden=true; mini=null; G.parts=[]; if(miniN===2) showResult(compute()); else showQ(); }
-
-// 입력
-function hold(btn,key){ const on=e=>{e.preventDefault();inp[key]=true;btn.classList.add('on');pc.target=null;}, off=()=>{inp[key]=false;btn.classList.remove('on');};
-  btn.addEventListener('pointerdown',on); ['pointerup','pointerleave','pointercancel'].forEach(ev=>btn.addEventListener(ev,off)); }
-hold($('btnL'),'l'); hold($('btnR'),'r');
-$('btnAct').addEventListener('pointerdown',e=>{e.preventDefault();doAct();});
-function doAct(){ if(mode==="mini"&&mini&&mini.act) mini.act(); }
-$('optL').onclick=()=>{ if(mode==="quiz") pc.target=G.GL-4; };
-$('optR').onclick=()=>{ if(mode==="quiz") pc.target=G.GR+4; };
-const playing=()=>mode==="quiz"||mode==="mini";
-addEventListener('keydown',e=>{ if(!playing())return; const k=e.key;
-  if(k==="ArrowLeft"||k==="a"||k==="A"){inp.l=true;pc.target=null;e.preventDefault();}
-  else if(k==="ArrowRight"||k==="d"||k==="D"){inp.r=true;pc.target=null;e.preventDefault();}
-  else if((k===" "||k==="ArrowUp")&&mode==="mini"){ if(!e.repeat) doAct(); e.preventDefault(); } });
-addEventListener('keyup',e=>{ const k=e.key; if(k==="ArrowLeft"||k==="a"||k==="A")inp.l=false; if(k==="ArrowRight"||k==="d"||k==="D")inp.r=false; });
-
-// 루프
-function update(dt){
-  G.updParts(dt);
-  if(mode==="quiz"){
-    let d=(inp.r?1:0)-(inp.l?1:0); if(pc.target!=null) d=Math.sign(pc.target-pc.x);
-    pc.x=Math.max(10,Math.min(150,pc.x+d*66*dt));
-    if(d){pc.face=d;pc.ft+=dt;pc.frame=[0,1,0,2][Math.floor(pc.ft*10)%4];}else pc.frame=0;
-    $('optL').classList.toggle('hot',pc.x<62); $('optR').classList.toggle('hot',pc.x>98);
-    if(pc.x<=G.GL+2) choose('a'); else if(pc.x>=G.GR-2) choose('b');
-  } else if(mode==="enter"){
-    enterT+=dt; const cx=enterSide==='a'?G.GL:G.GR; pc.x+=(cx-pc.x)*Math.min(1,dt*10);
-    pc.y=G.FEET-enterT*26; pc.alpha=Math.max(0,1-enterT/0.5); pc.ft+=dt; pc.frame=[0,1,0,2][Math.floor(pc.ft*10)%4];
-    if(enterT>0.62){ $('optL').classList.remove('hot'); $('optR').classList.remove('hot'); nextQ(); }
-  } else if(mode==="mini"){ mini.update(dt,inp); if(mini.done) endMini(); else { const h=mini.hud(); $('mLeft').textContent=h[0]; $('mRight').textContent=h[1]; } }
-}
-function draw(t){
-  if(mode==="intro"){ drawCast(t); return; }
-  if(mode==="result") return;
-  ctx.drawImage(BG,0,0); G.drawSky(ctx,t);
-  if(mode==="quiz"||mode==="enter"){
-    [[G.GL,pc.x<62||(enterSide==='a'&&mode==="enter")],[G.GR,pc.x>98||(enterSide==='b'&&mode==="enter")]].forEach(([cx,on])=>{
-      if(!on) return; ctx.fillStyle='rgba(255,214,90,'+(0.45+0.25*Math.sin(t*8)).toFixed(2)+')'; ctx.fillRect(cx-4,88,9,10); ctx.fillRect(cx-3,86,7,2);
-      if(mode==="quiz"){ const by=Math.round(56+Math.sin(t*6)*1.5); ctx.fillStyle="#16131f"; ctx.fillRect(cx-3,by-1,7,1); ctx.fillStyle="#ffd65a"; ctx.fillRect(cx-2,by,5,1); ctx.fillRect(cx-1,by+1,3,1); ctx.fillRect(cx,by+2,1,1); } });
-    ctx.fillStyle='rgba(40,80,40,0.25)'; ctx.fillRect(Math.round(pc.x)-7,G.FEET,15,2);
-    G.drawDog(ctx,pc.x,pc.y,G.PUP,pc.frame,pc.face,pc.alpha,Math.floor(t*8)%2);
-  } else if(mini && (mode==="mini"||mode==="miniEnd")) mini.draw(ctx,t);
-  G.drawParts(ctx);
-}
-let last=performance.now();
-function loop(now){ const dt=Math.min(0.05,(now-last)/1000); last=now; update(dt); draw(now/1000); requestAnimationFrame(loop); }
-requestAnimationFrame(loop);
-
-// 채점
-const AX=[["E","I","외향","내향"],["S","N","감각","직관"],["T","F","사고","감정"],["J","P","계획","즉흥"]];
-function compute(){
-  const sc={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
-  Q.forEach((q,i)=>{ const c=ans[i]; if(c) sc[q[c][1]]+=q.w||1; });
-  const pct=AX.map(([a,b])=>{const tt=sc[a]+sc[b]; return tt?sc[a]/tt:0.5;});
-  const all=[];
-  for(const a of "EI")for(const b of "SN")for(const c of "TF")for(const d of "JP"){ const code=a+b+c+d;
-    all.push({code,m:[...code].reduce((s,L,i)=>s+(L===AX[i][0]?pct[i]:1-pct[i]),0)/4}); }
-  all.sort((x,y)=>y.m-x.m); return {pct,rank:all};
-}
-
-// 결과
-const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
-function dogCanvas(d,w,h,face){ const c=document.createElement('canvas'); c.width=w; c.height=h; const g=c.getContext('2d');
-  g.fillStyle="rgba(40,80,40,0.18)"; g.fillRect(Math.round(w/2-9),h-4,19,2); G.drawDog(g,w/2,h-4,d,0,face||1,1,0); return c; }
-function ownerCanvas(code){ const c=document.createElement('canvas'); c.width=20; c.height=32; G.drawOwner(c.getContext('2d'),5,10,code); return c; }
-function mateCard(item,kind){ const t=T[item.c];
-  return '<div class="mate '+kind+'"><div data-dog="'+item.c+'" data-face="'+(kind==='bad'?-1:1)+'"></div><div style="min-width:0"><span class="badge '+(kind==='good'?'g':'b')+'">'+(kind==='good'?'산책 메이트':'으르렁 주의')+'</span><div class="nm">'+esc(t.breed)+'</div><div class="cd">'+item.c+'</div></div><p>'+esc(item.why)+'</p></div>'; }
-function ownerCard(o,kind){
-  return '<div class="owner '+kind+'"><div data-owner="'+o.c+'"></div><div style="min-width:0"><span class="badge '+(kind==='good'?'g':'b')+'">'+(kind==='good'?'찰떡 주인':'안 맞는 주인')+'</span><div class="cd">'+o.c+' 주인</div><div class="nm">'+esc(o.t)+'</div><p>'+esc(o.why)+'</p>'+(o.tip?'<p class="tip"><b>그래도 함께라면</b> · '+esc(o.tip)+'</p>':'')+'</div></div>'; }
-function shareBase(){ return SHARE_URL || location.href.split('#')[0]; }
-function showResult(res,shared){
-  mode="result"; $('intro').hidden=true; $('play').hidden=true;
-  const code=res.rank[0].code, t=T[code], el=$('result'); el.hidden=false;
-  const energy='<span class="energy">활동량 '+[1,2,3,4,5].map(i=>'<i class="'+(i<=t.energy?'on':'')+'"></i>').join('')+'</span>';
-  const axes=shared?'':'<div class="panel"><h3><span class="k">GRAPH</span>내 성향 그래프</h3><div class="axes">'+AX.map(([a,b,an,bn],i)=>{const p=res.pct[i];
-    return '<div class="axis"><span class="a '+(p>=0.5?'on':'')+'">'+an+' '+a+'</span><div><div class="bar"><i style="width:'+Math.round(p*100)+'%"></i></div><div class="pc"><span>'+Math.round(p*100)+'%</span><span>'+Math.round((1-p)*100)+'%</span></div></div><span class="'+(p<0.5?'on':'')+'">'+b+' '+bn+'</span></div>';}).join('')+'</div></div>';
-  const alts=shared?'':'<div class="panel"><h3><span class="k">2ND · 3RD</span>내 안에 숨은 다른 견종</h3><p class="sub">가장 아슬아슬했던 성향이 반대로 기울었다면 이 친구들이었을 거예요.</p><div class="pair">'+
-    res.rank.slice(1,3).map((o,i)=>{const a=T[o.code]; return '<div class="mate good alt"><div data-dog="'+o.code+'" data-face="1"></div><div style="min-width:0"><div class="rk">'+(i+2)+'순위 · 닮은 정도 '+Math.round(o.m*100)+'%</div><div class="nm">'+esc(a.breed)+'</div><div class="cd">'+o.code+' · '+esc(a.nick)+'</div></div><p>'+esc(a.desc.split('. ')[0])+'.</p></div>';}).join('')+'</div></div>';
-  el.innerHTML=(shared?'<p class="hint" style="font-size:15px">친구가 보낸 결과예요. 나는 어떤 강아지일까요?</p>':'')+
-   '<div class="hero"><div data-hero></div><div class="meta"><span class="eyebrow">나는 강아지로 태어났다면</span><div class="code">'+code+'</div>'+
-   '<h2 class="breed">'+esc(t.breed)+'<small>'+esc(t.en)+'</small></h2><div class="nick">'+esc(t.nick)+'</div>'+
-   '<div class="chips"><span class="chip">'+esc(t.size)+'</span>'+energy+'</div></div></div>'+
-   '<div class="panel"><h3><span class="k">TYPE</span>어떤 강아지인가요</h3><p>'+esc(t.desc)+'</p><div class="traits">'+t.traits.map(x=>'<span>'+esc(x)+'</span>').join('')+'</div></div>'+
-   axes+
-   '<div class="panel"><h3><span class="k">WALK</span>같이 산책하기 좋은 친구</h3><div class="pair">'+t.walk.map(w=>mateCard(w,'good')).join('')+'</div></div>'+
-   '<div class="panel"><h3><span class="k">GRRR</span>만나면 으르렁대는 앙숙</h3><div class="pair">'+t.growl.map(w=>mateCard(w,'bad')).join('')+'</div></div>'+
-   '<div class="panel"><h3><span class="k">OWNER</span>나와 맞는 주인, 안 맞는 주인</h3><div class="pair">'+ownerCard(t.good,'good')+ownerCard(t.bad,'bad')+'</div></div>'+
-   alts+
-   '<div class="panel"><h3><span class="k">SHARE</span>친구에게 보내기</h3><div class="share">'+(shared?'':'<button class="btn" id="cpRes">내 결과 링크 복사</button>')+'<button class="btn '+(shared?'':'ghost')+'" id="cpTest">검사 링크 복사</button></div>'+
-   '<input class="urlbox" id="urlbox" readonly aria-label="공유 링크"><p class="toast" id="toast"></p><div class="share"><button class="btn ghost" id="again">'+(shared?'나도 해 보기':'다시 해 보기')+'</button></div></div>'+
-   '<p class="hint">재미로 보는 검사예요. MBTI를 빌린 놀이일 뿐 공식 성격검사가 아니고, 견종 성격도 개체마다 달라요.</p>';
-  const hc=dogCanvas(t.dog,40,30,1); hc.className='portrait'; el.querySelector('[data-hero]').replaceWith(hc);
-  el.querySelectorAll('[data-dog]').forEach(d=>d.replaceWith(dogCanvas(T[d.dataset.dog].dog,28,21,+d.dataset.face)));
-  el.querySelectorAll('[data-owner]').forEach(d=>d.replaceWith(ownerCanvas(d.dataset.owner)));
-  const resUrl=shareBase()+'#'+code, testUrl=shareBase();
-  $('urlbox').value=shared?testUrl:resUrl;
-  const copy=(u,msg)=>{ $('urlbox').value=u; try{ navigator.clipboard.writeText(u).then(()=>$('toast').textContent=msg,()=>{ $('urlbox').select(); $('toast').textContent="복사가 막혔어요. 위 주소를 길게 눌러 복사해 주세요."; }); }catch(e){ $('urlbox').select(); } };
-  if($('cpRes')) $('cpRes').onclick=()=>copy(resUrl,"결과 링크를 복사했어요!");
-  $('cpTest').onclick=()=>copy(testUrl,"검사 링크를 복사했어요!");
-  $('again').onclick=()=>{ el.hidden=true; el.innerHTML=''; try{history.replaceState(null,'',location.pathname+location.search);}catch(e){} start(); };
-  scrollTo({top:0,behavior:'smooth'});
-}
-function start(){ idx=0; ans=[]; $('intro').hidden=true; $('result').hidden=true; $('play').hidden=false; showQ(); }
-$('start').onclick=start;
-const h=(location.hash||'').slice(1).toUpperCase();
-if(T[h]) showResult({rank:[{code:h,m:1}]},true);
-})();
-
-</script>
-
-</body>
-</html>
+</body></html>
